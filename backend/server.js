@@ -1,9 +1,11 @@
-import express, { request } from 'express';
-import mongoose from 'mongoose';
+import express from 'express';
 import cors from 'cors';
+import session from 'express-session';
 import 'dotenv/config';
-import { Receipe } from './models/receipeModel.js';
-import receipeRoute from './routes/receipeRoute.js';
+
+import recipeRoute from './routes/recipeRoute.js';
+import authRoute from './routes/authRoute.js';
+import errorHandler from './middlewares/errorHandler.js';
 
 const app = express();
 app.use(express.json());
@@ -14,23 +16,27 @@ app.use(cors({
 
 }));
 
-// route root
-app.get('/', (request, response) => {
-    console.log(request);
-    return response.status(200).send('Hello');
+const sess = {
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { 
+        secure: false,
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+     }
+}
+if (app.get('NODE_ENV') === 'production') {
+    app.set('trust proxy', 1) // trust first proxy
+    sess.cookie.secure = true
+}
+app.use(session(sess));
 
+// app.use('/receipe', receipeRoute);
+app.use('/api/auth', authRoute);
+
+app.use(errorHandler);
+
+app.listen(process.env.PORT, () => {
+    console.log(`Server is running on port ${process.env.PORT}`);
 });
-app.use('/receipe', receipeRoute);
-
-mongoose.connect(process.env.MONGO_URL)
-    .then(() => {
-
-        console.log('App connected to DB');
-        app.listen(process.env.APP_PORT, () => {
-            console.log(`Server started at http://localhost:${process.env.APP_PORT}`);
-        });
-    })
-    .catch((error) => {
-        console.log(error);
-
-    });

@@ -1,5 +1,4 @@
 import express from 'express';
-import { Receipe } from '../models/receipeModel.js';
 
 const router = express.Router();
 
@@ -88,8 +87,5 @@ router.patch('/:id', async (request, response) => {
         return response.status(500).send({ message: error.message });
     }
 });
-
-
-
 
 export default router;
