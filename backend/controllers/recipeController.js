@@ -2,7 +2,7 @@ import createError from "http-errors";
 import prisma from "../utils/prisma.js";
 
 async function list(req, res) {
-  const recipes = await prisma.recipe.find();
+  const recipes = await prisma.recipe.findMany();
 
   res.json(recipes);
 }
@@ -25,7 +25,15 @@ async function get(req, res, next) {
 
 async function create(req, res, next) {
   try {
-    const recipe = await prisma.recipe.create(req.body);
+    const recipe = await prisma.recipe.create({
+      data: {
+        ...req.body,
+        user: {
+          connect: {
+            id: req.session.user.id
+          }
+      }
+    }});
 
     res.status(201).json(recipe);
   } catch (error) {
@@ -37,7 +45,11 @@ async function remove(req, res, next) {
   const { id } = req.params;
 
   try {
-    const recipe = await prisma.recipe.findByIdAndDelete(id);
+    const recipe = await prisma.recipe.findUnique({
+      where: {
+        id
+      }
+    });
 
     if (!recipe) {
       return next(createError(404, 'Recipe not found'));
@@ -47,7 +59,11 @@ async function remove(req, res, next) {
       return next(createError(403));
     }
 
-    recipe.remove();
+    await prisma.recipe.delete({
+      where: {
+        id
+      }
+    });
 
     res.status(204).end();
   } catch (error) {
@@ -59,7 +75,11 @@ async function update(req, res, next) {
   const { id } = req.params;
 
   try {
-    const recipe = await prisma.recipe.findById(id);
+    const recipe = await prisma.recipe.findUnique({
+      where: {
+        id
+      }
+    })
 
     if (!recipe) {
       return next(createError(404, 'Recipe not found'));
@@ -69,11 +89,16 @@ async function update(req, res, next) {
       return next(createError(403));
     }
 
-    Object.assign(recipe, req.body);
+    const updatedRecipe = await prisma.recipe.update({
+      where: {
+        id
+      },
+      data: {
+        ...req.body
+      }
+    });
 
-    await recipe.save();
-
-    res.json(recipe);
+    res.json(updatedRecipe);
   } catch (error) {
     return next(createError(500, error));
   }

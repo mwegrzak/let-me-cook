@@ -27,7 +27,7 @@ router.post('/logout', logout);
 const passwordResetRequestSchema = Joi.object({
     email: Joi.string().email().required(),
 });
-router.post('/passwordreset', notAuthenticated ,validator.body(passwordResetRequestSchema), passwordReset);
+router.post('/passwordreset', notAuthenticated ,validator.body(passwordResetRequestSchema), passwordResetRequest);
 
 const passwordResetSchema = Joi.object({
     password: Joi.string().min(8).required(),
@@ -35,6 +35,6 @@ const passwordResetSchema = Joi.object({
 router.post('/passwordreset/:token', notAuthenticated ,validator.body(passwordResetSchema), passwordReset);
 
 
-router.get('check', authenticated, check)
+router.get('/check', authenticated, check)
 
 export default router;

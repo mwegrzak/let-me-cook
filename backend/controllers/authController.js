@@ -1,6 +1,7 @@
 import createError from "http-errors";
 import argon2 from "argon2";
 import prisma from "../utils/prisma.js";
+import crypto from "crypto";
 
 async function register(req, res, next) {
   const { email, password, name } = req.body;
@@ -74,7 +75,7 @@ async function login(req, res, next) {
 async function logout(req, res, next) {
   try {
     await req.session.destroy();
-    return res.status(204).send();
+    return res.status(200).send();
   } catch (error) {
     return next(createError(500, error));
   }
@@ -141,7 +142,7 @@ async function passwordReset(req, res, next) {
       }
     });
 
-    return res.status(204).send();
+    return res.status(200).send();
   } catch (error) {
     return next(createError(500, error));
   }

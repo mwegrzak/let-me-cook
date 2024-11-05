@@ -32,11 +32,17 @@ if (app.get('NODE_ENV') === 'production') {
 }
 app.use(session(sess));
 
-app.use('/recipe', receipeRoute);
+app.use('/api/recipe', recipeRoute);
 app.use('/api/auth', authRoute);
+
+if (process.env.NODE_ENV === 'development') {
+    app.use('/api-doc' ,express.static('dist'));
+}
 
 app.use(errorHandler);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`);
 });
+
+export default app;

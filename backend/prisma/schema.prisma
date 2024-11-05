@@ -27,6 +27,7 @@ model User {
   recipes    Recipe[]
   sessions  Session[]
   RecipeLikes RecipeLike[]
+  PasswordResets PasswordReset[]
 }
 
 model Session {
@@ -38,10 +39,10 @@ model Session {
 }
 
 model PasswordReset {
-  id        String @id @default(cuid())
-  token     String
+  token     String  @id
   userId    String
   validTill DateTime
+  user      User    @relation(fields: [userId], references: [id])
 }
 
 model Recipe {
