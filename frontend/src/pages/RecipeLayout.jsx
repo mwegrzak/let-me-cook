@@ -3,10 +3,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import AppTheme from '../shared-theme/AppTheme';
 
-export default function ReceipeLayout(props) {
+export default function RecipeLayout(props) {
   return (
     <Container>
-      <h1>ReceipeLayout goes here</h1>
+      <h1>RecipeLayout goes here</h1>
     </Container>
   );
 }

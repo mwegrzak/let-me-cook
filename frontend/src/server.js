@@ -1,4 +1,5 @@
 import { createServer, Model, Response } from "miragejs"
+import userDefaultAvatar from './images/default-user-avatar.png'
 
 
 createServer({
@@ -14,10 +15,14 @@ createServer({
     */
     seeds(server) {
         server.create("recipe", {
-            id: "1",
-            name: "Bran Muffins",
-            author: "admin",
-            userId: 1,
+            id: 1,
+            title: "Bran Muffins",
+            author: {
+                id: 1,
+                name: "admin",
+                avatar: userDefaultAvatar
+            },
+            createDate: '3.11.2024',
             prepTime: "30 minutes",
             isPublic: true,
             cookTime: "1 hour",
@@ -34,18 +39,22 @@ createServer({
                 { step: "Bake", description: " Bake the muffins for 5 minutes. Reduce the oven temperature to 350°F without opening the door. Continue baking for 10 to 13 minutes, or until a toothpick inserted into the center of one of the muffins comes out clean. " },
                 { step: "Cool muffins and serve", description: " Allow the muffins to cool in the pan for 5 minutes before transferring them to a wire rack to finish cooling. Serve warm or at room temperature. " }
             ],
-            imageUrl: "https://www.simplyrecipes.com/thmb/cvOjc9W1eNwGQFN0V3aCrdpkXZs=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/SimplyRecipes_BranMuffins_LEAD_7-fd45c486d07348438b564e34f6013713.jpg",
+            imgUrl: "https://www.simplyrecipes.com/thmb/cvOjc9W1eNwGQFN0V3aCrdpkXZs=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/SimplyRecipes_BranMuffins_LEAD_7-fd45c486d07348438b564e34f6013713.jpg",
             score: { 1: 2, 2: 6, 3: 4, 4: 20, 5: 60 },
             tags: ['breakfast', 'vegetarian', 'muffins']
         })
 
         server.create("recipe", {
-            id: "2",
-            name: "BBQ Chicken Pizza",
-            author: "admin",
-            userId: 1,
+            id: 2,
+            title: "BBQ Chicken Pizza",
+            author: {
+                id: 1,
+                name: "admin",
+                avatar: userDefaultAvatar
+            },
             prepTime: "1 hour",
             isPublic: true,
+            createDate: '3.11.2024',
             cookTime: "15 minutes",
             servings: "8",
             difficulty: "easy",
@@ -57,19 +66,23 @@ createServer({
                 { step: "Top with chicken, pepperoncini peppers, onion, and cilantro.  Cover with Colby-Jack cheese. ", description: "" },
                 { step: "Bake in the preheated oven until cheese is melted and bubbly, about 15 minutes. ", description: "" }
             ],
-            imageUrl: "https://www.allrecipes.com/thmb/tUOuFVtAmMKG-fxojt_ronfEjaY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/AR-24878-bbq-chicken-pizza-beauty-4x3-39cd80585ad04941914dca4bd82eae3d.jpg",
+            imgUrl: "https://www.allrecipes.com/thmb/tUOuFVtAmMKG-fxojt_ronfEjaY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/AR-24878-bbq-chicken-pizza-beauty-4x3-39cd80585ad04941914dca4bd82eae3d.jpg",
             score: { 1: 2, 2: 3, 3: 4, 4: 20, 5: 100 },
             tags: ['italian', 'dinner']
         })
 
 
         server.create("recipe", {
-            id: "3",
-            name: "Lazy Wonton Soup",
-            author: "Teofil Jesionowski",
-            userId: 3,
+            id: 3,
+            title: "Lazy Wonton Soup",
+            author: {
+                id: 3,
+                name: 'Teofil Jesionowski',
+                avatar: userDefaultAvatar
+            },
             prepTime: "30 minutes",
             cookTime: "1 hour",
+            createDate: '3.11.2024',
             isPublic: false,
             servings: "4",
             difficulty: "easy",
@@ -81,18 +94,22 @@ createServer({
                 { step: "Boil ", description: "Form mixture into 1-inch balls and add to broth. Alternatively, use a small spoon to drop heaping teaspoons full of meat into broth. Reduce heat to a simmer; cook 5 minutes. Add wonton wrappers, bok choy, and additional soy sauce to taste. Cook 8 minutes, stirring occasionally." },
                 { step: "Serve", description: "Serve with reserved green onions and hot sauce or chili crisp if desired." }
             ],
-            imageUrl: "https://www.allrecipes.com/lazy-wonton-soup-recipe-8604015",
+            imgUrl: "https://www.allrecipes.com/lazy-wonton-soup-recipe-8604015",
             score: { 1: 2, 2: 3, 3: 4, 4: 20, 5: 60 },
             tags: ['chinese', 'dinner', 'soup']
         })
 
 
         server.create("recipe", {
-            id: "4",
-            name: "Mama's Banana Pudding",
-            author: "Bob Ziroll",
-            userId: 2,
+            id: 4,
+            title: "Mama's Banana Pudding",
+            author: {
+                id: 2,
+                name: 'Bob Ziroll',
+                avatar: userDefaultAvatar
+            },
             prepTime: "30 minutes",
+            createDate: '3.11.2024',
             isPublic: true,
             cookTime: "2 hours",
             servings: "24",
@@ -107,7 +124,7 @@ createServer({
                 { step: "", description: " Set oven rack about 4 inches from broiler; turn broiler to high. Quickly broil meringues until browned, about 1 to 2 minutes. (This happens very quickly, so keep a close eye on it.) " },
                 { step: "", description: " Remove dishes from oven, allow meringue to cool slightly, about 15 minutes, and serve. (Chill, covered, up to 4 days.)" }
             ],
-            imageUrl: "https://www.allrecipes.com/thmb/_sRnQ1LZJ8R0SUPkbVWNFXzvGto=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/8707679-mamas-banana-pudding-4x3-2b1439f987664c7d83377974fb8761fe.jpg",
+            imgUrl: "https://www.allrecipes.com/thmb/_sRnQ1LZJ8R0SUPkbVWNFXzvGto=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/8707679-mamas-banana-pudding-4x3-2b1439f987664c7d83377974fb8761fe.jpg",
             score: { 1: 2, 2: 3, 3: 4, 4: 20, 5: 60 },
             tags: ['desert', 'vegetarian', '']
         })
@@ -116,8 +133,11 @@ createServer({
         server.create("recipe", {
             id: "5",
             name: "",
-            author: "admin",
-            userId: 3,
+            author: {
+                id: X,
+                name: '',
+                avatar: userDefaultAvatar
+            },
             prepTime: "30 minutes",
             isPublic: true,
             cookTime: "1 hour",
@@ -131,7 +151,7 @@ createServer({
                 { step: "", description: "" },
                 { step: "", description: "" }
             ],
-            imageUrl: "",
+            imgUrl: "",
             score: { 1: 2, 2: 3, 3: 4, 4: 20, 5: 60 },
             tags: ['', '', '']
         })
@@ -144,24 +164,24 @@ createServer({
         */
 
         server.create("user", {
-            id: "1",
-            username: "Administrator",
+            id: 1,
+            name: "Administrator",
             password: "admin",
             email: "admin@put.local",
             isAdmin: true
         })
 
         server.create("user", {
-            id: "2",
-            username: "Bob Ziroll",
+            id: 2,
+            name: "Bob Ziroll",
             email: "bob.ziroll@put.local",
             password: "srimba",
             isAdmin: false
         })
 
         server.create("user", {
-            id: "3",
-            username: "Teofil Jesionowski",
+            id: 3,
+            name: "Teofil Jesionowski",
             email: "rektor@put.local",
             password: "polibuda",
             isAdmin: false
