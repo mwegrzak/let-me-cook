@@ -147,4 +147,8 @@ async function passwordReset(req, res, next) {
   }
 }
 
-export { register, login, logout, passwordResetRequest, passwordReset };
+async function check(req, res, next) {
+  return res.status(200).json(req.session.user);
+}
+
+export { register, login, logout, passwordResetRequest, passwordReset, check };
