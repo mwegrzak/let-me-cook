@@ -59,9 +59,9 @@ createServer({
             servings: "8",
             difficulty: "easy",
             ingredients: ["1 (12 inch) pre-baked pizza crust", "1 cup spicy barbeque sauce", "2 skinless boneless chicken breast halves, cooked and cubed", "1 cup sliced pepperoncini peppers", "1 cup chopped red onion", "½ cup chopped fresh cilantro", "2 cups shredded Colby-Jack cheese"],
-            description: "",
+            description: "This BBQ chicken pizza has spicy barbecue sauce, diced chicken, peppers, onion, and cilantro, all covered with cheese and baked to bubbly goodness! This is similar to a recipe I had at a popular pizza place in California. My family loves it!",
             directions: [
-                { step: "Gather all ingredients. Preheat the oven to 350 degrees F (175 degrees C).", description: "This BBQ chicken pizza has spicy barbecue sauce, diced chicken, peppers, onion, and cilantro, all covered with cheese and baked to bubbly goodness! This is similar to a recipe I had at a popular pizza place in California. My family loves it!" },
+                { step: "Gather all ingredients. Preheat the oven to 350 degrees F (175 degrees C).", description: "" },
                 { step: "Place pizza crust on a baking sheet. Spread barbeque sauce on crust. ", description: "" },
                 { step: "Top with chicken, pepperoncini peppers, onion, and cilantro.  Cover with Colby-Jack cheese. ", description: "" },
                 { step: "Bake in the preheated oven until cheese is melted and bubbly, about 15 minutes. ", description: "" }
@@ -94,7 +94,7 @@ createServer({
                 { step: "Boil ", description: "Form mixture into 1-inch balls and add to broth. Alternatively, use a small spoon to drop heaping teaspoons full of meat into broth. Reduce heat to a simmer; cook 5 minutes. Add wonton wrappers, bok choy, and additional soy sauce to taste. Cook 8 minutes, stirring occasionally." },
                 { step: "Serve", description: "Serve with reserved green onions and hot sauce or chili crisp if desired." }
             ],
-            imgUrl: "https://www.allrecipes.com/lazy-wonton-soup-recipe-8604015",
+            imgUrl: "https://www.allrecipes.com/thmb/EL998HCFXXOyPZFaYbm6nBawc3c=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/8604015_Lazy-Wonton-Soup_Dotdash-Meredith-Food-Studios_4x3-eb587414677c431ab44426b1efcc7997.jpg",
             score: { 1: 2, 2: 3, 3: 4, 4: 20, 5: 60 },
             tags: ['chinese', 'dinner', 'soup']
         })

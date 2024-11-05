@@ -74,7 +74,7 @@ export default function HomePageRecipe(props) {
 
     return (
         <Grid size={{ xs: 12, md: 6 }}>
-            <NavLink styleName="" to={`recipe/${props.id}`}>
+            <NavLink to={`recipe/${props.id}`} className="navlink">
                 <SyledCard
                     variant="outlined"
                     onFocus={() => handleFocus(0)}
@@ -84,7 +84,7 @@ export default function HomePageRecipe(props) {
                 >
                     <CardMedia
                         component="img"
-                        alt="green iguana"
+                        alt={props.title}
                         image={props.img}
                         sx={{
                             aspectRatio: '16 / 9',

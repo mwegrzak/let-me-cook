@@ -17,8 +17,6 @@ export default function Home(props) {
       .then(data => setRecipes(data.recipes))
   }, [])
 
-  console.log(recipes)
-
   const handleFilterClick = () => {
     console.info('You clicked the Chip.');
   };

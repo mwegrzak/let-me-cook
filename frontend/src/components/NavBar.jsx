@@ -44,7 +44,7 @@ export default function NavBar() {
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <Button component={NavLink} to="/" variant="outlined" color="info" size="small">Home</Button>
-              <Button component={NavLink} className={({ isActive }) => isActive ? "active" : null} to="/recipes" variant="outlined" color="info" size="small">All recipes</Button>
+              <Button component={NavLink} to="/recipes" variant="outlined" color="info" size="small">All recipes</Button>
             </Box>
           </Box>
 
