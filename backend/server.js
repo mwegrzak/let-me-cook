@@ -32,7 +32,7 @@ if (app.get('NODE_ENV') === 'production') {
 }
 app.use(session(sess));
 
-// app.use('/receipe', receipeRoute);
+app.use('/recipe', receipeRoute);
 app.use('/api/auth', authRoute);
 
 app.use(errorHandler);
