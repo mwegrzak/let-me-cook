@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url); // get the resolved path to t
 const __dirname = path.dirname(__filename); // get the name of the directory
 
 const config = {
-	outputPath: path.join(__dirname, 'dist'),
+	outputPath: path.join(__dirname, 'api-doc'),
 	generateUI: true,
 	swaggerUIPath: '/api-doc',
 	requestSchemaName: 'recipeCreateSchema',

@@ -36,7 +36,7 @@ app.use('/api/recipe', recipeRoute);
 app.use('/api/auth', authRoute);
 
 if (process.env.NODE_ENV === 'development') {
-    app.use('/api-doc' ,express.static('dist'));
+    app.use('/api-doc' ,express.static('api-doc'));
 }
 
 app.use(errorHandler);
