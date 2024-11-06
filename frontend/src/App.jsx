@@ -14,7 +14,7 @@ import AdminPanelLayout from './pages/AdminPanelLayout.jsx'
 import AdminPanel from './pages/AdminPanel.jsx'
 import CssBaseline from '@mui/material/CssBaseline';
 import NotFound from './pages/NotFound.jsx';
-import "./server"
+// import "./server"s
 
 function App() {
 
