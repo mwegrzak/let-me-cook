@@ -12,9 +12,7 @@ async function register(req, res, next) {
               email,
               password: hashedPassword,
               name
-          }
-      },
-      {
+          },
           select: {
               id: true,
               email: true,
@@ -28,7 +26,7 @@ async function register(req, res, next) {
       }
 
       req.session.user = user;
-      return res.status(201).json(user);
+      return res.status(201).json({ id: user.id, email: user.email, name: user.name });
     });
     
   } catch (error) {
@@ -64,7 +62,7 @@ async function login(req, res, next) {
       }
 
       req.session.user = user;
-      return res.status(200).json(user);
+      return res.status(200).json({ id: user.id, email: user.email, name: user.name });
     });
 
   } catch (error) {
