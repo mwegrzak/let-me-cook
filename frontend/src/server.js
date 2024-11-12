@@ -27,7 +27,7 @@ createServer({
             isPublic: true,
             cookTime: "1 hour",
             servings: "4",
-            difficulty: "easy",
+            difficulty: "Easy",
             ingredients: ["1 cup (60g) wheat bran", "1 1/2 cups (180g) white whole wheat flour", "2 teaspoons baking powder", "1/2 teaspoon baking soda", "1/2 teaspoon kosher salt", "1/2 teaspoon ground cinnamon", "1/3 cup (77g) light brown sugar", "1/3 cup (113g) honey", "1/3 cup (70g) unsalted butter, melted", "2 large eggs, room temperature", "3/4 cup unsweetened applesauce (140g) or mashed ripe banana (170g)", "3/4 cup (180ml) buttermilk", "1 teaspoon vanilla extract"],
             description: "A malty, nutty, and sweet breakfast muffin with an easy trick for a moist and flavorful crumb.",
             directions: [
@@ -57,7 +57,7 @@ createServer({
             createDate: '3.11.2024',
             cookTime: "15 minutes",
             servings: "8",
-            difficulty: "easy",
+            difficulty: "Easy",
             ingredients: ["1 (12 inch) pre-baked pizza crust", "1 cup spicy barbeque sauce", "2 skinless boneless chicken breast halves, cooked and cubed", "1 cup sliced pepperoncini peppers", "1 cup chopped red onion", "½ cup chopped fresh cilantro", "2 cups shredded Colby-Jack cheese"],
             description: "This BBQ chicken pizza has spicy barbecue sauce, diced chicken, peppers, onion, and cilantro, all covered with cheese and baked to bubbly goodness! This is similar to a recipe I had at a popular pizza place in California. My family loves it!",
             directions: [
@@ -85,7 +85,7 @@ createServer({
             createDate: '3.11.2024',
             isPublic: false,
             servings: "4",
-            difficulty: "easy",
+            difficulty: "Easy",
             ingredients: ["2 quarts chicken stock or broth", "1 bunch green onions, divided", "1 garlic clove, thinly sliced", "1 (3-inch) piece fresh ginger, peeled, or 2 teaspoons ground ginger", "2 tablespoons soy sauce, plus more to taste", "1 1/2 teaspoons rice vinegar", "1 tablespoon brown sugar", "1 teaspoon kosher salt, divided", "1 pound ground pork", "2 teaspoons toasted sesame oil", "2 teaspoons cornstarch", "3 heads baby bok choy, roughly chopped (about 3 cups)", "20 wonton wrappers, cut into quarters", "Sriracha hot sauce or chili crunch (optional)"],
             description: "For this lazy wonton soup, you skip making filled wontons, and drop pork meatballs and quartered wonton wrappers right into the gingery, flavorful broth. This recipe is SO delicious!",
             directions: [
@@ -142,7 +142,7 @@ createServer({
             isPublic: true,
             cookTime: "1 hour",
             servings: "",
-            difficulty: "easy",
+            difficulty: "Easy",
             ingredients: [""],
             description: "",
             directions: [
@@ -201,7 +201,7 @@ createServer({
         this.timing = 1000
 
         this.get("/recipes", (schema, request) => {
-            // return new Response(400, {}, {error: "Error fetching data"})
+            //return new Response(400, {}, { error: "Error fetching data" })
             return schema.recipes.all()
         })
 
