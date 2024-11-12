@@ -1,21 +1,17 @@
 import * as React from 'react';
-import { useSearchParams } from 'react-router-dom';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid2';
-import Chip from '@mui/material/Chip';
+import { useSearchParams, useLoaderData } from 'react-router-dom';
+import { Typography, Chip, Grid2, CircularProgress, Box } from '@mui/material';
 import HomePageRecipe from '../components/HomePageRecipe';
+import { getRecipes } from '../api';
+
+export function loader() {
+  return getRecipes()
+}
 
 export default function Home(props) {
 
-  const [recipes, setRecipes] = React.useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
-
-  React.useEffect(() => {
-    fetch("/api/recipes")
-      .then(res => res.json())
-      .then(data => setRecipes(data.recipes))
-  }, [])
+  const { recipes } = useLoaderData()
 
   const handleFilterClick = () => {
     console.info('You clicked the Chip.');
@@ -52,9 +48,9 @@ export default function Home(props) {
         <Chip onClick={handleFilterClick} size="medium" label="Desery" sx={{ backgroundColor: 'transparent', border: 'none', }} />
         <Chip onClick={handleFilterClick} size="medium" label="Przekąski" sx={{ backgroundColor: 'transparent', border: 'none', }} />
       </Box>
-      <Grid container spacing={2} columns={20}>
+      <Grid2 container spacing={2} columns={20}>
         {recipeElements}
-      </Grid>
+      </Grid2>
 
     </>
 

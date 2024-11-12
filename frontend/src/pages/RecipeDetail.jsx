@@ -1,32 +1,23 @@
 import * as React from 'react';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-
-import { useParams } from 'react-router-dom'
-
+import { useLoaderData } from 'react-router-dom'
+import { Container, Box, CardMedia, Typography, CircularProgress } from '@mui/material/';
 import RecipeSummaryBox from '../components/RecipeSummaryBox';
 import IngredientsList from '../components/IngredientsList';
 import RecipeStepsList from '../components/RecipeStepsList';
+import { getRecipe } from '../api.js'
+
+export function loader({ params }) {
+  return getRecipe(params.id)
+}
 
 export default function RecipeDetail(props) {
 
-
-  const [recipe, setRecipe] = React.useState(null);
-  const params = useParams()
-
-  React.useEffect(() => {
-    fetch(`/api/recipe/${params.id}`)
-      .then(res => res.json())
-      .then(data => setRecipe(data.recipes))
-  }, [params.id])
-
+  const data = useLoaderData()
+  const recipe = data.recipes
 
   return (
     <Container>
-      {recipe ? (
-
+      {
         <>
           <Typography gutterBottom variant="h1" component="div">
             {recipe.title}
@@ -35,9 +26,7 @@ export default function RecipeDetail(props) {
             {recipe.description}
 
           </Typography>
-          <Box
-            sx={{ display: 'inline-flex', flexDirection: 'row', gap: 3, overflow: 'auto' }}
-          >
+          <Box sx={{ display: 'inline-flex', flexDirection: 'row', gap: 3, overflow: 'auto' }}>
 
             <CardMedia
               component="img"
@@ -49,25 +38,19 @@ export default function RecipeDetail(props) {
                 borderColor: 'divider',
               }}
             />
-            <RecipeSummaryBox />
+            <RecipeSummaryBox
+              difficulty={recipe.difficulty}
+              scoreVotes={recipe.score}
+              prepTime={recipe.prepTime}
+              cookTime={recipe.cookTime}
+              servings={recipe.servings} />
           </Box>
-          <Box
-            sx={{ display: 'inline-flex', flexDirection: 'row', gap: 3, overflow: 'auto' }}
-          >
-
+          <Box sx={{ display: 'inline-flex', flexDirection: 'row', gap: 3, overflow: 'auto' }}>
             <IngredientsList ingredientsList={recipe.ingredients} />
-
-
             <RecipeStepsList stepsList={recipe.directions} />
           </Box>
-
-
         </>
-      ) : <h1>Loading...</h1>
-
       }
-
-
 
     </Container>
   );

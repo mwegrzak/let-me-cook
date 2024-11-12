@@ -1,9 +1,9 @@
 # let-me-cook
-Webapp for hosting cooking receipes
+Webapp for hosting cooking recipes
 
 ## How to run
 
-Install node.js and optionally docker if you wish to test mongodb locally
+Install node.js
 ```
 git clone https://github.com/mwegrzak/let-me-cook.git
 cd let-me-cook
@@ -19,11 +19,11 @@ npm run dev
 ### backend
 ```
 cd backend
-# adjust mongodb and mongo-express config in docker-compose
-# non-production; just for debugging purposes
 docker compose up -d 
 cp env.example .env
 vim .env
 npm install
+npx prisma generate
+npx prisma migrate dev
 npm run dev
 ```

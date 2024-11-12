@@ -25,16 +25,13 @@ export default function IngredientsList(ingredientsList) {
     };
 
     return (
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        <List sx={{ width: '100%', minWidth: 360, bgcolor: 'background.paper' }}>
             {ingredientsList.ingredientsList.map((value) => {
                 const labelId = `checkbox-list-label-${value}`;
 
                 return (
-                    <ListItem
-                        key={value}
-                        disablePadding
-                    >
-                        <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+                    <ListItem key={value} disablePadding>
+                        <ListItemButton onClick={handleToggle(value)} dense>
                             <ListItemIcon>
                                 <Checkbox
                                     edge="start"

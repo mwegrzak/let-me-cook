@@ -9,18 +9,16 @@ import Typography from '@mui/material/Typography';
 export default function RecipeStepsList(stepsList) {
 
     const listItems = stepsList['stepsList'].map((item) => {
-        return < ListItemText key={item.step} primary={item.step} secondary={item.description} />
+        return <ListItem> < ListItemText primaryTypographyProps={{ fontSize: 18 }} key={item.step} primary={item.step} secondary={item.description} /></ListItem>
     })
 
     return (
         <Grid xs={12} md={6}>
-            <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-                Text only
+            <Typography variant="h4" component="div">
+                Directions
             </Typography>
             <List>
-                <ListItem>
-                    {listItems}
-                </ListItem>
+                {listItems}
             </List>
         </Grid>
     );
