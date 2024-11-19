@@ -2,6 +2,7 @@ import express from 'express';
 import Joi from "joi";
 import { createValidator } from "express-joi-validation";
 import { list, get, create, remove, update } from '../controllers/recipeController.js';
+import authenticated from "../middlewares/authenticated.js";
 
 const router = express.Router();
 const validator = createValidator({passError: true, statusCode: 400});
@@ -21,7 +22,7 @@ const recipeCreateSchema = Joi.object({
     difficulty: Joi.number().required(),
     time: Joi.number().required(),
 });
-router.post('/', validator.body(recipeCreateSchema), create);
+router.post('/', validator.body(recipeCreateSchema), authenticated, create);
 
 const recipeUpdateSchemaBody = Joi.object({
     name: Joi.string().required(),
@@ -34,11 +35,11 @@ const recipeUpdateSchemaBody = Joi.object({
 const recipeUpdateSchemaParams = Joi.object({
     id: Joi.string().required(),
 });
-router.put('/:id', validator.params(recipeUpdateSchemaParams), validator.body(recipeUpdateSchemaBody), update);
+router.put('/:id', validator.params(recipeUpdateSchemaParams), validator.body(recipeUpdateSchemaBody), authenticated ,update);
 
 const recipeDeleteSchema = Joi.object({
     id: Joi.string().required(),
 });
-router.delete('/:id', validator.params(recipeDeleteSchema), remove);
+router.delete('/:id', validator.params(recipeDeleteSchema), authenticated, remove);
 
 export default router;
