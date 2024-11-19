@@ -1,8 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import { useLoaderData } from 'react-router-dom';
 import Container from '@mui/material/Container';
+import { requireAuth } from '../utils/api';
 
-export function loader() {
+export async function loader() {
+  await requireAuth()
   return null
 }
 

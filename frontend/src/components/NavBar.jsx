@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { alpha, styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';

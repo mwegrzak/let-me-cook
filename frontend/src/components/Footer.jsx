@@ -1,15 +1,6 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
-import Link from '@mui/material/Link';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import FacebookIcon from '@mui/icons-material/GitHub';
+import React from 'react';
+import { Box, Button, Container, Divider, IconButton, InputLabel, Link, Stack, TextField, Typography } from '@mui/material';
+import GithubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/X';
 
@@ -198,7 +189,7 @@ export default function Footer() {
                             aria-label="GitHub"
                             sx={{ alignSelf: 'center' }}
                         >
-                            <FacebookIcon />
+                            <GithubIcon />
                         </IconButton>
                         <IconButton
                             color="inherit"

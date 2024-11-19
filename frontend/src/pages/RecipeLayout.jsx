@@ -1,7 +1,5 @@
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
+import React from 'react';
 import Container from '@mui/material/Container';
-import AppTheme from '../shared-theme/AppTheme';
 
 export default function RecipeLayout(props) {
   return (

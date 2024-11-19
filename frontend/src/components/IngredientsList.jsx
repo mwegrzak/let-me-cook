@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import CommentIcon from '@mui/icons-material/Comment';
 
 export default function IngredientsList(ingredientsList) {
-    const [checked, setChecked] = React.useState([0]);
+    const [checked, setChecked] = useState([0]);
 
     const handleToggle = (value) => () => {
         const currentIndex = checked.indexOf(value);

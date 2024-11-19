@@ -1,13 +1,23 @@
-import * as React from 'react';
-import Grid from '@mui/material/Grid2';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { Grid2 as Grid, Card, CardContent, CardMedia, Box, Avatar, Typography, styled } from '@mui/material';
+
+function calcAvgScore(scoreVotes) {
+    // weighted average of votes
+    let weightedSum = 0;
+    let sumOfValues = 0;
+
+    for (const key in scoreVotes) {
+        const weight = Number(key);
+        const value = scoreVotes[key];
+
+        weightedSum += weight * value;
+        sumOfValues += value;
+    }
+
+    const weightedAverage = weightedSum / sumOfValues;
+    return weightedAverage.toFixed(2);
+}
 
 const SyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
@@ -62,7 +72,7 @@ function Author(author) {
 }
 
 export default function HomePageRecipe(props) {
-    const [focusedCardIndex, setFocusedCardIndex] = React.useState(null);
+    const [focusedCardIndex, setFocusedCardIndex] = useState(null);
 
     const handleFocus = (index) => {
         setFocusedCardIndex(index);
@@ -108,7 +118,7 @@ export default function HomePageRecipe(props) {
                     </SyledCardContent>
                     <Author author={props.author} />
                     <Typography variant="caption">{props.creationDate}</Typography>
-                    <Typography variant="caption">Rate 5.0</Typography>
+                    <Typography variant="caption">Score {calcAvgScore(props.score)}</Typography>
                 </SyledCard>
             </NavLink>
         </Grid>

@@ -1,9 +1,5 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import Rating from '@mui/material/Rating';
+import React, { useState } from 'react';
+import { Box, Card, CardContent, Typography, Rating } from '@mui/material';
 
 function calcAvgScore(scoreVotes) {
     // weighted average of votes
@@ -29,7 +25,7 @@ export default function RecipeSummaryBox(props) {
     const cookTime = props.cookTime
     let scoreVotes = props.scoreVotes
 
-    const [score, setScore] = React.useState(1);
+    const [score, setScore] = useState(1);
 
     return (
         <Card sx={{ minWidth: 275 }}>
@@ -43,15 +39,6 @@ export default function RecipeSummaryBox(props) {
                             setScore(newValue);
                         }}
                     />
-
-                    {/*
-                    <Typography component="legend">Read only</Typography>
-                    <Rating name="read-only" score={score} readOnly />
-                    <Typography component="legend">Disabled</Typography>
-                    <Rating name="disabled" score={score} disabled />
-                    <Typography component="legend">No score given</Typography>
-                    <Rating name="no-score" score={null} />
-                    */}
                 </Box>
 
                 <Box sx={{ justifyContent: 'space-between', display: 'flex', flexDirection: 'row', m: 3 }} >

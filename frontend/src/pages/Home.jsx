@@ -1,24 +1,26 @@
-import * as React from 'react';
+import React from 'react';
 import { useSearchParams, useLoaderData } from 'react-router-dom';
-import { Typography, Chip, Grid2, CircularProgress, Box } from '@mui/material';
+import { Chip, Grid2, Box } from '@mui/material';
 import HomePageRecipe from '../components/HomePageRecipe';
-import { getRecipes } from '../api';
+import { getRecipes } from '../utils/api';
 
 export function loader() {
   return getRecipes()
 }
 
 export default function Home(props) {
-
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams()
   const { recipes } = useLoaderData()
-
-  const handleFilterClick = () => {
-    console.info('You clicked the Chip.');
-  };
+  const recipeFilter = searchParams.get("type")
+  const filteredRecipes = recipeFilter ? recipes.filter(recipe => recipe.tags.indexOf(recipeFilter) > -1) : recipes
 
 
-  const recipeElements = recipes.map(item => {
+  function handleFilterChange(key, value) {
+    if (key === null) { setSearchParams([]); }
+    else { setSearchParams(prevParams => ([[key, value]])); }
+  }
+
+  const recipeElements = filteredRecipes.map(item => {
     return <HomePageRecipe
       key={item.id}
       id={item.id}
@@ -27,6 +29,7 @@ export default function Home(props) {
       title={item.title}
       description={item.description}
       author={item.author}
+      score={item.score}
     />
   })
 
@@ -41,12 +44,11 @@ export default function Home(props) {
           overflow: 'auto',
         }}
       >
-        { /*********** FILTER BAR ***********/}
-        <Chip onClick={handleFilterClick} size="medium" label="Wszystkie kategorie" />
-        <Chip onClick={handleFilterClick} size="medium" label="Śniadania" sx={{ backgroundColor: 'transparent', border: 'none', }} />
-        <Chip onClick={handleFilterClick} size="medium" label="Obiady" sx={{ backgroundColor: 'transparent', border: 'none', }} />
-        <Chip onClick={handleFilterClick} size="medium" label="Desery" sx={{ backgroundColor: 'transparent', border: 'none', }} />
-        <Chip onClick={handleFilterClick} size="medium" label="Przekąski" sx={{ backgroundColor: 'transparent', border: 'none', }} />
+        <Chip onClick={() => handleFilterChange(null, null)} size="medium" label="All categories" />
+        <Chip onClick={() => handleFilterChange("type", "Breakfast")} size="medium" label="Breakfast" color='primary' sx={{ backgroundColor: 'none' }} />
+        <Chip onClick={() => handleFilterChange("type", "Dinner")} size="medium" label="Dinner" sx={{ backgroundColor: 'transparent', border: 'none', }} />
+        <Chip onClick={() => handleFilterChange("type", "Dessert")} size="medium" label="Dessert" sx={{ backgroundColor: 'transparent', border: 'none', }} />
+        <Chip onClick={() => handleFilterChange("type", "Aperitif")} size="medium" label="Aperitif" sx={{ backgroundColor: 'transparent', border: 'none', }} />
       </Box>
       <Grid2 container spacing={2} columns={20}>
         {recipeElements}

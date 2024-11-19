@@ -23,7 +23,7 @@ createServer({
                 avatar: userDefaultAvatar
             },
             createDate: '3.11.2024',
-            prepTime: "30 minutes",
+            prepTime: "30",
             isPublic: true,
             cookTime: "1 hour",
             servings: "4",
@@ -41,7 +41,7 @@ createServer({
             ],
             imgUrl: "https://www.simplyrecipes.com/thmb/cvOjc9W1eNwGQFN0V3aCrdpkXZs=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/SimplyRecipes_BranMuffins_LEAD_7-fd45c486d07348438b564e34f6013713.jpg",
             score: { 1: 2, 2: 6, 3: 4, 4: 20, 5: 60 },
-            tags: ['breakfast', 'vegetarian', 'muffins']
+            tags: ['Breakfast', 'vegetarian', 'muffins']
         })
 
         server.create("recipe", {
@@ -52,7 +52,7 @@ createServer({
                 name: "admin",
                 avatar: userDefaultAvatar
             },
-            prepTime: "1 hour",
+            prepTime: "60",
             isPublic: true,
             createDate: '3.11.2024',
             cookTime: "15 minutes",
@@ -68,7 +68,7 @@ createServer({
             ],
             imgUrl: "https://www.allrecipes.com/thmb/tUOuFVtAmMKG-fxojt_ronfEjaY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/AR-24878-bbq-chicken-pizza-beauty-4x3-39cd80585ad04941914dca4bd82eae3d.jpg",
             score: { 1: 2, 2: 3, 3: 4, 4: 20, 5: 100 },
-            tags: ['italian', 'dinner']
+            tags: ['italian', 'Dinner']
         })
 
 
@@ -80,8 +80,8 @@ createServer({
                 name: 'Teofil Jesionowski',
                 avatar: userDefaultAvatar
             },
-            prepTime: "30 minutes",
-            cookTime: "1 hour",
+            prepTime: "30",
+            cookTime: "60",
             createDate: '3.11.2024',
             isPublic: false,
             servings: "4",
@@ -96,7 +96,7 @@ createServer({
             ],
             imgUrl: "https://www.allrecipes.com/thmb/EL998HCFXXOyPZFaYbm6nBawc3c=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/8604015_Lazy-Wonton-Soup_Dotdash-Meredith-Food-Studios_4x3-eb587414677c431ab44426b1efcc7997.jpg",
             score: { 1: 2, 2: 3, 3: 4, 4: 20, 5: 60 },
-            tags: ['chinese', 'dinner', 'soup']
+            tags: ['chinese', 'Dinner', 'soup']
         })
 
 
@@ -108,10 +108,10 @@ createServer({
                 name: 'Bob Ziroll',
                 avatar: userDefaultAvatar
             },
-            prepTime: "30 minutes",
+            prepTime: "30",
             createDate: '3.11.2024',
             isPublic: true,
-            cookTime: "2 hours",
+            cookTime: "120",
             servings: "24",
             difficulty: "medium",
             ingredients: ["1 cup plus 1 tablespoon sugar", "1/2 cup flour", "1/8 teaspoon salt", "6 cups whole milk", "6 egg yolks", "3 eggs", "1/2 cup butter", "3 teaspoons vanilla extract", "9 ripe bananas", "2 (12 ounce) boxes vanilla wafers", "6 egg whites (see “Test Kitchen Tip”)", "1/4 teaspoon cream of tartar"],
@@ -126,7 +126,7 @@ createServer({
             ],
             imgUrl: "https://www.allrecipes.com/thmb/_sRnQ1LZJ8R0SUPkbVWNFXzvGto=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/8707679-mamas-banana-pudding-4x3-2b1439f987664c7d83377974fb8761fe.jpg",
             score: { 1: 2, 2: 3, 3: 4, 4: 20, 5: 60 },
-            tags: ['desert', 'vegetarian', '']
+            tags: ['Dessert', 'vegetarian', '']
         })
         /*
 
