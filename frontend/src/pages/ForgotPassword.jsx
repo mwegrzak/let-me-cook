@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useLoaderData, Form, redirect, useActionData } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
-import { Box, Button, FormLabel, Link, TextField, Typography, Stack, Alert, AlertTitle } from '@mui/material'
+import { Box, Button, FormLabel, Link, TextField, Typography, Alert } from '@mui/material'
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
-import ForgotPasswordModal from '../components/ForgotPasswordModal';
 import { SitemarkIcon } from '../components/CustomIcons';
 import fetchPost from '../utils/fetchPost';
 
@@ -36,9 +34,10 @@ export async function action({ request }) {
 
   const formData = await request.formData()
 
-  // TODO form forgot-password
-  const email = formData.get("email")
   const password = formData.get("password")
+  const repeatPassword = formData.get("repeatPassword")
+
+  // check if passwords match
   try {
     const user = await fetchPost('/login', { password: password, email: email })
     redirect('/')
@@ -83,7 +82,7 @@ export default function Login(props) {
         <Card variant="outlined">
           <SitemarkIcon />
           <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
-            Sign in
+            Forgot password
           </Typography>
 
           <Box noValidate
@@ -94,21 +93,8 @@ export default function Login(props) {
               gap: 3,
             }}
           >
-            <Form method="post" action="/login" replace>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <TextField
-                id="email"
-                type="email"
-                name="email"
-                placeholder="your@email.com"
-                autoComplete="email"
-                autoFocus
-                required
-                fullWidth
-                variant="outlined"
-                sx={{ ariaLabel: 'email' }}
+            <Form method="post" action="/forgot-password" replace>
 
-              />
               <FormLabel htmlFor="password">Password</FormLabel>
               <TextField
                 name="password"
@@ -122,24 +108,24 @@ export default function Login(props) {
                 variant="outlined"
               />
 
+              <FormLabel htmlFor="repeatPassword">Repeat password</FormLabel>
+              <TextField
+                name="repeatPassword"
+                placeholder="••••••••••••"
+                type="password"
+                id="repeatPassword"
+                autoComplete="current-password"
+                autoFocus
+                required
+                fullWidth
+                variant="outlined"
+              />
+
+
               <Button type="submit" fullWidth variant="contained">
-                Sign in
+                Remind me a password
               </Button>
             </Form>
-            <ForgotPasswordModal open={open} handleClose={handleClose} />
-
-            <Box display={'inline-flex'} justifyContent={'space-between'}>
-
-              <Link component="button" type="button" onClick={handleClickOpen} variant="body2" sx={{ alignSelf: 'baseline' }}>
-                Forgot your password?
-              </Link>
-
-              <Typography sx={{ textAlign: 'center' }}>
-                Don't have an account?{' '}
-                <NavLink className={'navlink'} to="/register">Register!</NavLink>
-              </Typography>
-
-            </Box>
 
           </Box>
         </Card>

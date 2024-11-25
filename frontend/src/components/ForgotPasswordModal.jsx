@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, OutlinedInput } from '@mui/material';
 
 
-function ForgotPassword({ open, handleClose }) {
+function ForgotPasswordModal({ open, handleClose }) {
 
   return (
     <Dialog
@@ -45,9 +45,9 @@ function ForgotPassword({ open, handleClose }) {
   );
 }
 
-ForgotPassword.propTypes = {
+ForgotPasswordModal.propTypes = {
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
 };
 
-export default ForgotPassword;
+export default ForgotPasswordModal;

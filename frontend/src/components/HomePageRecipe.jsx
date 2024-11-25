@@ -5,21 +5,22 @@ import { Grid2 as Grid, Card, CardContent, CardMedia, Box, Avatar, Typography, s
 function calcAvgScore(scoreVotes) {
     // weighted average of votes
     let weightedSum = 0;
-    let sumOfValues = 0;
+    let sum = 0;
 
     for (const key in scoreVotes) {
         const weight = Number(key);
         const value = scoreVotes[key];
 
         weightedSum += weight * value;
-        sumOfValues += value;
+        sum += value;
     }
 
-    const weightedAverage = weightedSum / sumOfValues;
+    const weightedAverage = weightedSum / sum;
     return weightedAverage.toFixed(2);
 }
 
-const SyledCard = styled(Card)(({ theme }) => ({
+
+const StyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: 0,
@@ -36,7 +37,7 @@ const SyledCard = styled(Card)(({ theme }) => ({
     },
 }));
 
-const SyledCardContent = styled(CardContent)({
+const StyledCardContent = styled(CardContent)({
     display: 'flex',
     flexDirection: 'column',
     gap: 4,
@@ -55,22 +56,6 @@ const StyledTypography = styled(Typography)({
     textOverflow: 'ellipsis',
 });
 
-function Author(author) {
-    return (
-        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center', justifyContent: 'space-between', padding: '16px', }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }} >
-                <Avatar
-                    key={author.id}
-                    alt={author.name}
-                    src={author.avatar}
-                    sx={{ width: 24, height: 24 }}
-                />
-                <Typography variant="caption">July 14, 2021 {author.name}</Typography>
-            </Box>
-        </Box>
-    );
-}
-
 export default function HomePageRecipe(props) {
     const [focusedCardIndex, setFocusedCardIndex] = useState(null);
 
@@ -85,13 +70,15 @@ export default function HomePageRecipe(props) {
     return (
         <Grid size={{ xs: 12, md: 6 }}>
             <NavLink to={`recipe/${props.id}`} className="navlink">
-                <SyledCard
+                <StyledCard
                     variant="outlined"
                     onFocus={() => handleFocus(0)}
                     onBlur={handleBlur}
                     tabIndex={0}
                     className={focusedCardIndex === 0 ? 'Mui-focused' : ''}
                 >
+                    <CardContent>
+                    </CardContent>
                     <CardMedia
                         component="img"
                         alt={props.title}
@@ -102,7 +89,8 @@ export default function HomePageRecipe(props) {
                             borderColor: 'divider',
                         }}
                     />
-                    <SyledCardContent>
+
+                    <Box>
 
                         <Typography gutterBottom variant="h6" component="div">
                             {props.title}
@@ -110,17 +98,30 @@ export default function HomePageRecipe(props) {
                         <StyledTypography variant="body2" color="text.secondary" gutterBottom>
                             {props.description}
                         </StyledTypography>
-                        <Typography gutterBottom variant="caption" component="div">
-                            {props.tags.map((tag) => {
-                                return tag + ' '
-                            })}
-                        </Typography>
-                    </SyledCardContent>
-                    <Author author={props.author} />
-                    <Typography variant="caption">{props.creationDate}</Typography>
-                    <Typography variant="caption">Score {calcAvgScore(props.score)}</Typography>
-                </SyledCard>
+                    </Box>
+                    <Box display='inline-flex' justifyContent={'space-between'}>
+
+                        <Typography variant="caption">Score {calcAvgScore(props.score)}</Typography>
+                        {/*<Typography variant="caption">{props.creationDate}</Typography> */}
+
+                        <Box display='flex'>
+                            <Avatar
+                                key={props.author.id}
+                                alt={props.author.name}
+                                src={props.avatar}
+                                sx={{ width: 24, height: 24 }}
+                            />
+                            <Typography variant="caption">{props.author.name}</Typography>
+                        </Box>
+                    </Box>
+                    <Typography gutterBottom variant="caption" component="div">
+                        {props.tags.map((tag) => {
+                            return tag + ' '
+                        })}
+                    </Typography>
+
+                </StyledCard>
             </NavLink>
-        </Grid>
+        </Grid >
     )
 }

@@ -4,7 +4,7 @@ export default async function fetchPost(endpoint, data) {
   const body = JSON.stringify(data) || {};
 
   const response = await fetch(`${API_ENDPOINT}${endpoint}`, {
-    method: 'Post',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },

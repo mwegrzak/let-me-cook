@@ -6,7 +6,7 @@ import Home, { loader as homeLoader } from './pages/Home.jsx'
 import Register from './pages/Register.jsx'
 import Error from './pages/Error.jsx'
 import Login, { loader as loginLoader, action as loginAction } from './pages/Login.jsx'
-import ForgotPassword from './components/ForgotPassword.jsx'
+import ForgotPassword, { action as ForgotPasswordAction } from './pages/ForgotPassword.jsx'
 import UserRecipes, { loader as userRecipesLoader } from './pages/UserRecipes.jsx'
 import RecipeDetail, { loader as recipeDetailLoader } from './pages/RecipeDetail.jsx'
 import RecipeInput, { loader as recipeInputLoader, action as recipeInputAction } from './pages/RecipeInput.jsx'
@@ -25,7 +25,7 @@ function App() {
             <Route index element={<Home />} loader={homeLoader} />
             <Route path="login" element={<Login />} loader={loginLoader} action={loginAction} />
             <Route path="register" element={<Register />} />
-            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="forgot-password" element={<ForgotPassword />} action={ForgotPasswordAction} />
             <Route path="recipe/:id" element={<RecipeDetail />} loader={recipeDetailLoader} />
             <Route path="recipes" element={<UserRecipes />} loader={userRecipesLoader} />
 

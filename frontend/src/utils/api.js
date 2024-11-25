@@ -26,6 +26,26 @@ export async function getRecipe(id) {
     return data
 }
 
+export async function deleteRecipe(id) {
+    const res = await fetch(`/api/recipe/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+
+    if (!res.ok) {
+        throw {
+            message: "Failed to fetch recipes",
+            statusText: res.statusText,
+            status: res.status
+        }
+    }
+    const data = await res.json()
+    return data
+
+
+}
 
 export async function requireAuth() {
 

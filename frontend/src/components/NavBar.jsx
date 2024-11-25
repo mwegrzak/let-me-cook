@@ -45,12 +45,13 @@ export default function NavBar() {
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <Button component={NavLink} to="/" variant="outlined" color="info" size="small">All recipes</Button>
               <Button component={NavLink} to="/recipes" variant="outlined" color="info" size="small">My recipes</Button>
+              <Button component={NavLink} to="/recipes/add" variant="outlined" color="info" size="small">Add recipe</Button>
             </Box>
           </Box>
 
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center', }}>
-            <Button component={NavLink} to="login" color="primary" variant="outlined" size="small">Login</Button>
-            <Button component={NavLink} to="register" color="primary" variant="contained" size="small">Register</Button>
+            <Button component={NavLink} to="/login" color="primary" variant="outlined" size="small">Login</Button>
+            <Button component={NavLink} to="/register" color="primary" variant="contained" size="small">Register</Button>
             <Button component={NavLink} to="/profile" variant="outlined" color="info" size="small">Profile</Button>
             <Button component={NavLink} to="/" color="outlined" variant="contained" size="small">Logout</Button>
             <ColorModeIconDropdown />

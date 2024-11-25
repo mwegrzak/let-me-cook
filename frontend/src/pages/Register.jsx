@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, Form } from 'react-router-dom';
 import { SitemarkIcon } from '../components/CustomIcons';
-import { Box, Button, FormLabel, TextField, Typography, Stack, styled } from '@mui/material'
+import { Box, Button, FormLabel, TextField, Typography, styled } from '@mui/material'
 import MuiCard from '@mui/material/Card';
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -23,28 +23,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }),
 }));
 
-const SignUpContainer = styled(Stack)(({ theme }) => ({
-  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-  minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-  },
-}));
 
 export async function loader() {
   console.log('looooaaaadooor')
@@ -55,7 +33,12 @@ export async function action({ request }) {
   const formData = await request.formData()
   const email = formData.get("email")
   const password = formData.get("password")
+  const repeatPassword = formData.get("repeatPassword")
   const name = formData.get("name")
+
+  if (password != repeatPassword) {
+    throw 'Passwords do not match'
+  }
 
   try {
     const response = await fetchPost('/register', { name: name, email: email, password: password })
@@ -71,7 +54,7 @@ export default function Register(props) {
 
   return (
     <>
-      <SignUpContainer direction="column" justifyContent="space-between">
+      <Box direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <SitemarkIcon />
           <Typography
@@ -126,9 +109,18 @@ export default function Register(props) {
                 placeholder="••••••"
                 autoComplete="new-password"
                 variant="outlined"
-              //error={passwordError}
-              //helperText={passwordErrorMessage}
-              //color={passwordError ? 'error' : 'primary'}
+              />
+              <FormLabel htmlFor="repeatPassword">Repeat Password</FormLabel>
+
+              <TextField
+                required
+                fullWidth
+                name="repeatPassword"
+                type="password"
+                id="repeatPassword"
+                placeholder="••••••"
+                autoComplete="new-password"
+                variant="outlined"
               />
               <Button type="submit" fullWidth variant="contained">
                 Sign up
@@ -136,12 +128,12 @@ export default function Register(props) {
             </Form>
             <Typography sx={{ textAlign: 'center' }}>
               Already have an account?{' '}
-              <NavLink to="/login" className={'navlink'}>Sign in</NavLink>
+              <NavLink to="/login" className={'navlink'}>Log in!</NavLink>
             </Typography>
           </Box>
 
         </Card>
-      </SignUpContainer>
+      </Box>
     </>
   );
 }
