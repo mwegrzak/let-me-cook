@@ -3,7 +3,7 @@ import React from 'react-dom'
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom'
 import HomeLayout from './pages/HomeLayout.jsx'
 import Home, { loader as homeLoader } from './pages/Home.jsx'
-import Register from './pages/Register.jsx'
+import Register, { action as registerAction } from './pages/Register.jsx'
 import Error from './pages/Error.jsx'
 import Login, { loader as loginLoader, action as loginAction } from './pages/Login.jsx'
 import ForgotPassword, { action as ForgotPasswordAction } from './pages/ForgotPassword.jsx'
@@ -16,7 +16,7 @@ import AdminPanel, { loader as adminPanelLoader } from './pages/AdminPanel.jsx'
 import NotFound from './pages/NotFound.jsx';
 import AppTheme from './shared-theme/AppTheme';
 import CssBaseline from '@mui/material/CssBaseline';
-import "./server"
+//import "./server"
 
 function App() {
 
@@ -24,7 +24,7 @@ function App() {
         <Route path='/' element={<HomeLayout />} errorElement={<Error />} >
             <Route index element={<Home />} loader={homeLoader} />
             <Route path="login" element={<Login />} loader={loginLoader} action={loginAction} />
-            <Route path="register" element={<Register />} />
+            <Route path="register" element={<Register />} action={registerAction} />
             <Route path="forgot-password" element={<ForgotPassword />} action={ForgotPasswordAction} />
             <Route path="recipe/:id" element={<RecipeDetail />} loader={recipeDetailLoader} />
             <Route path="recipes" element={<UserRecipes />} loader={userRecipesLoader} />

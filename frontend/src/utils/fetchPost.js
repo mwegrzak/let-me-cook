@@ -1,4 +1,4 @@
-const API_ENDPOINT = 'http://localhost:4000/api';
+const API_ENDPOINT = 'http://localhost:4000';
 
 export default async function fetchPost(endpoint, data) {
   const body = JSON.stringify(data) || {};

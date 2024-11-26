@@ -35,27 +35,39 @@ export function loader({ request }) {
 export async function action({ request }) {
 
   const formData = await request.formData()
-
-  // TODO form forgot-password
+  const forgotPasswordEmail = formData.get("forgotPasswordEmail")
   const email = formData.get("email")
   const password = formData.get("password")
-  try {
-    const user = await fetchPost('/login', { password: password, email: email })
-    redirect('/')
 
-  } catch (err) {
-    return err
+  if (typeof forgotPasswordEmail !== 'undefined') {
+    // handle forgot password form TODO
+    try {
+      const response = await fetchPost('/api/auth/passwordreset', { email: email })
+      console.log(response)
+      return response
+    }
+    catch (err) {
+      return err
+    }
+  }
+  else {
+    // handle login form
+    try {
+      const response = await fetchPost('/api/auth/login', { email: email, password: password })
+      return response
+
+    } catch (err) {
+      return err
+    }
   }
 
-  return response
 }
 
 export default function Login(props) {
 
   const [open, setOpen] = useState(false);
-  const message = useLoaderData()
-  //const error = useActionData()
-  //console.log(error.message)
+  const loaderData = useLoaderData()
+  const actionData = useActionData()
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,21 +81,35 @@ export default function Login(props) {
   return (
     <>
       <Box direction="column" justifyContent="space-between">
-
-        {message &&
-          <Alert severity="error" variant="outlined"
-            sx={{
-              width: '40%', display: 'flex',
-              flexDirection: 'column',
-              alignSelf: 'center',
-            }} >
-            {message}
-          </Alert>
-        }
         <Card variant="outlined">
+
+          {loaderData &&
+            <Alert severity="error" variant="outlined"
+              sx={{
+                width: '100%', display: 'flex',
+                flexDirection: 'column',
+                alignSelf: 'center',
+              }} >
+              {loaderData.error}
+            </Alert>
+          }
+
+
+          {actionData &&
+            <Alert severity="error" variant="outlined"
+              sx={{
+                width: '100%', display: 'flex',
+                flexDirection: 'column',
+                alignSelf: 'center',
+              }} >
+              {actionData.error}
+            </Alert>
+          }
+
+
           <SitemarkIcon />
           <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
-            Sign in
+            Log in
           </Typography>
 
           <Box noValidate
