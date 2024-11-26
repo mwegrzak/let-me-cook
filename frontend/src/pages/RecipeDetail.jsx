@@ -4,10 +4,10 @@ import { Container, Box, CardMedia, Typography, CircularProgress } from '@mui/ma
 import RecipeSummaryBox from '../components/RecipeSummaryBox';
 import IngredientsList from '../components/IngredientsList';
 import RecipeStepsList from '../components/RecipeStepsList';
-import { getRecipe } from '../utils/api.js'
+import { fetchGet } from '../utils/api.js'
 
 export function loader({ params }) {
-  return getRecipe(params.id)
+  return fetchGet(`/api/recipe/${params.id}`)
 }
 
 export default function RecipeDetail(props) {

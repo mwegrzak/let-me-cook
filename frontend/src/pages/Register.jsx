@@ -3,7 +3,7 @@ import { NavLink, Form, useActionData, useLoaderData } from 'react-router-dom';
 import { SitemarkIcon } from '../components/CustomIcons';
 import { Box, Button, FormLabel, TextField, Typography, styled, Alert } from '@mui/material'
 import MuiCard from '@mui/material/Card';
-import fetchPost from '../utils/fetchPost';
+import { fetchPost } from '../utils/api';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -26,7 +26,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
 
 
 export async function loader() {
-  console.log('looooaaaadooor')
   return null
 }
 
@@ -46,8 +45,6 @@ export async function action({ request }) {
     return response
   }
   catch (err) {
-    console.log(err)
-
     return err
   }
 }
@@ -56,7 +53,6 @@ export default function Register(props) {
 
   const loaderData = useLoaderData()
   const actionData = useActionData()
-  console.log(actionData)
 
   return (
     <>

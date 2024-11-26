@@ -4,13 +4,13 @@ import userDefaultAvatar from './images/default-user-avatar.png'
 
 createServer({
     models: {
-        recipes: Model,
+        recipe: Model,
         users: Model
     },
 
     /* 
         *************************************************************
-        ************************** RECIPES **************************
+        ************************** recipe **************************
         *************************************************************
     */
     seeds(server) {
@@ -39,7 +39,7 @@ createServer({
                 { step: "Bake", description: " Bake the muffins for 5 minutes. Reduce the oven temperature to 350°F without opening the door. Continue baking for 10 to 13 minutes, or until a toothpick inserted into the center of one of the muffins comes out clean. " },
                 { step: "Cool muffins and serve", description: " Allow the muffins to cool in the pan for 5 minutes before transferring them to a wire rack to finish cooling. Serve warm or at room temperature. " }
             ],
-            imgUrl: "https://www.simplyrecipes.com/thmb/cvOjc9W1eNwGQFN0V3aCrdpkXZs=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/SimplyRecipes_BranMuffins_LEAD_7-fd45c486d07348438b564e34f6013713.jpg",
+            imgUrl: "https://www.simplyrecipe.com/thmb/cvOjc9W1eNwGQFN0V3aCrdpkXZs=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/Simplyrecipe_BranMuffins_LEAD_7-fd45c486d07348438b564e34f6013713.jpg",
             score: { 1: 2, 2: 6, 3: 4, 4: 20, 5: 60 },
             tags: ['Breakfast', 'vegetarian', 'muffins']
         })
@@ -66,7 +66,7 @@ createServer({
                 { step: "Top with chicken, pepperoncini peppers, onion, and cilantro.  Cover with Colby-Jack cheese. ", description: "" },
                 { step: "Bake in the preheated oven until cheese is melted and bubbly, about 15 minutes. ", description: "" }
             ],
-            imgUrl: "https://www.allrecipes.com/thmb/tUOuFVtAmMKG-fxojt_ronfEjaY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/AR-24878-bbq-chicken-pizza-beauty-4x3-39cd80585ad04941914dca4bd82eae3d.jpg",
+            imgUrl: "https://www.allrecipe.com/thmb/tUOuFVtAmMKG-fxojt_ronfEjaY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/AR-24878-bbq-chicken-pizza-beauty-4x3-39cd80585ad04941914dca4bd82eae3d.jpg",
             score: { 1: 2, 2: 3, 3: 4, 4: 20, 5: 100 },
             tags: ['italian', 'Dinner']
         })
@@ -94,7 +94,7 @@ createServer({
                 { step: "Boil ", description: "Form mixture into 1-inch balls and add to broth. Alternatively, use a small spoon to drop heaping teaspoons full of meat into broth. Reduce heat to a simmer; cook 5 minutes. Add wonton wrappers, bok choy, and additional soy sauce to taste. Cook 8 minutes, stirring occasionally." },
                 { step: "Serve", description: "Serve with reserved green onions and hot sauce or chili crisp if desired." }
             ],
-            imgUrl: "https://www.allrecipes.com/thmb/EL998HCFXXOyPZFaYbm6nBawc3c=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/8604015_Lazy-Wonton-Soup_Dotdash-Meredith-Food-Studios_4x3-eb587414677c431ab44426b1efcc7997.jpg",
+            imgUrl: "https://www.allrecipe.com/thmb/EL998HCFXXOyPZFaYbm6nBawc3c=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/8604015_Lazy-Wonton-Soup_Dotdash-Meredith-Food-Studios_4x3-eb587414677c431ab44426b1efcc7997.jpg",
             score: { 1: 2, 2: 3, 3: 4, 4: 20, 5: 60 },
             tags: ['chinese', 'Dinner', 'soup']
         })
@@ -124,7 +124,7 @@ createServer({
                 { step: "", description: " Set oven rack about 4 inches from broiler; turn broiler to high. Quickly broil meringues until browned, about 1 to 2 minutes. (This happens very quickly, so keep a close eye on it.) " },
                 { step: "", description: " Remove dishes from oven, allow meringue to cool slightly, about 15 minutes, and serve. (Chill, covered, up to 4 days.)" }
             ],
-            imgUrl: "https://www.allrecipes.com/thmb/_sRnQ1LZJ8R0SUPkbVWNFXzvGto=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/8707679-mamas-banana-pudding-4x3-2b1439f987664c7d83377974fb8761fe.jpg",
+            imgUrl: "https://www.allrecipe.com/thmb/_sRnQ1LZJ8R0SUPkbVWNFXzvGto=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/8707679-mamas-banana-pudding-4x3-2b1439f987664c7d83377974fb8761fe.jpg",
             score: { 1: 2, 2: 3, 3: 4, 4: 20, 5: 60 },
             tags: ['Dessert', 'vegetarian', '']
         })
@@ -200,24 +200,24 @@ createServer({
         this.logging = false
         this.timing = 1000
 
-        this.get("/recipes", (schema, request) => {
+        this.get("/recipe", (schema, request) => {
             //return new Response(400, {}, { error: "Error fetching data" })
-            return schema.recipes.all()
+            return schema.recipe.all()
         })
 
         this.get("/recipe/:id", (schema, request) => {
             const id = request.params.id
-            return schema.recipes.find(id)
+            return schema.recipe.find(id)
         })
 
         this.get("/users", (schema, request) => {
-            return schema.recipes.where({ hostId: "123" })
+            return schema.recipe.where({ hostId: "123" })
         })
 
-        this.get("/recipes/:id", (schema, request) => {
+        this.get("/recipe/:id", (schema, request) => {
 
             const id = request.params.id
-            return schema.recipes.findBy({ id, hostId: "123" })
+            return schema.recipe.findBy({ id, hostId: "123" })
         })
 
         this.post("/login", (schema, request) => {

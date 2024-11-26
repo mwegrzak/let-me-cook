@@ -6,7 +6,7 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import ForgotPasswordModal from '../components/ForgotPasswordModal';
 import { SitemarkIcon } from '../components/CustomIcons';
-import fetchPost from '../utils/fetchPost';
+import { fetchPost } from '../utils/api';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -39,11 +39,10 @@ export async function action({ request }) {
   const email = formData.get("email")
   const password = formData.get("password")
 
-  if (typeof forgotPasswordEmail !== 'undefined') {
+  if (forgotPasswordEmail != null) {
     // handle forgot password form TODO
     try {
       const response = await fetchPost('/api/auth/passwordreset', { email: email })
-      console.log(response)
       return response
     }
     catch (err) {

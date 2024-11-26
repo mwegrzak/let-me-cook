@@ -2,15 +2,16 @@ import React from 'react';
 import { useSearchParams, useLoaderData } from 'react-router-dom';
 import { Chip, Grid2, Box } from '@mui/material';
 import HomePageRecipe from '../components/HomePageRecipe';
-import { getRecipes } from '../utils/api';
+import { fetchGet } from '../utils/api';
 
 export function loader() {
-  return getRecipes()
+  return fetchGet('/api/recipe')
 }
 
 export default function Home(props) {
   const [searchParams, setSearchParams] = useSearchParams()
-  const { recipes } = useLoaderData()
+  const recipes = useLoaderData()
+  console.log(recipes)
   const recipeFilter = searchParams.get("type")
   const filteredRecipes = recipeFilter ? recipes.filter(recipe => recipe.tags.indexOf(recipeFilter) > -1) : recipes
 

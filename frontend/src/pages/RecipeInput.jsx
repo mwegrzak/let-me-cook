@@ -3,7 +3,7 @@ import { useLoaderData, useActionData, Form } from 'react-router-dom';
 import { TextField, Button, MenuItem, Typography, Box, Checkbox, FormControlLabel, Card, CardContent } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
 import { styled } from '@mui/system';
-import { getRecipe, requireAuth } from '../utils/api';
+import { fetchGet, requireAuth } from '../utils/api';
 
 const DragDropContainer = styled('div')({
   border: '2px dashed #ccc',
@@ -18,7 +18,7 @@ export async function loader({ params }) {
   await requireAuth()
 
   if (params.id) {
-    const recipe = getRecipe(params.id)
+    const recipe = fetchGet(`/api/recipe/${params.id}`)
     return recipe
   }
   else {

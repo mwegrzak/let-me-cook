@@ -4,7 +4,7 @@ import { Box, Button, FormLabel, Link, TextField, Typography, Alert } from '@mui
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { SitemarkIcon } from '../components/CustomIcons';
-import fetchPost from '../utils/fetchPost';
+import { fetchPost } from '../utils/api';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',

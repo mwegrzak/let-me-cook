@@ -2,18 +2,17 @@ import React from 'react';
 import { useLoaderData, NavLink } from 'react-router-dom';
 import { Grid2 as Grid, Box, Button } from '@mui/material';
 import HomePageRecipe from '../components/HomePageRecipe';
-import { getRecipes, deleteRecipe } from '../utils/api';
+import { fetchGet, fetchDelete } from '../utils/api';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 
 export function loader() {
 
-  return getRecipes()
-  //return getRecipes(userId)
+  return fetchGet('/api/recipe')
 }
 
 export default function UserRecipes(props) {
-  const { recipes } = useLoaderData()
+  const recipes = useLoaderData()
 
   const recipeElements = recipes.map(item => {
     return (
@@ -23,7 +22,7 @@ export default function UserRecipes(props) {
           <NavLink to={`/recipes/edit/${item.id}`} className="navlink">
             <Button startIcon={<EditRoundedIcon />} />
           </NavLink>
-          <Button startIcon={<DeleteRoundedIcon />} onClick={deleteRecipe(item.id)} />
+          <Button startIcon={<DeleteRoundedIcon />} onClick={(fetchDelete(`/api/recipe/${item.id}`))} />
         </Box>
 
 
