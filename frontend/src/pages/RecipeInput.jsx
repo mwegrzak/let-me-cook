@@ -19,41 +19,49 @@ export async function loader({ params }) {
 
   if (params.id) {
     const recipe = fetchGet(`/api/recipe/${params.id}`)
+    console.log(recipe)
     return recipe
   }
   else {
     const recipe = {
-      recipes: {
-        title: '',
-        description: '',
-        photo: null,
-        ingredients: [''],
-        directions: [''],
-        difficulty: '',
-        prepTime: '',
-        cookTime: '',
-        servings: '',
-        visibility: 'private',
-        tags: ''
-      }
+      title: '',
+      description: '',
+      photo: null,
+      ingredients: [''],
+      directions: [''],
+      difficulty: '',
+      prepTime: '',
+      cookTime: '',
+      servings: '',
+      isPublic: false,
+      tags: ''
     }
     return recipe
   }
 
 }
 
-export async function action({ request }) {
-  //TODO
-  // get url whether its add or edit
-  // const endpoint = request.url
-  // const id = request.params.id
-  const endpoint = 'add'
-  const id = '1'
+export async function action({ request, params }) {
 
   const formData = await request.formData()
   const values = [...formData.entries()];
+  console.log(params)
   console.log(formData);
   console.log(values);
+
+
+  const endpoint = new URL(request.url).pathname
+  if (endpoint == '/recipes/add') {
+
+    //fetchPost('/api/recipe', values)
+  }
+  else {
+    const recipeId = pathname.split('/')
+    console.log(recipeId)
+    //fetchPut(`/api/recipe/${recipeId}`)
+
+  }
+
   return null
 
   /*
@@ -69,8 +77,7 @@ export async function action({ request }) {
 }
 export default function RecipeInput() {
 
-  const data = useLoaderData()
-  const recipe = data.recipes
+  const recipe = useLoaderData()
   const [photo, setPhoto] = useState(recipe.photo);
   const [ingredients, setIngredients] = useState(recipe.ingredients);
   const [directions, setDirections] = useState(recipe.directions);
@@ -152,12 +159,8 @@ export default function RecipeInput() {
                 <TextField fullWidth label="Cook Time (minutes)" name="cookTime" defaultValue={recipe.cookTime} type="number" variant="outlined" margin="normal" />
               </Box>
 
-              <FormControlLabel
-                control={
-                  <Checkbox checked={recipe.visibility === 'public'} />
-                }
-                label="Public"
-              />
+              Make recipe public
+              <Checkbox name="isPublic" label="isPublic" defaultChecked={recipe.isPublic} />
             </CardContent>
 
           </Card>
