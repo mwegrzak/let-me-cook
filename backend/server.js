@@ -12,10 +12,10 @@ import prisma from './utils/prisma.js';
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: '*',
+  origin: 'http://localhost:5173',
   methods: ['GET', 'POST', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type']
-
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
+  credentials: true
 }));
 
 const sess = {

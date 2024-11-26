@@ -12,7 +12,7 @@ const router = Router();
 const registerSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(8).required(),
-    name: Joi.string().alphanum().min(3).max(30).required(),
+    name: Joi.string().pattern(/^[a-zA-Z\s]{3,30}$/).required(),
 });
 router.post('/register', notAuthenticated ,validator.body(registerSchema), register);
 

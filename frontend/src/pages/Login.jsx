@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLoaderData, Form, redirect, useActionData } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { useLoaderData, Form, redirect, useActionData, useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { Box, Button, FormLabel, Link, TextField, Typography, Stack, Alert, AlertTitle } from '@mui/material'
 import MuiCard from '@mui/material/Card';
@@ -7,6 +7,8 @@ import { styled } from '@mui/material/styles';
 import ForgotPasswordModal from '../components/ForgotPasswordModal';
 import { SitemarkIcon } from '../components/CustomIcons';
 import { fetchPost } from '../utils/api';
+
+import { userContext } from '../userContext';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -67,6 +69,8 @@ export default function Login(props) {
   const [open, setOpen] = useState(false);
   const loaderData = useLoaderData()
   const actionData = useActionData()
+  const { toggleLogin } = useContext(userContext);
+  const navigate = useNavigate();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -76,6 +80,14 @@ export default function Login(props) {
     setOpen(false);
     return null
   };
+
+  useEffect(() => {
+    console.log(JSON.stringify(actionData));
+    if (actionData?.id) {
+        toggleLogin(actionData.user);
+        navigate('/');
+    }
+}, [actionData, toggleLogin, navigate]);
 
   return (
     <>

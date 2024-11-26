@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { NavLink } from 'react-router-dom';
 import { alpha, styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -8,6 +8,11 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import letMeCookLogo from '../images/letmecook.webp';
 import ColorModeIconDropdown from '../shared-theme/ColorModeIconDropdown';
+
+import { userContext } from '../userContext';
+
+import '@mui/system';
+import { color } from '@mui/system';
 
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -26,7 +31,19 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: '8px 12px',
 }));
 
+const logout = (setUser) => {
+  fetch('http://localhost:4000/api/auth/logout', {
+    method: 'POST',
+    credentials: 'include',
+  })
+  .then(() => {
+    setUser({}); 
+    window.location.href = '/';
+  })
+}
+
 export default function NavBar() {
+  const {isLoggedIn, user, toggleLogin} = useContext(userContext);
 
   return (
     <AppBar
@@ -49,6 +66,14 @@ export default function NavBar() {
             </Box>
           </Box>
 
+          {isLoggedIn ? (
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center', }}>
+              <Box sx={{ color: 'text.primary' }}>Welcome, {user.name}</Box>
+              <Button component={NavLink} to="/profile" variant="outlined" color="info" size="small">Profile</Button>
+              <Button color="info" variant="contained" size="small" onClick={() => logout(toggleLogin)}>Logout</Button>
+              <ColorModeIconDropdown />
+            </Box>
+          ) : (
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center', }}>
             <Button component={NavLink} to="/login" color="primary" variant="outlined" size="small">Login</Button>
             <Button component={NavLink} to="/register" color="primary" variant="contained" size="small">Register</Button>
@@ -56,6 +81,7 @@ export default function NavBar() {
             <Button component={NavLink} to="/" color="outlined" variant="contained" size="small">Logout</Button>
             <ColorModeIconDropdown />
           </Box>
+          )}
 
         </StyledToolbar>
       </Container>

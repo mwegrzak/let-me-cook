@@ -19,6 +19,7 @@ export async function fetchPost(endpoint, data) {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body
     })
     return response.json();
@@ -37,7 +38,8 @@ export async function fetchGet(endpoint) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
+      credentials: 'include'
     })
     console.log(response)
     return response;

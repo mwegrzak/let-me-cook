@@ -18,7 +18,42 @@ import AppTheme from './shared-theme/AppTheme';
 import CssBaseline from '@mui/material/CssBaseline';
 //import "./server"
 
+import { userContext } from './userContext.js'
+import { useEffect, useState } from 'react'
+
 function App() {
+    const [user, setUser] = useState({});
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const toggleLogin = (userData) => {
+        if (userData) {
+            setUser(userData);
+            setIsLoggedIn(true);
+        } else {
+            setUser({});
+            setIsLoggedIn(false);
+        }
+    }
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await fetch(`http://localhost:4000/api/auth/check`, {
+                    credentials: 'include',
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const userData = await response.json();
+                setUser(userData);
+            } catch (error) {
+                console.error('Failed to fetch user:', error);
+                setUser({});
+            }
+        };
+
+        fetchUser();
+    }, [])
 
     const router = createBrowserRouter(createRoutesFromElements(
         <Route path='/' element={<HomeLayout />} errorElement={<Error />} >
@@ -43,10 +78,12 @@ function App() {
     ))
 
     return (
-        <AppTheme>
-            <CssBaseline enableColorScheme />
-            <RouterProvider router={router} />
-        </AppTheme>
+        <userContext.Provider value={{ isLoggedIn, user, toggleLogin }}>
+            <AppTheme>
+                <CssBaseline enableColorScheme />
+                <RouterProvider router={router} />
+            </AppTheme>
+        </userContext.Provider>
 
     )
 }

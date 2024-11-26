@@ -25,8 +25,8 @@ async function register(req, res, next) {
         return next(createError(500, err));
       }
 
-      req.session.user = user;
-      return res.status(201).json({ id: user.id, email: user.email, name: user.name });
+      req.session.user =  {id: user.id, email: user.email, name: user.name };
+      return res.status(201).json(req.session.user);
     });
     
   } catch (error) {
@@ -61,8 +61,8 @@ async function login(req, res, next) {
         return next(createError(500, err));
       }
 
-      req.session.user = user;
-      return res.status(200).json({ id: user.id, email: user.email, name: user.name });
+      req.session.user = { id: user.id, email: user.email, name: user.name };
+      return res.status(200).json(req.session.user);
     });
 
   } catch (error) {
