@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
+import hemlet from 'helmet';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import 'dotenv/config';
 
@@ -36,18 +37,23 @@ const sess = {
     }
   )
 }
-if (app.get('NODE_ENV') === 'production') {
+
+if (process.env.NODE_ENV === 'development') {
+  app.use('/api-doc', express.static('api-doc'));
+  app.use(hemlet({
+    contentSecurityPolicy: false
+  }));
+  app.use('/api-doc', express.static('api-doc'));
+} else {
   app.set('trust proxy', 1) // trust first proxy
   sess.cookie.secure = true
+  app.use(hemlet());
 }
+
 app.use(session(sess));
 
 app.use('/api/recipe', recipeRoute);
 app.use('/api/auth', authRoute);
-
-if (process.env.NODE_ENV === 'development') {
-  app.use('/api-doc', express.static('api-doc'));
-}
 
 app.use(errorHandler);
 
