@@ -39,7 +39,6 @@ const sess = {
 }
 
 if (process.env.NODE_ENV === 'development') {
-  app.use('/api-doc', express.static('api-doc'));
   app.use(hemlet({
     contentSecurityPolicy: false
   }));
