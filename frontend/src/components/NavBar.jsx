@@ -31,13 +31,13 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: '8px 12px',
 }));
 
-const logout = (setUser) => {
+const logout = (toggleLogin) => {
   fetch('http://localhost:4000/api/auth/logout', {
     method: 'POST',
     credentials: 'include',
   })
   .then(() => {
-    setUser({}); 
+    toggleLogin(); 
     window.location.href = '/';
   })
 }
@@ -56,6 +56,7 @@ export default function NavBar() {
         mt: 'calc(var(--template-frame-height, 0px) + 28px)',
       }}
     >
+      {JSON.stringify(isLoggedIn)}
       <Container maxWidth="lg">
         <StyledToolbar variant="dense" disableGutters>
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>

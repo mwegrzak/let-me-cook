@@ -45,10 +45,10 @@ function App() {
                     throw new Error('Network response was not ok');
                 }
                 const userData = await response.json();
-                setUser(userData);
+                toggleLogin(userData);
             } catch (error) {
                 console.error('Failed to fetch user:', error);
-                setUser({});
+                toggleLogin();
             }
         };
 
