@@ -2,14 +2,6 @@ import { redirect } from 'react-router-dom'
 
 const API_URL = 'http://localhost:4000';
 
-export async function requireAuth() {
-
-  const isLogged = true
-  if (!isLogged) {
-    throw redirect("/login?message=You must login first")
-  }
-}
-
 export async function fetchPost(endpoint, data) {
   const body = JSON.stringify(data) || {};
 

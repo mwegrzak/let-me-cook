@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSearchParams, useLoaderData } from 'react-router-dom';
-import { Chip, Grid2, Box } from '@mui/material';
+import { Chip, Grid2 as Grid, Box } from '@mui/material';
 import HomePageRecipe from '../components/HomePageRecipe';
 import { fetchGet } from '../utils/api';
 
@@ -11,7 +11,6 @@ export function loader() {
 export default function Home(props) {
   const [searchParams, setSearchParams] = useSearchParams()
   const recipes = useLoaderData()
-  console.log(recipes)
   const recipeFilter = searchParams.get("type")
   const filteredRecipes = recipeFilter ? recipes.filter(recipe => recipe.tags.indexOf(recipeFilter) > -1) : recipes
 
@@ -51,9 +50,9 @@ export default function Home(props) {
         <Chip onClick={() => handleFilterChange("type", "Dessert")} size="medium" label="Dessert" sx={{ backgroundColor: 'transparent', border: 'none', }} />
         <Chip onClick={() => handleFilterChange("type", "Aperitif")} size="medium" label="Aperitif" sx={{ backgroundColor: 'transparent', border: 'none', }} />
       </Box>
-      <Grid2 container spacing={2} columns={20}>
+      <Grid container spacing={2} columns={20}>
         {recipeElements}
-      </Grid2>
+      </Grid>
 
     </>
 

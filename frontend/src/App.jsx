@@ -16,44 +16,9 @@ import AdminPanel, { loader as adminPanelLoader } from './pages/AdminPanel.jsx'
 import NotFound from './pages/NotFound.jsx';
 import AppTheme from './shared-theme/AppTheme';
 import CssBaseline from '@mui/material/CssBaseline';
-//import "./server"
-
-import { userContext } from './userContext.js'
-import { useEffect, useState } from 'react'
+import { UserProvider } from './UserContext.js'
 
 function App() {
-    const [user, setUser] = useState({});
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    const toggleLogin = (userData) => {
-        if (userData) {
-            setUser(userData);
-            setIsLoggedIn(true);
-        } else {
-            setUser({});
-            setIsLoggedIn(false);
-        }
-    }
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await fetch(`http://localhost:4000/api/auth/check`, {
-                    credentials: 'include',
-                });
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const userData = await response.json();
-                toggleLogin(userData);
-            } catch (error) {
-                console.error('Failed to fetch user:', error);
-                toggleLogin();
-            }
-        };
-
-        fetchUser();
-    }, [])
 
     const router = createBrowserRouter(createRoutesFromElements(
         <Route path='/' element={<HomeLayout />} errorElement={<Error />} >
@@ -62,8 +27,8 @@ function App() {
             <Route path="register" element={<Register />} action={registerAction} />
             <Route path="forgot-password" element={<ForgotPassword />} action={ForgotPasswordAction} />
             <Route path="recipe/:id" element={<RecipeDetail />} loader={recipeDetailLoader} />
-            <Route path="recipes" element={<UserRecipes />} loader={userRecipesLoader} />
 
+            <Route path="recipes" element={<UserRecipes />} loader={userRecipesLoader} />
             <Route path="recipes/add" element={<RecipeInput />} loader={recipeInputLoader} action={recipeInputAction} />
             <Route path="recipes/edit/:id" element={<RecipeInput />} loader={recipeInputLoader} action={recipeInputAction} />
             <Route path="profile" element={<UserProfile />} loader={userProfileLoader} />
@@ -78,12 +43,12 @@ function App() {
     ))
 
     return (
-        <userContext.Provider value={{ isLoggedIn, user, toggleLogin }}>
+        <UserProvider>
             <AppTheme>
                 <CssBaseline enableColorScheme />
                 <RouterProvider router={router} />
             </AppTheme>
-        </userContext.Provider>
+        </UserProvider>
 
     )
 }

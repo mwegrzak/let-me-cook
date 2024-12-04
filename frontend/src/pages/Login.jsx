@@ -1,14 +1,14 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { useLoaderData, Form, redirect, useActionData, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLoaderData, Form, Navigate, useActionData } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { Box, Button, FormLabel, Link, TextField, Typography, Stack, Alert, AlertTitle } from '@mui/material'
+import { Box, Button, FormLabel, Link, TextField, Typography, Alert } from '@mui/material'
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import ForgotPasswordModal from '../components/ForgotPasswordModal';
 import { SitemarkIcon } from '../components/CustomIcons';
 import { fetchPost } from '../utils/api';
 
-import { userContext } from '../userContext';
+import { useUser, useUpdateUser } from '../UserContext';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -31,6 +31,11 @@ const Card = styled(MuiCard)(({ theme }) => ({
 
 
 export function loader({ request }) {
+  const { isLoggedIn, user } = useUser()
+  console.log(user)
+  if (isLoggedIn) {
+    return <Navigate to="/" />
+  }
   return new URL(request.url).searchParams.get("message")
 }
 
@@ -55,6 +60,13 @@ export async function action({ request }) {
     // handle login form
     try {
       const response = await fetchPost('/api/auth/login', { email: email, password: password })
+      if (response.id) {
+        console.log(response)
+        toggleLogin(response);
+        redirect('/');
+      }
+      console.log(response)
+
       return response
 
     } catch (err) {
@@ -64,13 +76,53 @@ export async function action({ request }) {
 
 }
 
+
 export default function Login(props) {
 
   const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({ email: null, password: null, forgotPasswordEmail: null });
   const loaderData = useLoaderData()
   const actionData = useActionData()
-  const { toggleLogin } = useContext(userContext);
-  const navigate = useNavigate();
+  const { isLoggedIn, user } = useUser()
+  const toggleLogin = useUpdateUser();
+
+  function handleSubmit(e) {
+    e.preventDefault()
+
+    if (loginFormData.forgotPasswordEmail != null) {
+      // handle forgot password form 
+      fetch('http://localhost:4000/api/auth/passwordreset', { email: email })
+      return response
+
+    }
+    else {
+      // handle login form
+      try {
+        fetchPost('/api/auth/login', { email: email, password: password })
+        if (response.id) {
+          console.log(response)
+          toggleLogin(response);
+          redirect('/');
+        }
+        console.log(response)
+
+        return response
+
+      } catch (err) {
+        return err
+      }
+    }
+
+  }
+
+  function handleChange(e) {
+    const { name, value } = e.target
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value
+
+    }))
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -81,13 +133,14 @@ export default function Login(props) {
     return null
   };
 
-  useEffect(() => {
-    console.log(JSON.stringify(actionData));
-    if (actionData?.id) {
-        toggleLogin(actionData.user);
-        navigate('/');
-    }
-}, [actionData, toggleLogin, navigate]);
+
+  //useEffect(() => {
+  //  console.log(JSON.stringify(actionData));
+  //  if (actionData?.id) {
+  //    toggleLogin(actionData.user);
+  //    redirect('/');
+  //  }
+  //}, [actionData, toggleLogin]);
 
   return (
     <>
@@ -131,7 +184,7 @@ export default function Login(props) {
               gap: 3,
             }}
           >
-            <Form method="post" action="/login" replace>
+            <Form method="post" onSubmit={handleSubmit} replace>
               <FormLabel htmlFor="email">Email</FormLabel>
               <TextField
                 id="email"
@@ -143,6 +196,8 @@ export default function Login(props) {
                 required
                 fullWidth
                 variant="outlined"
+                onChange={handleChange}
+                value={formData.email}
                 sx={{ ariaLabel: 'email' }}
 
               />
@@ -156,6 +211,8 @@ export default function Login(props) {
                 autoFocus
                 required
                 fullWidth
+                onChange={handleChange}
+                value={formData.password}
                 variant="outlined"
               />
 
