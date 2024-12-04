@@ -1,0 +1,27 @@
+@startuml
+title User Login Sequence Diagram
+
+actor User
+participant "Frontend Server" as WB
+participant "Backend Server" as BS
+database "Database" as DB
+
+User -> WB: Open Login Page
+WB -> User: Display Login Form
+User -> WB: Enter Credentials and Submit
+WB -> BS: POST /login with Credentials
+
+BS -> DB: Query User by email
+DB -> BS: Fetch user data
+
+
+alt Password Matches
+    BS -> WB: Set Session Cookie
+    WB -> User: Redirect to Dashboard and send cookie
+
+else Password Does Not Match or User does not exist
+    BS --> WB: Return Error Message
+    WB -> User: Display Error Message
+
+end
+@enduml

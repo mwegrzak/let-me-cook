@@ -1,0 +1,34 @@
+@startuml
+title User Registration Sequence Diagram
+
+actor User
+participant "Frontend Server" as Frontend
+participant "Backend Server" as Backend
+database "Database" as DB
+
+User -> Frontend: Open Registration Page
+Frontend -> User: Display Registration Form
+
+User -> Frontend: Fill Form and Submit
+Frontend -> Backend: POST /register with Form Data
+Backend -> DB: Insert New User Record
+
+alt New User
+    DB --> Backend: Insert Success
+    Backend -> Frontend: Return Success Response
+    Frontend -> User: Display Success Message
+    Backend -> User: Send email with confirmation
+
+else User Already Exists
+    DB --> Backend: User Exists
+    Backend --> Frontend : Return Error Message
+    Frontend -> User: Display Error Message
+end
+
+User -> Frontend: Confirm registration
+Frontend -> Backend: POST /confirmed
+Backend -> DB: Insert user confirmed
+Backend -> Frontend: Return success
+Frontend -> User: Display confirmation success
+
+@enduml

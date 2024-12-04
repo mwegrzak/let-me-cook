@@ -47,7 +47,7 @@ export async function action({ request }) {
   const password = formData.get("password")
 
   if (forgotPasswordEmail != null) {
-    // handle forgot password form TODO
+    // handle forgot password form
     try {
       const response = await fetchPost('/api/auth/passwordreset', { email: email })
       return response
