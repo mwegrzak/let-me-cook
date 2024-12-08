@@ -1,17 +1,24 @@
-import React from 'react';
-import { useSearchParams, useLoaderData } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Chip, Grid2 as Grid, Box } from '@mui/material';
 import HomePageRecipe from '../components/HomePageRecipe';
 import { fetchGet } from '../utils/api';
 
-export function loader() {
-  return fetchGet('/api/recipe')
-}
-
 export default function Home(props) {
   const [searchParams, setSearchParams] = useSearchParams()
-  const recipes = useLoaderData()
+  const [recipes, setRecipes] = useState([])
+
+  useEffect(() => {
+    async function getRecipes() {
+      const response = await fetchGet('/api/recipe/')
+      console.log(response)
+      setRecipes(response)
+    }
+    getRecipes()
+  }, [])
+
   const recipeFilter = searchParams.get("type")
+  console.log(recipes)
   const filteredRecipes = recipeFilter ? recipes.filter(recipe => recipe.tags.indexOf(recipeFilter) > -1) : recipes
 
 
@@ -24,12 +31,17 @@ export default function Home(props) {
     return <HomePageRecipe
       key={item.id}
       id={item.id}
-      img={item.imgUrl}
-      tags={item.tags}
-      title={item.title}
+      title={item.name}
       description={item.description}
-      author={item.author}
-      score={item.score}
+      author={item.userId}
+      // TODO
+      //img={item.imgUrl}
+      //score={item.score}
+      //tags={item.tags}
+      score={{ 1: 1, 2: 2, 3: 6, 4: 20, 5: 100 }}
+      img={"https://cdn.aniagotuje.com/pictures/articles/2024/11/70950775-v-1080x1080.jpg"}
+      tags={['dinner']}
+
     />
   })
 

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useLoaderData, Form, redirect, useActionData } from 'react-router-dom';
-import { Box, Button, FormLabel, Link, TextField, Typography, Alert } from '@mui/material'
+import React from 'react';
+import { Form, redirect } from 'react-router-dom';
+import { Box, Button, FormLabel, TextField, Typography, Alert } from '@mui/material'
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { SitemarkIcon } from '../components/CustomIcons';
@@ -26,10 +26,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 
-export function loader({ request }) {
-  return new URL(request.url).searchParams.get("message")
-}
-
 export async function action({ request }) {
 
   const formData = await request.formData()
@@ -50,20 +46,7 @@ export async function action({ request }) {
 }
 
 export default function Login(props) {
-
-  const [open, setOpen] = useState(false);
-  const message = useLoaderData()
-  //const error = useActionData()
-  //console.log(error.message)
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    return null
-  };
+  const message = null
 
   return (
     <>

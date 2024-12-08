@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { alpha, styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -44,7 +44,7 @@ export default function NavBar() {
     })
       .then(() => {
         toggleLogin();
-        navigate("/")
+        navigate("/", { replace: true })
       })
   }
 
@@ -73,20 +73,24 @@ export default function NavBar() {
             </Box>
           </Box>
 
-          {isLoggedIn ? (
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center', }}>
-              <Box sx={{ color: 'text.primary' }}>Welcome, {user.name}</Box>
-              <Button component={NavLink} to="/profile" variant="outlined" color="info" size="small">Profile</Button>
-              <Button color="info" variant="contained" size="small" onClick={() => logout(toggleLogin)}>Logout</Button>
-              <ColorModeIconDropdown />
-            </Box>
-          ) : (
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center', }}>
-              <Button component={NavLink} to="/login" color="primary" variant="outlined" size="small">Login</Button>
-              <Button component={NavLink} to="/register" color="primary" variant="contained" size="small">Register</Button>
-              <ColorModeIconDropdown />
-            </Box>
-          )}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center', }}>
+            {isLoggedIn ? (
+              <>
+                <Box sx={{ color: 'text.primary' }}>Welcome, {user.name}</Box>
+                <Button component={NavLink} to="/user" variant="outlined" color="info" size="small">Profile</Button>
+                <Button component={NavLink} to="/admin" variant="outlined" color="info" size="small">Admin panel</Button>
+                <Button color="info" variant="contained" size="small" onClick={() => logout(toggleLogin)}>Logout</Button>
+                <ColorModeIconDropdown />
+              </>
+            ) : (
+              <>
+                <Button component={NavLink} to="/login" color="primary" variant="outlined" size="small">Login</Button>
+                <Button component={NavLink} to="/register" color="primary" variant="contained" size="small">Register</Button>
+                <ColorModeIconDropdown />
+              </>
+            )
+            }
+          </Box>
 
         </StyledToolbar>
       </Container>

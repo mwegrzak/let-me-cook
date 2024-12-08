@@ -1,43 +1,63 @@
 import './App.css'
 import React from 'react-dom'
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom'
-import HomeLayout from './pages/HomeLayout.jsx'
-import Home, { loader as homeLoader } from './pages/Home.jsx'
-import Register, { action as registerAction } from './pages/Register.jsx'
-import Error from './pages/Error.jsx'
-import Login, { loader as loginLoader, action as loginAction } from './pages/Login.jsx'
-import ForgotPassword, { action as ForgotPasswordAction } from './pages/ForgotPassword.jsx'
-import UserRecipes, { loader as userRecipesLoader } from './pages/UserRecipes.jsx'
-import RecipeDetail, { loader as recipeDetailLoader } from './pages/RecipeDetail.jsx'
-import RecipeInput, { loader as recipeInputLoader, action as recipeInputAction } from './pages/RecipeInput.jsx'
-import UserProfile, { loader as userProfileLoader } from './pages/UserProfile.jsx'
-import AdminPanelLayout from './pages/AdminPanelLayout.jsx'
-import AdminPanel, { loader as adminPanelLoader } from './pages/AdminPanel.jsx'
-import NotFound from './pages/NotFound.jsx';
-import AppTheme from './shared-theme/AppTheme';
 import CssBaseline from '@mui/material/CssBaseline';
-import { UserProvider } from './UserContext.js'
+import { UserProvider, useUser } from './UserContext.js'
+
+import AppTheme from './shared-theme/AppTheme';
+import NotFound from './pages/NotFound.jsx';
+import Error from './pages/Error.jsx'
+import HomeLayout from './pages/HomeLayout.jsx'
+import Home from './pages/Home.jsx'
+import Register, { action as registerAction } from './pages/Register.jsx'
+import Login from './pages/Login.jsx'
+import ForgotPassword, { action as ForgotPasswordAction } from './pages/ForgotPassword.jsx'
+import RecipeDetail from './pages/RecipeDetail.jsx'
+
+import RequireAuth from './pages/RequireAuth.jsx'
+import RecipeInput from './pages/RecipeInput.jsx'
+import UserRecipes from './pages/UserRecipes.jsx'
+import UserProfile from './pages/UserProfile.jsx'
+
+import AdminPanelLayout from './pages/AdminPanelLayout.jsx'
+import AdminPanel from './pages/AdminPanel.jsx'
+import UserList from './pages/UserList.jsx'
+
+
 
 function App() {
+    const { isLoggedIn, user } = useUser()
+
 
     const router = createBrowserRouter(createRoutesFromElements(
         <Route path='/' element={<HomeLayout />} errorElement={<Error />} >
-            <Route index element={<Home />} loader={homeLoader} />
-            <Route path="login" element={<Login />} loader={loginLoader} action={loginAction} />
+
+            <Route index element={<Home />} />
+            <Route path="*" element={<NotFound />} />
+            <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} action={registerAction} />
             <Route path="forgot-password" element={<ForgotPassword />} action={ForgotPasswordAction} />
-            <Route path="recipe/:id" element={<RecipeDetail />} loader={recipeDetailLoader} />
+            <Route path="recipe/:id" element={<RecipeDetail />} />
 
-            <Route path="recipes" element={<UserRecipes />} loader={userRecipesLoader} />
-            <Route path="recipes/add" element={<RecipeInput />} loader={recipeInputLoader} action={recipeInputAction} />
-            <Route path="recipes/edit/:id" element={<RecipeInput />} loader={recipeInputLoader} action={recipeInputAction} />
-            <Route path="profile" element={<UserProfile />} loader={userProfileLoader} />
-
-            <Route path='admin-panel' element={<AdminPanelLayout />} >
-                <Route index element={<AdminPanel />} loader={adminPanelLoader} />
+            <Route path='recipes' element={<RequireAuth />}>
+                <Route index element={<UserRecipes />} />
+                <Route path="add" element={<RecipeInput />} />
+                <Route path="edit/:id" element={<RecipeInput />} />
             </Route>
 
-            <Route path="*" element={<NotFound />} />
+
+            <Route path='user' element={<RequireAuth />}>
+                <Route index element={<UserProfile />} />
+            </Route>
+
+            <Route path='admin' element={<RequireAuth />} >
+                <Route index element={<AdminPanel />} />
+                <Route path="users" element={<UserList />} />
+                <Route path="users/:id" element={<UserProfile />} />
+                <Route path="recipes" element={<UserRecipes />} />
+                <Route path="recipes/:id" element={<RecipeInput />} />
+            </Route>
+
         </Route>
 
     ))

@@ -1,19 +1,24 @@
-import * as React from 'react';
-import { useLoaderData } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom'
 import { Container, Box, CardMedia, Typography, CircularProgress } from '@mui/material/';
 import RecipeSummaryBox from '../components/RecipeSummaryBox';
 import IngredientsList from '../components/IngredientsList';
 import RecipeStepsList from '../components/RecipeStepsList';
 import { fetchGet } from '../utils/api.js'
 
-export function loader({ params }) {
-  return fetchGet(`/api/recipe/${params.id}`)
-}
-
 export default function RecipeDetail(props) {
 
-  const data = useLoaderData()
-  const recipe = data.recipes
+  const [recipe, setRecipe] = useState([])
+  const params = useParams()
+
+  useEffect(() => {
+    async function getRecipes() {
+      const data = await fetchGet(`/api/recipe/${params.id}`)
+      console.log(data)
+      setRecipe(data)
+    }
+    getRecipes()
+  }, [])
 
   return (
     <Container>
@@ -46,7 +51,7 @@ export default function RecipeDetail(props) {
               servings={recipe.servings} />
           </Box>
           <Box sx={{ display: 'inline-flex', flexDirection: 'row', gap: 3, overflow: 'auto' }}>
-            <IngredientsList ingredientsList={recipe.ingredients} />
+            <IngredientsList ingredients={recipe.ingredients} />
             <RecipeStepsList stepsList={recipe.directions} />
           </Box>
         </>

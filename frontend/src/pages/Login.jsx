@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useLoaderData, Form, Navigate, useActionData } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
-import { Box, Button, FormLabel, Link, TextField, Typography, Alert } from '@mui/material'
+import React, { useState } from 'react';
+import { Form, useNavigate, replace, NavLink } from 'react-router-dom';
+import { Box, Button, FormLabel, Link, TextField, Typography, Alert, Snackbar } from '@mui/material'
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import ForgotPasswordModal from '../components/ForgotPasswordModal';
@@ -29,111 +28,61 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }),
 }));
 
-
-export function loader({ request }) {
-  const { isLoggedIn, user } = useUser()
-  console.log(user)
-  if (isLoggedIn) {
-    return <Navigate to="/" />
-  }
-  return new URL(request.url).searchParams.get("message")
-}
-
-export async function action({ request }) {
-
-  const formData = await request.formData()
-  const forgotPasswordEmail = formData.get("forgotPasswordEmail")
-  const email = formData.get("email")
-  const password = formData.get("password")
-
-  if (forgotPasswordEmail != null) {
-    // handle forgot password form
-    try {
-      const response = await fetchPost('/api/auth/passwordreset', { email: email })
-      return response
-    }
-    catch (err) {
-      return err
-    }
-  }
-  else {
-    // handle login form
-    try {
-      const response = await fetchPost('/api/auth/login', { email: email, password: password })
-      if (response.id) {
-        console.log(response)
-        toggleLogin(response);
-        redirect('/');
-      }
-      console.log(response)
-
-      return response
-
-    } catch (err) {
-      return err
-    }
-  }
-
-}
-
-
 export default function Login(props) {
 
-  const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({ email: null, password: null, forgotPasswordEmail: null });
-  const loaderData = useLoaderData()
-  const actionData = useActionData()
+  const [openForgotPassword, setOpenForgotPassword] = useState(false);
+  const [openSnackBar, setOpenSnackbar] = useState(false);
+  const [formData, setFormData] = useState({ email: "", password: "", forgotPasswordEmail: "" });
+  const loaderData = null
   const { isLoggedIn, user } = useUser()
   const toggleLogin = useUpdateUser();
+  let navigate = useNavigate()
 
-  function handleSubmit(e) {
+  const handleSubmit = async (e) => {
+    console.log(formData)
     e.preventDefault()
 
-    if (loginFormData.forgotPasswordEmail != null) {
+    if (formData.forgotPasswordEmail != "") {
       // handle forgot password form 
-      fetch('http://localhost:4000/api/auth/passwordreset', { email: email })
-      return response
-
+      const response = await fetch('/api/auth/passwordreset', { email: formData.forgotPasswordEmail })
+      console.log('forgot passwd')
+      console.log(response)
     }
     else {
       // handle login form
-      try {
-        fetchPost('/api/auth/login', { email: email, password: password })
-        if (response.id) {
-          console.log(response)
-          toggleLogin(response);
-          redirect('/');
-        }
-        console.log(response)
-
-        return response
-
-      } catch (err) {
-        return err
+      const response = await fetchPost('/api/auth/login', { email: formData.email, password: formData.password })
+      if (response.id) {
+        console.log(response);
+        toggleLogin(response);
+        navigate("/", replace);
       }
+      else {
+        console.log(response)
+      }
+
     }
 
   }
 
-  function handleChange(e) {
-    const { name, value } = e.target
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      [name]: value
-
-    }))
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setFormData(values => ({ ...values, [name]: value }))
   }
-
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpenForgotPassword(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenForgotPassword(false);
     return null
   };
 
 
+  const handleCloseSnackBar = () => {
+    setOpenSnackbar(false);
+    return null
+  };
   //useEffect(() => {
   //  console.log(JSON.stringify(actionData));
   //  if (actionData?.id) {
@@ -158,19 +107,6 @@ export default function Login(props) {
             </Alert>
           }
 
-
-          {actionData &&
-            <Alert severity="error" variant="outlined"
-              sx={{
-                width: '100%', display: 'flex',
-                flexDirection: 'column',
-                alignSelf: 'center',
-              }} >
-              {actionData.error}
-            </Alert>
-          }
-
-
           <SitemarkIcon />
           <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
             Log in
@@ -184,7 +120,8 @@ export default function Login(props) {
               gap: 3,
             }}
           >
-            <Form method="post" onSubmit={handleSubmit} replace>
+
+            <Form onSubmit={handleSubmit} replace>
               <FormLabel htmlFor="email">Email</FormLabel>
               <TextField
                 id="email"
@@ -220,7 +157,7 @@ export default function Login(props) {
                 Sign in
               </Button>
             </Form>
-            <ForgotPasswordModal open={open} handleClose={handleClose} />
+            <ForgotPasswordModal open={openForgotPassword} handleClose={handleClose} />
 
             <Box display={'inline-flex'} justifyContent={'space-between'}>
 
@@ -237,6 +174,16 @@ export default function Login(props) {
 
           </Box>
         </Card>
+        <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleCloseSnackBar}>
+          <Alert
+            onClose={handleCloseSnackBar}
+            severity="success"
+            variant="filled"
+            sx={{ width: '100%' }}
+          >
+            This is a success Alert inside a Snackbar!
+          </Alert>
+        </Snackbar>
       </Box>
     </>
   );

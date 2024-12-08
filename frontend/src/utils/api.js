@@ -1,5 +1,3 @@
-import { redirect } from 'react-router-dom'
-
 const API_URL = 'http://localhost:4000';
 
 export async function fetchPost(endpoint, data) {
@@ -22,7 +20,6 @@ export async function fetchPost(endpoint, data) {
   }
 }
 
-
 export async function fetchGet(endpoint) {
 
   try {
@@ -33,12 +30,14 @@ export async function fetchGet(endpoint) {
       },
       credentials: 'include'
     })
-    console.log(response)
-    return response;
+    if (response.ok) { return response.json(); }
+    else {
+      return ({ error: 'Response is not ok' });
+    }
 
   }
   catch (err) {
-    return err;
+    return err.json();
   }
 }
 
@@ -57,7 +56,7 @@ export async function fetchDelete(endpoint, data) {
 
   }
   catch (err) {
-    return err
+    return err.json()
   }
 }
 
@@ -76,7 +75,7 @@ export async function fetchPut(endpoint, data) {
 
   }
   catch (err) {
-    return err
+    return err.json()
   }
 }
 

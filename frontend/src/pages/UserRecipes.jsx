@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLoaderData, NavLink } from 'react-router-dom';
 import { Grid2 as Grid, Box, Button } from '@mui/material';
 import HomePageRecipe from '../components/HomePageRecipe';
@@ -6,13 +6,17 @@ import { fetchGet, fetchDelete } from '../utils/api';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 
-export function loader() {
-
-  return fetchGet('/api/recipe')
-}
-
 export default function UserRecipes(props) {
-  const recipes = useLoaderData()
+
+  const [recipes, setRecipes] = useState([])
+
+  useEffect(() => {
+    async function getRecipes() {
+      const response = await fetchGet('/api/recipe/')
+      setRecipes(response)
+    }
+    getRecipes()
+  }, [])
 
   const recipeElements = recipes.map(item => {
     return (
