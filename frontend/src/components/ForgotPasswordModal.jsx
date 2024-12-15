@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, OutlinedInput } from '@mui/material';
 
 
-function ForgotPasswordModal({ open, handleClose }) {
+function ForgotPasswordModal({ open, handleClose, onChange, forgotPasswordEmail }) {
 
   return (
     <Dialog
@@ -30,6 +30,8 @@ function ForgotPasswordModal({ open, handleClose }) {
             label="Email address"
             placeholder="Email address"
             type="email"
+            value={forgotPasswordEmail}
+            onChange={onChange}
             fullWidth
           />
         </DialogContent>

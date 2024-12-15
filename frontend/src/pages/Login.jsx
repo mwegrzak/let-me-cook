@@ -45,7 +45,6 @@ export default function Login(props) {
     if (formData.forgotPasswordEmail != "") {
       // handle forgot password form 
       const response = await fetch('/api/auth/passwordreset', { email: formData.forgotPasswordEmail })
-      console.log('forgot passwd')
       console.log(response)
     }
     else {
@@ -157,7 +156,7 @@ export default function Login(props) {
                 Sign in
               </Button>
             </Form>
-            <ForgotPasswordModal open={openForgotPassword} handleClose={handleClose} />
+            <ForgotPasswordModal open={openForgotPassword} handleClose={handleClose} onChange={handleChange} />
 
             <Box display={'inline-flex'} justifyContent={'space-between'}>
 

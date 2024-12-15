@@ -20,7 +20,7 @@ import UserRecipes from './pages/UserRecipes.jsx'
 import UserProfile from './pages/UserProfile.jsx'
 
 import AdminPanelLayout from './pages/AdminPanelLayout.jsx'
-import AdminPanel from './pages/AdminPanel.jsx'
+import AdminPanelDashboard from './pages/AdminPanelDashboard.jsx'
 import UserList from './pages/UserList.jsx'
 
 
@@ -50,8 +50,8 @@ function App() {
                 <Route index element={<UserProfile />} />
             </Route>
 
-            <Route path='admin' element={<RequireAuth />} >
-                <Route index element={<AdminPanel />} />
+            <Route path='admin' element={<AdminPanelLayout />} >
+                <Route index element={<AdminPanelDashboard />} />
                 <Route path="users" element={<UserList />} />
                 <Route path="users/:id" element={<UserProfile />} />
                 <Route path="recipes" element={<UserRecipes />} />

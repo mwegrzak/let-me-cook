@@ -1,32 +1,53 @@
-import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { Drawer, List, ListItem, ListItemText, Divider, IconButton, Box } from '@mui/material';
+import { Dashboard as DashboardIcon, People as PeopleIcon, LocalDining as LocalDiningIcon, Close as CloseIcon } from '@mui/icons-material';
 
 export default function AdminSidebar() {
-    const [value, setValue] = React.useState(0);
+    const [open, setOpen] = useState(true);
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleOpen = () => {
+        setOpen(true);
     };
 
     return (
-        <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }}>
-            <Tabs
-                value={value}
-                onChange={handleChange}
-                variant="scrollable"
-                scrollButtons={false}
-                aria-label="scrollable prevent tabs example"
-            >
-                <Tab label="Item One" />
-                <Tab label="Item Two" />
-                <Tab label="Item Three" />
-                <Tab label="Item Four" />
-                <Tab label="Item Five" />
-                <Tab label="Item Six" />
-                <Tab label="Item Seven" />
-            </Tabs>
-        </Box>
+        <Drawer
+            sx={{
+                '& .MuiDrawer-paper': {
+                    width: 250,
+                    boxSizing: 'border-box',
+                },
+            }}
+            variant="persistent"
+            anchor="left"
+            open={open}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '16px' }}>
+                <h2>Admin Panel</h2>
+                <IconButton onClick={handleClose}>
+                    <CloseIcon />
+                </IconButton>
+            </Box>
+            <Divider />
+            <List>
+                <ListItem button component={NavLink} to="/admin">
+                    <DashboardIcon />
+                    <ListItemText primary="Dashboard" />
+                </ListItem>
+                <ListItem button component={NavLink} to="/admin/users">
+                    <PeopleIcon />
+                    <ListItemText primary="Users" />
+                </ListItem>
+                <ListItem button component={NavLink} to="/admin/recipes">
+                    <LocalDiningIcon />
+                    <ListItemText primary="Recipes" />
+                </ListItem>
+            </List>
+        </Drawer>
+
     );
-}
+};

@@ -147,7 +147,15 @@ export default function RecipeInput() {
         <Box display={'flex'} justifyContent={'center'} >
 
           <Box alignItems="center" maxWidth={'25em'} mt={1}>
+
             <Typography variant="subtitle1" mt={2}>Ingredients</Typography>
+            <Button startIcon={<Add />} onClick={handleAddIngredient} sx={{ mt: 1 }}>
+              Add Ingredient
+            </Button>
+            <Button startIcon={<Delete />} onClick={handleRemoveIngredient} >
+              Delete Ingredient
+            </Button>
+
             {recipe.ingredients.map((ingredient, index) => (
               <TextField
                 fullWidth
@@ -159,16 +167,16 @@ export default function RecipeInput() {
               />
             ))}
 
-            <Button startIcon={<Add />} onClick={handleAddIngredient} sx={{ mt: 1 }}>
-              Add Ingredient
-            </Button>
-            <Button startIcon={<Delete />} onClick={handleRemoveIngredient} >
-              Delete Ingredient
-            </Button>
           </Box>
 
           <Box display="block" alignItems="center" maxWidth={'40em'} mt={1}>
             <Typography variant="subtitle1" mt={2}>Directions</Typography>
+            <Button startIcon={<Add />} onClick={handleAddDirection} sx={{ mt: 1 }}>
+              Add direction
+            </Button>
+            <Button startIcon={<Delete />} onClick={handleRemoveDirection}>
+              Delete direction
+            </Button>
             {recipe.directions.map((direction, index) => (
               <Box key={index} margin={'10px'}>
                 <TextField fullWidth name="step" defaultValue={direction.step} label={`Step ${index + 1}`} variant="outlined" />
@@ -186,12 +194,6 @@ export default function RecipeInput() {
               </Box>
             ))}
 
-            <Button startIcon={<Add />} onClick={handleAddDirection} sx={{ mt: 1 }}>
-              Add direction
-            </Button>
-            <Button startIcon={<Delete />} onClick={handleRemoveDirection}>
-              Delete direction
-            </Button>
           </Box>
         </Box>
 
