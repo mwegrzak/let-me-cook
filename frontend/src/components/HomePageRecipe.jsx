@@ -24,7 +24,8 @@ const StyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: 0,
-    height: '100%',
+    width: "20em",
+    height: "22em",
     backgroundColor: (theme.vars || theme).palette.background.paper,
     '&:hover': {
         backgroundColor: 'transparent',
@@ -37,16 +38,6 @@ const StyledCard = styled(Card)(({ theme }) => ({
     },
 }));
 
-const StyledCardContent = styled(CardContent)({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 4,
-    padding: 16,
-    flexGrow: 1,
-    '&:last-child': {
-        paddingBottom: 16,
-    },
-});
 
 const StyledTypography = styled(Typography)({
     display: '-webkit-box',

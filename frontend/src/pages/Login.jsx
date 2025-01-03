@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Form, useNavigate, replace, NavLink } from 'react-router-dom';
-import { Box, Button, FormLabel, Link, TextField, Typography, Alert, Snackbar } from '@mui/material'
+import { Box, Button, FormLabel, Link, TextField, Typography, Alert, Snackbar, Dialog, DialogTitle, DialogContent, DialogContentText, OutlinedInput, DialogActions } from '@mui/material'
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
-import ForgotPasswordModal from '../components/ForgotPasswordModal';
 import { SitemarkIcon } from '../components/CustomIcons';
 import { fetchPost } from '../utils/api';
 
@@ -32,33 +31,32 @@ export default function Login(props) {
 
   const [openForgotPassword, setOpenForgotPassword] = useState(false);
   const [openSnackBar, setOpenSnackbar] = useState(false);
+  const [error, setError] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "", forgotPasswordEmail: "" });
-  const loaderData = null
   const { isLoggedIn, user } = useUser()
   const toggleLogin = useUpdateUser();
   let navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
-    console.log(formData)
-    e.preventDefault()
 
-    if (formData.forgotPasswordEmail != "") {
-      // handle forgot password form 
-      const response = await fetch('/api/auth/passwordreset', { email: formData.forgotPasswordEmail })
-      console.log(response)
+  const handleForgotPasswordSubmit = async (e) => {
+    e.preventDefault()
+    const response = await fetch('/api/auth/passwordreset', { email: formData.forgotPasswordEmail })
+    console.log(response)
+    setOpenSnackbar(true)
+
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    console.log(formData)
+
+    const response = await fetchPost('/api/auth/login', { email: formData.email, password: formData.password })
+    if (response.id) {
+      toggleLogin(response);
+      navigate("/", replace);
     }
     else {
-      // handle login form
-      const response = await fetchPost('/api/auth/login', { email: formData.email, password: formData.password })
-      if (response.id) {
-        console.log(response);
-        toggleLogin(response);
-        navigate("/", replace);
-      }
-      else {
-        console.log(response)
-      }
-
+      setError(response.error)
     }
 
   }
@@ -77,32 +75,24 @@ export default function Login(props) {
     return null
   };
 
-
   const handleCloseSnackBar = () => {
     setOpenSnackbar(false);
     return null
   };
-  //useEffect(() => {
-  //  console.log(JSON.stringify(actionData));
-  //  if (actionData?.id) {
-  //    toggleLogin(actionData.user);
-  //    redirect('/');
-  //  }
-  //}, [actionData, toggleLogin]);
 
   return (
     <>
       <Box direction="column" justifyContent="space-between">
         <Card variant="outlined">
 
-          {loaderData &&
+          {error &&
             <Alert severity="error" variant="outlined"
               sx={{
                 width: '100%', display: 'flex',
                 flexDirection: 'column',
                 alignSelf: 'center',
               }} >
-              {loaderData.error}
+              {error}
             </Alert>
           }
 
@@ -156,7 +146,50 @@ export default function Login(props) {
                 Sign in
               </Button>
             </Form>
-            <ForgotPasswordModal open={openForgotPassword} handleClose={handleClose} onChange={handleChange} />
+
+            {/* **************************************
+            ***************** Modal ***************** 
+            **************************************
+            */}
+
+
+            <Dialog
+              open={openForgotPassword}
+              onClose={handleClose}
+              PaperProps={{
+                sx: { backgroundImage: 'none' },
+              }}
+            >
+              <Form onSubmit={handleForgotPasswordSubmit}>
+
+                <DialogTitle>Reset password</DialogTitle>
+                <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
+                  <DialogContentText>
+                    Enter your account's email address and we'll send you a link to reset your password.
+                  </DialogContentText>
+                  <OutlinedInput
+                    autoFocus
+                    required
+                    margin="dense"
+                    id="forgotPasswordEmail"
+                    type="email"
+                    name="forgotPasswordEmail"
+                    autoComplete="email"
+                    placeholder="your@email.com"
+                    onChange={handleChange}
+                    value={formData.forgotPasswordEmail}
+                    fullWidth
+                  />
+                </DialogContent>
+                <DialogActions sx={{ pb: 3, px: 3 }}>
+                  <Button onClick={handleClose}>Cancel</Button>
+                  <Button type="submit" variant="contained">
+                    Continue
+                  </Button>
+                </DialogActions>
+              </Form>
+
+            </Dialog>
 
             <Box display={'inline-flex'} justifyContent={'space-between'}>
 
@@ -173,17 +206,18 @@ export default function Login(props) {
 
           </Box>
         </Card>
-        <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleCloseSnackBar}>
+        <Snackbar open={openSnackBar} autoHideDuration={3000} onClose={handleCloseSnackBar}>
           <Alert
             onClose={handleCloseSnackBar}
             severity="success"
             variant="filled"
             sx={{ width: '100%' }}
           >
-            This is a success Alert inside a Snackbar!
+            Password reminder has been successfully submitted. <br />
+            If you registered an account we will send you an email with a reset link.
           </Alert>
         </Snackbar>
-      </Box>
+      </Box >
     </>
   );
 }

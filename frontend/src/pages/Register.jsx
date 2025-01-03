@@ -1,5 +1,5 @@
-import React, { act } from 'react';
-import { NavLink, Form, useActionData, useLoaderData } from 'react-router-dom';
+import React from 'react';
+import { NavLink, Form, useActionData } from 'react-router-dom';
 import { SitemarkIcon } from '../components/CustomIcons';
 import { Box, Button, FormLabel, TextField, Typography, styled, Alert } from '@mui/material'
 import MuiCard from '@mui/material/Card';
@@ -25,10 +25,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 
-export async function loader() {
-  return null
-}
-
 export async function action({ request }) {
   const formData = await request.formData()
   const email = formData.get("email")
@@ -51,7 +47,6 @@ export async function action({ request }) {
 
 export default function Register(props) {
 
-  const loaderData = useLoaderData()
   const actionData = useActionData()
 
   return (

@@ -39,7 +39,7 @@ function App() {
             <Route path="forgot-password" element={<ForgotPassword />} action={ForgotPasswordAction} />
             <Route path="recipe/:id" element={<RecipeDetail />} />
 
-            <Route path='recipes' element={<RequireAuth />}>
+            <Route path='my-recipes' element={<RequireAuth />}>
                 <Route index element={<UserRecipes />} />
                 <Route path="add" element={<RecipeInput />} />
                 <Route path="edit/:id" element={<RecipeInput />} />

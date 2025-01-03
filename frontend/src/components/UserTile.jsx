@@ -1,9 +1,11 @@
 import React from 'react';
-import { Card, CardContent, Typography, Button, Avatar, Box } from '@mui/material';
+import { NavLink } from 'react-router-dom';
+import { Card, Typography, Button, Avatar, Box } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 
-const UserTile = ({ user, onEdit, onDelete }) => {
-    const { name, surname, email, avatarUrl, creationDate } = user;
+const UserTile = ({ user, onDelete }) => {
+    // user props
+    const { name, surname, email, avatarUrl, creationDate, userId } = user;
 
     return (
         <Card sx={{
@@ -23,10 +25,10 @@ const UserTile = ({ user, onEdit, onDelete }) => {
             <Typography variant="body2" color="text.secondary">{email}</Typography>
             <Typography variant="body2" color="text.secondary">Created: {creationDate}</Typography>
             <Box>
-                <Button variant="outlined" startIcon={<EditIcon />} onClick={() => onEdit(user)}  >
+                <Button component={NavLink} to={`${userId}`} variant="outlined" startIcon={<EditIcon />} >
                     Edit
                 </Button>
-                <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => onDelete(user)}>
+                <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => onDelete(userId)}>
                     Delete
                 </Button>
             </Box>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Drawer, List, ListItem, ListItemText, Divider, IconButton, Box } from '@mui/material';
+import { Drawer, List, ListItemButton, ListItemText, Divider, IconButton, Box } from '@mui/material';
 import { Dashboard as DashboardIcon, People as PeopleIcon, LocalDining as LocalDiningIcon, Close as CloseIcon } from '@mui/icons-material';
 
 export default function AdminSidebar() {
@@ -34,18 +34,18 @@ export default function AdminSidebar() {
             </Box>
             <Divider />
             <List>
-                <ListItem button component={NavLink} to="/admin">
+                <ListItemButton key="Dashboard" component={NavLink} to="/admin">
                     <DashboardIcon />
                     <ListItemText primary="Dashboard" />
-                </ListItem>
-                <ListItem button component={NavLink} to="/admin/users">
+                </ListItemButton>
+                <ListItemButton component={NavLink} to="/admin/users">
                     <PeopleIcon />
                     <ListItemText primary="Users" />
-                </ListItem>
-                <ListItem button component={NavLink} to="/admin/recipes">
+                </ListItemButton>
+                <ListItemButton component={NavLink} to="/admin/recipes">
                     <LocalDiningIcon />
                     <ListItemText primary="Recipes" />
-                </ListItem>
+                </ListItemButton>
             </List>
         </Drawer>
 

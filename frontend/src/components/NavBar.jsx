@@ -1,17 +1,10 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { alpha, styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
+import { Box, AppBar, Toolbar, Button, Container, alpha, styled } from '@mui/material';
 import letMeCookLogo from '../images/letmecook.webp';
 import ColorModeIconDropdown from '../shared-theme/ColorModeIconDropdown';
 import { useUser, useUpdateUser } from '../UserContext.js'
-
-import '@mui/system';
-
+import { fetchPost } from '../utils/api.js';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -37,7 +30,7 @@ export default function NavBar() {
   let navigate = useNavigate()
 
 
-  const logout = (toggleLogin) => {
+  const logout = async (toggleLogin) => {
     fetch('http://localhost:4000/api/auth/logout', {
       method: 'POST',
       credentials: 'include',
@@ -66,8 +59,8 @@ export default function NavBar() {
               <Button component={NavLink} to="/" variant="outlined" color="info" size="small">All recipes</Button>
               {isLoggedIn && (
                 <>
-                  <Button component={NavLink} to="/recipes" variant="outlined" color="info" size="small">My recipes</Button>
-                  <Button component={NavLink} to="/recipes/add" variant="outlined" color="info" size="small">Add recipe</Button>
+                  <Button component={NavLink} to="/my-recipes" variant="outlined" color="info" size="small">My recipes</Button>
+                  <Button component={NavLink} to="/my-recipes/add" variant="outlined" color="info" size="small">Add recipe</Button>
                 </>
               )}
             </Box>

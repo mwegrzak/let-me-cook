@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Chip, Grid2 as Grid, Box } from '@mui/material';
+import { Chip, Grid2 as Grid, Box, Skeleton } from '@mui/material';
 import HomePageRecipe from '../components/HomePageRecipe';
 import { fetchGet } from '../utils/api';
 
 export default function Home(props) {
   const [searchParams, setSearchParams] = useSearchParams()
   const [recipes, setRecipes] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function getRecipes() {
+      setLoading(true)
       const response = await fetchGet('/api/recipe/')
       console.log(response)
       setRecipes(response)
+      setLoading(false)
     }
     getRecipes()
   }, [])
@@ -47,25 +50,36 @@ export default function Home(props) {
 
   return (
     <>
+      {
+        loading ? (
+          <Grid container spacing={2} columns={20}>
+            <Skeleton variant="rectangular" width="20em" height="22em" sx={{ mr: "4%" }} />
+            <Skeleton variant="rectangular" width="20em" height="22em" sx={{ mr: "4%" }} />
+            <Skeleton variant="rectangular" width="20em" height="22em" sx={{ mr: "4%" }} />
+          </Grid>
 
-      <Box
-        sx={{
-          display: 'inline-flex',
-          flexDirection: 'row',
-          gap: 3,
-          overflow: 'auto',
-        }}
-      >
-        <Chip onClick={() => handleFilterChange(null, null)} size="medium" label="All categories" />
-        <Chip onClick={() => handleFilterChange("type", "Breakfast")} size="medium" label="Breakfast" color='primary' sx={{ backgroundColor: 'none' }} />
-        <Chip onClick={() => handleFilterChange("type", "Dinner")} size="medium" label="Dinner" sx={{ backgroundColor: 'transparent', border: 'none', }} />
-        <Chip onClick={() => handleFilterChange("type", "Dessert")} size="medium" label="Dessert" sx={{ backgroundColor: 'transparent', border: 'none', }} />
-        <Chip onClick={() => handleFilterChange("type", "Aperitif")} size="medium" label="Aperitif" sx={{ backgroundColor: 'transparent', border: 'none', }} />
-      </Box>
-      <Grid container spacing={2} columns={20}>
-        {recipeElements}
-      </Grid>
-
+        ) : (
+          <>
+            <Box
+              sx={{
+                display: 'inline-flex',
+                flexDirection: 'row',
+                gap: 3,
+                overflow: 'auto',
+              }}
+            >
+              <Chip onClick={() => handleFilterChange(null, null)} size="medium" label="All categories" />
+              <Chip onClick={() => handleFilterChange("type", "Breakfast")} size="medium" label="Breakfast" color='primary' sx={{ backgroundColor: 'none' }} />
+              <Chip onClick={() => handleFilterChange("type", "Dinner")} size="medium" label="Dinner" sx={{ backgroundColor: 'transparent', border: 'none', }} />
+              <Chip onClick={() => handleFilterChange("type", "Dessert")} size="medium" label="Dessert" sx={{ backgroundColor: 'transparent', border: 'none', }} />
+              <Chip onClick={() => handleFilterChange("type", "Aperitif")} size="medium" label="Aperitif" sx={{ backgroundColor: 'transparent', border: 'none', }} />
+            </Box>
+            <Grid container spacing={2} columns={20}>
+              {recipeElements}
+            </Grid>
+          </>
+        )
+      }
     </>
 
   );

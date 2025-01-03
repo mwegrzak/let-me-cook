@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, OutlinedInput } from '@mui/material';
 
 
-function ForgotPasswordModal({ open, handleClose, onChange, forgotPasswordEmail }) {
+function ForgotPasswordModal({ open, handleClose, handleChange, handleSubmit, forgotPasswordEmail }) {
 
   return (
     <Dialog
@@ -14,7 +14,7 @@ function ForgotPasswordModal({ open, handleClose, onChange, forgotPasswordEmail 
         sx: { backgroundImage: 'none' },
       }}
     >
-      <Form method="post" action="/register">
+      <Form onSubmit={handleSubmit}>
 
         <DialogTitle>Reset password</DialogTitle>
         <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
@@ -26,18 +26,18 @@ function ForgotPasswordModal({ open, handleClose, onChange, forgotPasswordEmail 
             required
             margin="dense"
             id="forgotPasswordEmail"
-            name="forgotPasswordEmail"
-            label="Email address"
-            placeholder="Email address"
             type="email"
+            name="forgotPasswordEmail"
+            autoComplete="email"
+            placeholder="your@email.com"
+            onChange={handleChange}
             value={forgotPasswordEmail}
-            onChange={onChange}
             fullWidth
           />
         </DialogContent>
         <DialogActions sx={{ pb: 3, px: 3 }}>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button variant="contained" type="submit">
+          <Button type="submit" variant="contained">
             Continue
           </Button>
         </DialogActions>

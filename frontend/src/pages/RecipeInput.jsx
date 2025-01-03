@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Form } from 'react-router-dom';
+import { useParams, useLocation, Form, useNavigate } from 'react-router-dom';
 import { TextField, Button, MenuItem, Typography, Box, Checkbox, Card, CardContent } from '@mui/material';
 import { Add, Delete, DisabledByDefault } from '@mui/icons-material';
 import { styled } from '@mui/system';
-import { fetchGet } from '../utils/api';
-import { fetchPost } from '../utils/api';
+import { fetchGet, fetchPost, fetchPut } from '../utils/api';
 import { useUser } from '../UserContext';
 
 const DragDropContainer = styled('div')({
@@ -20,6 +19,8 @@ const DragDropContainer = styled('div')({
 export default function RecipeInput() {
 
   const params = useParams()
+  const location = useLocation()
+  const navigate = useNavigate()
   const { isLoggedIn, user } = useUser()
   const [recipe, setRecipe] = useState({
     title: '',
@@ -35,15 +36,17 @@ export default function RecipeInput() {
     tags: ''
   })
 
-  /*
+
   useEffect(() => {
     async function getRecipe() {
-      const response = fetchGet(`/api/recipe/${params.id}`)
-      setRecipe(response)
+      if (location.pathname.includes('my-recipes/edit')) {
+        const response = fetchGet(`/api/recipe/${params.id}`)
+        setRecipe(response)
+      }
     }
     getRecipe()
   }, [])
-*/
+
 
   const handleAddIngredient = () => {
     setRecipe({
@@ -63,7 +66,6 @@ export default function RecipeInput() {
     }
   };
 
-
   const handleAddDirection = () => {
     setRecipe({ ...recipe, directions: [...recipe.directions, ''] });
   };
@@ -80,21 +82,29 @@ export default function RecipeInput() {
     setRecipe({ ...recipe, photo: e.target.files[0] });
   };
 
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setFormData(values => ({ ...values, [name]: value }))
+  }
   const handleSubmit = (e) => {
-    let test = e.target
-    console.log(test)
-    //e.preventDefault()
-    //const name = e.target.name;
-    //const value = e.target.value;
-    //setFormData(values => ({ ...values, [name]: value }))
-
-
+    console.log(recipe)
+    e.preventDefault()
+    if (location.pathname.includes('my-recipes/edit')) {
+      const response = fetchPut(`/api/recipe/${params.id}`, recipe)
+      console.log(response)
+    }
+    else {
+      const response = fetchPost(`/api/recipe`, recipe)
+      console.log(response)
+      navigate('/my-recipes?message=Recipe added')
+    }
   }
 
   return (
     <Box sx={{ maxWidth: 1000, margin: 'auto', padding: 4 }}>
 
-      <Form method="post" onSubmit={handleSubmit} >
+      <Form onSubmit={handleSubmit} >
 
         <Typography variant="h5" mb={2}>Add New Recipe</Typography>
         <TextField fullWidth label="Title" name="title" id="title" defaultValue={recipe.title} variant="outlined" margin="normal" />
@@ -122,7 +132,7 @@ export default function RecipeInput() {
           <Card>
             <CardContent>
               <Box display={'flex'}>
-                <TextField fullWidth select label="Difficulty" name="difficulty" defaultValue={recipe.difficulty} variant="outlined" margin="normal">
+                <TextField fullWidth select label="difficulty" name="difficulty" defaultValue={recipe.difficulty} variant="outlined" margin="normal">
                   {['Easy', 'Medium', 'Hard'].map((level) => (
                     <MenuItem key={level} value={level}>
                       {level}
