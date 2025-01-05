@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
-import { useUser } from '../UserContext.js';
+import { useUser } from '../UserContext.jsx';
 
 export default function RequireAuth(props) {
   const { isLoggedIn, user } = useUser()

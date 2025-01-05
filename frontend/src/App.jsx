@@ -2,7 +2,7 @@ import './App.css'
 import React from 'react-dom'
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom'
 import CssBaseline from '@mui/material/CssBaseline';
-import { UserProvider, useUser } from './UserContext.js'
+import { UserProvider, useUser } from './UserContext.jsx'
 
 import AppTheme from './shared-theme/AppTheme';
 import NotFound from './pages/NotFound.jsx';

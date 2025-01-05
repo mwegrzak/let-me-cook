@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Box, AppBar, Toolbar, Button, Container, alpha, styled } from '@mui/material';
 import letMeCookLogo from '../images/letmecook.webp';
 import ColorModeIconDropdown from '../shared-theme/ColorModeIconDropdown';
-import { useUser, useUpdateUser } from '../UserContext.js'
+import { useUser, useUpdateUser } from '../UserContext.jsx'
 import { fetchPost } from '../utils/api.js';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({

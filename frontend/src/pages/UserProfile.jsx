@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, Form } from 'react-router-dom';
 import { Avatar, Button, Card, CardActions, CardContent, Divider, Stack, Typography, Box, CardHeader, Grid2 as Grid, FormControl, InputLabel, OutlinedInput, TextField } from '@mui/material';
 import { fetchPut, fetchGet } from '../utils/api';
-import { useUser } from '../UserContext.js'
+import { useUser } from '../UserContext.jsx'
 
 
 export default function UserProfile(props) {

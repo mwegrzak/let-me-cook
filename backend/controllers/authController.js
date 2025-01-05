@@ -25,7 +25,7 @@ async function register(req, res, next) {
         return next(createError(500, err));
       }
 
-      req.session.user =  {id: user.id, email: user.email, name: user.name };
+      req.session.user =  {id: user.id, email: user.email, name: user.name, isAdmin: user.isAdmin};
       return res.status(201).json(req.session.user);
     });
     
