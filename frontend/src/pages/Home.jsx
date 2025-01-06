@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { NavLink, useSearchParams } from 'react-router-dom';
 import { Chip, Grid2 as Grid, Box, Skeleton } from '@mui/material';
 import HomePageRecipe from '../components/HomePageRecipe';
 import { fetchGet } from '../utils/api';
@@ -13,7 +13,6 @@ export default function Home(props) {
     async function getRecipes() {
       setLoading(true)
       const response = await fetchGet('/api/recipe/')
-      console.log(response)
       setRecipes(response)
       setLoading(false)
     }
@@ -21,7 +20,6 @@ export default function Home(props) {
   }, [])
 
   const recipeFilter = searchParams.get("type")
-  console.log(recipes)
   const filteredRecipes = recipeFilter ? recipes.filter(recipe => recipe.tags.indexOf(recipeFilter) > -1) : recipes
 
 
@@ -31,21 +29,24 @@ export default function Home(props) {
   }
 
   const recipeElements = filteredRecipes.map(item => {
-    return <HomePageRecipe
-      key={item.id}
-      id={item.id}
-      title={item.name}
-      description={item.description}
-      author={item.userId}
-      // TODO
-      //img={item.imgUrl}
-      //score={item.score}
-      //tags={item.tags}
-      score={{ 1: 1, 2: 2, 3: 6, 4: 20, 5: 100 }}
-      img={"https://cdn.aniagotuje.com/pictures/articles/2024/11/70950775-v-1080x1080.jpg"}
-      tags={['dinner']}
-
-    />
+    return (
+      <NavLink to={`recipe/${item.id}`} className="navlink">
+        <HomePageRecipe
+          key={item.id}
+          id={item.id}
+          title={item.name}
+          description={item.description}
+          author={item.userId}
+          // TODO
+          //img={item.imgUrl}
+          //score={item.score}
+          //tags={item.tags}
+          score={{ 1: 1, 2: 2, 3: 6, 4: 20, 5: 100 }}
+          img={"https://cdn.aniagotuje.com/pictures/articles/2024/11/70950775-v-1080x1080.jpg"}
+          tags={['dinner']}
+        />
+      </NavLink>
+    )
   })
 
   return (

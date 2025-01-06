@@ -1,16 +1,15 @@
 import React from 'react';
 import { List, ListItem, ListItemText, Grid2 as Grid, Typography } from '@mui/material'
 
-export default function RecipeStepsList(stepsList) {
+export default function RecipeStepsList(...directions) {
 
-    const listItems = stepsList['stepsList'].map((item) => {
+    const listItems = directions.map((item) => {
         return (
             <ListItem>
                 < ListItemText
                     key={item.id}
                     primaryTypographyProps={{ fontSize: 18 }}
-                    primary={item.step}
-                    secondary={item.description}
+                    primary={item.content}
                 />
             </ListItem>
         )

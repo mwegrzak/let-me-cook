@@ -91,14 +91,14 @@ export default function Register(props) {
                 variant="outlined"
               />
 
-              <FormLabel htmlFor="name">Full name</FormLabel>
+              <FormLabel htmlFor="name">Name</FormLabel>
               <TextField
                 autoComplete="name"
                 name="name"
                 required
                 fullWidth
                 id="name"
-                placeholder="Jon Snow"
+                placeholder="JonSnow1337"
               />
 
 

@@ -42,6 +42,8 @@ function App() {
             <Route path='my-recipes' element={<RequireAuth />}>
                 <Route index element={<UserRecipes />} />
                 <Route path="add" element={<RecipeInput />} />
+                <Route path=":id" element={<RecipeDetail />} />
+
                 <Route path="edit/:id" element={<RecipeInput />} />
             </Route>
 

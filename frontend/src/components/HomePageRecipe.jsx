@@ -60,59 +60,58 @@ export default function HomePageRecipe(props) {
 
     return (
         <Grid size={{ xs: 12, md: 6 }}>
-            <NavLink to={`recipe/${props.id}`} className="navlink">
-                <StyledCard
-                    variant="outlined"
-                    onFocus={() => handleFocus(0)}
-                    onBlur={handleBlur}
-                    tabIndex={0}
-                    className={focusedCardIndex === 0 ? 'Mui-focused' : ''}
-                >
-                    <CardContent>
-                    </CardContent>
-                    <CardMedia
-                        component="img"
-                        alt={props.title}
-                        image={props.img}
-                        sx={{
-                            aspectRatio: '16 / 9',
-                            borderBottom: '1px solid',
-                            borderColor: 'divider',
-                        }}
-                    />
+            <StyledCard
+                variant="outlined"
+                onFocus={() => handleFocus(0)}
+                onBlur={handleBlur}
+                tabIndex={0}
+                className={focusedCardIndex === 0 ? 'Mui-focused' : ''}
+            >
+                <CardContent>
+                </CardContent>
+                <CardMedia
+                    component="img"
+                    alt={props.title}
+                    image={props.img}
+                    sx={{
+                        aspectRatio: '16 / 9',
+                        borderBottom: '1px solid',
+                        borderColor: 'divider',
+                    }}
+                />
 
-                    <Box>
+                <Box>
 
-                        <Typography gutterBottom variant="h6" component="div">
-                            {props.title}
-                        </Typography>
-                        <StyledTypography variant="body2" color="text.secondary" gutterBottom>
-                            {props.description}
-                        </StyledTypography>
+                    <Typography gutterBottom variant="h6" component="div">
+                        {props.title}
+                    </Typography>
+                    <StyledTypography variant="body2" color="text.secondary" gutterBottom>
+                        {props.description}
+                    </StyledTypography>
+                </Box>
+                <Box display='inline-flex' justifyContent={'space-between'}>
+
+                    <Typography variant="caption">Score {calcAvgScore(props.score)}</Typography>
+                    {/*<Typography variant="caption">{props.creationDate}</Typography> */}
+
+                    <Box display='flex'>
+                        <Avatar
+                            key={props.author.id}
+                            alt={props.author.name}
+                            src={props.avatar}
+                            sx={{ width: 24, height: 24 }}
+                        />
+                        <Typography variant="caption">{props.author.name}</Typography>
                     </Box>
-                    <Box display='inline-flex' justifyContent={'space-between'}>
+                </Box>
 
-                        <Typography variant="caption">Score {calcAvgScore(props.score)}</Typography>
-                        {/*<Typography variant="caption">{props.creationDate}</Typography> */}
-
-                        <Box display='flex'>
-                            <Avatar
-                                key={props.author.id}
-                                alt={props.author.name}
-                                src={props.avatar}
-                                sx={{ width: 24, height: 24 }}
-                            />
-                            <Typography variant="caption">{props.author.name}</Typography>
-                        </Box>
-                    </Box>
-                    <Typography gutterBottom variant="caption" component="div">
+                {/* <Typography gutterBottom variant="caption" component="div">
                         {props.tags.map((tag) => {
                             return tag + ' '
                         })}
-                    </Typography>
+                    </Typography> */}
 
-                </StyledCard>
-            </NavLink>
+            </StyledCard>
         </Grid >
     )
 }

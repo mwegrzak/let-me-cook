@@ -28,9 +28,9 @@ export default function AdminSidebar() {
         >
             <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '16px' }}>
                 <h2>Admin Panel</h2>
-                <IconButton onClick={handleClose}>
+                {/* <IconButton onClick={handleClose}>
                     <CloseIcon />
-                </IconButton>
+                </IconButton> */}
             </Box>
             <Divider />
             <List>

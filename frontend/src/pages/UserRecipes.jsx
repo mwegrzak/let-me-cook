@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLoaderData, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Grid2 as Grid, Box, Button } from '@mui/material';
 import HomePageRecipe from '../components/HomePageRecipe';
 import { fetchGet, fetchDelete } from '../utils/api';
@@ -11,6 +11,9 @@ export default function UserRecipes(props) {
   const [recipes, setRecipes] = useState([])
 
   useEffect(() => {
+    // useUser + body
+    // todo - if admin page fetch all recipes
+    // useLocation.pathname
     async function getRecipes() {
       const response = await fetchGet('/api/recipe/')
       setRecipes(response)
@@ -18,28 +21,28 @@ export default function UserRecipes(props) {
     getRecipes()
   }, [])
 
-  const recipeElements = recipes.map(item => {
+  const recipeElements = recipes.map(recipe => {
     return (
       <>
         <Box >
+          <NavLink to={recipe.id} className="navlink">
 
-          <NavLink to={`/recipes/edit/${item.id}`} className="navlink">
+            <HomePageRecipe
+              key={recipe.id}
+              id={recipe.id}
+              img={recipe.photo}
+              tags={recipe.tags}
+              title={recipe.title}
+              description={recipe.description}
+              author={recipe.userId}
+              score={recipe.score}
+            />
+          </NavLink>
+          <NavLink to={`edit/${recipe.id}`} className="navlink">
             <Button startIcon={<EditRoundedIcon />} />
           </NavLink>
-          <Button startIcon={<DeleteRoundedIcon />} onClick={(fetchDelete(`/api/recipe/${item.id}`))} />
+          <Button startIcon={<DeleteRoundedIcon />} onClick={() => fetchDelete(`/api/recipe/${recipe.id}`)} />
         </Box>
-
-
-        <HomePageRecipe
-          key={item.id}
-          id={item.id}
-          img={item.imgUrl}
-          tags={item.tags}
-          title={item.title}
-          description={item.description}
-          author={item.author}
-          score={item.score}
-        />
       </>
     )
   })

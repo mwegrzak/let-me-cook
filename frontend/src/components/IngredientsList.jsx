@@ -6,15 +6,15 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 
-export default function IngredientsList(ingredients) {
+export default function IngredientsList(...ingredients) {
     const [checked, setChecked] = useState([0]);
 
-    const handleToggle = (value) => () => {
-        const currentIndex = checked.indexOf(value);
+    const handleToggle = (ingredient) => () => {
+        const currentIndex = checked.indexOf(ingredient);
         const newChecked = [...checked];
 
         if (currentIndex === -1) {
-            newChecked.push(value);
+            newChecked.push(ingredient);
         } else {
             newChecked.splice(currentIndex, 1);
         }
@@ -24,22 +24,21 @@ export default function IngredientsList(ingredients) {
 
     return (
         <List sx={{ width: '100%', minWidth: 360, bgcolor: 'background.paper' }}>
-            {ingredientsList.ingredientsList.map((value) => {
-                const labelId = `checkbox-list-label-${value}`;
-
+            {ingredients.map((ingredient) => {
+                const labelId = `checkbox-list-label-${ingredient}`;
                 return (
-                    <ListItem key={value} disablePadding>
-                        <ListItemButton onClick={handleToggle(value)} dense>
+                    <ListItem key={ingredient} disablePadding>
+                        <ListItemButton onClick={handleToggle(ingredient.id)} dense>
                             <ListItemIcon>
                                 <Checkbox
                                     edge="start"
-                                    checked={checked.includes(value)}
+                                    checked={checked.includes(ingredient.id)}
                                     tabIndex={-1}
                                     disableRipple
                                     inputProps={{ 'aria-labelledby': labelId }}
                                 />
                             </ListItemIcon>
-                            <ListItemText id={labelId} primary={value} />
+                            <ListItemText id={labelId} primary={ingredient.content} />
                         </ListItemButton>
                     </ListItem>
                 );

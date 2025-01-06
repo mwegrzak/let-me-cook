@@ -9,18 +9,14 @@ export default function UserProfile(props) {
   const { isLoggedIn, user } = useUser()
   const params = useParams()
   const location = useLocation()
-  console.log(params)
-  console.log(location)
-
   const [formData, setFormData] = useState(
     {
-      id: user.id,
-      firstName: user.name,
-      lastName: user.name,
+      name: user.name,
       email: user.email,
-      aboutMe: 'I love cocking',
-      favouriteCuisine: 'Spanish',
-      avatar: '/assets/avatar.png',
+      // id: user.id,
+      // aboutMe: 'I love cocking',
+      // favouriteCuisine: 'Spanish',
+      // avatar: '/assets/avatar.png',
 
     }
   )
@@ -46,15 +42,14 @@ export default function UserProfile(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(formData)
 
     const response = await fetchPut(`/api/user/${formData.id}`,
       {
         email: formData.email,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        favouriteCuisine: formData.favouriteCuisine,
-        aboutMe: formData.aboutMe
+        name: formData.name,
+        // lastName: formData.lastName,
+        // favouriteCuisine: formData.favouriteCuisine,
+        // aboutMe: formData.aboutMe
       })
     if (response.id) {
       toggleLogin(response);
@@ -108,17 +103,17 @@ export default function UserProfile(props) {
                 <Grid container my={1}>
                   <Grid item md={6} xs={12} mr={4}>
                     <FormControl fullWidth>
-                      <InputLabel>First name</InputLabel>
-                      <OutlinedInput defaultValue={formData.firstName} label="First name" name="firstName" />
+                      <InputLabel>Name</InputLabel>
+                      <OutlinedInput defaultValue={formData.name} label="Name" name="name" />
                     </FormControl>
                   </Grid>
 
-                  <Grid item md={6} xs={12}>
+                  {/* <Grid item md={6} xs={12}>
                     <FormControl fullWidth>
                       <InputLabel>Last name</InputLabel>
                       <OutlinedInput defaultValue={formData.lastName} label="Last name" name="lastName" />
                     </FormControl>
-                  </Grid>
+                  </Grid>*/}
                 </Grid>
 
                 <Grid container my={1}>
@@ -129,16 +124,16 @@ export default function UserProfile(props) {
                     </FormControl>
                   </Grid>
 
-                  <Grid item md={6} xs={12}>
+                  {/* <Grid item md={6} xs={12}>
                     <FormControl fullWidth>
                       <InputLabel>Favourite cuisine</InputLabel>
                       <OutlinedInput onChange={handleChange} defaultValue={formData.favouriteCuisine} label="favouriteCuisine" name="favouriteCuisine" />
                     </FormControl>
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </Grid>
 
-              <Grid container >
+              {/* <Grid container >
                 <Box justifyContent={'center'}>
                   <TextField name="bio"
                     label='About me'
@@ -154,7 +149,7 @@ export default function UserProfile(props) {
                   />
                 </Box>
 
-              </Grid>
+              </Grid> */}
             </CardContent>
 
             <CardActions sx={{ marginTop: "30px", justifyContent: 'flex-end' }}>

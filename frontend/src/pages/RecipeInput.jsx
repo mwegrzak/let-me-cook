@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, Form, useNavigate } from 'react-router-dom';
-import { TextField, Button, MenuItem, Typography, Box, Checkbox, Card, CardContent } from '@mui/material';
-import { Add, Delete, DisabledByDefault } from '@mui/icons-material';
-import { styled } from '@mui/system';
+import { TextField, Button, MenuItem, Typography, Box, Checkbox, Card, CardContent, Input, CardMedia, CardActions } from '@mui/material';
+import { Add, CardTravel, Delete } from '@mui/icons-material';
 import { fetchGet, fetchPost, fetchPut } from '../utils/api';
 import { useUser } from '../UserContext';
+import placeholderDish from '../images/food-plate.png'
 
-const DragDropContainer = styled('div')({
-  border: '2px dashed #ccc',
-  borderRadius: '8px',
-  padding: '20px',
-  textAlign: 'center',
-  cursor: 'pointer',
-  color: '#999',
-});
-
-
+let nextIngredient = 2
+let nextDirection = 2
 export default function RecipeInput() {
 
   const params = useParams()
@@ -25,9 +17,9 @@ export default function RecipeInput() {
   const [recipe, setRecipe] = useState({
     title: '',
     description: '',
-    photo: null,
-    ingredients: [''],
-    directions: [''],
+    photo: placeholderDish,
+    ingredients: [{ id: 1, content: '' }],
+    directions: [{ id: 1, content: '' }],
     difficulty: '',
     prepTime: '',
     cookTime: '',
@@ -51,42 +43,69 @@ export default function RecipeInput() {
   const handleAddIngredient = () => {
     setRecipe({
       ...recipe,
-      ingredients: [...recipe.ingredients, '']
+      ingredients: [...recipe.ingredients, { id: nextIngredient++, content: "" }]
     });
   };
 
-  const handleRemoveIngredient = () => {
+  const handleRemoveIngredient = (e) => {
     if (recipe.ingredients.length > 1) {
-      const newIngredients = recipe.ingredients
-      newIngredients.pop()
+      nextIngredient--
       setRecipe({
         ...recipe,
-        ingredients: [...newIngredients]
+        ingredients: recipe.ingredients.filter(ingr => ingr.id != nextIngredient)
       });
     }
   };
 
   const handleAddDirection = () => {
-    setRecipe({ ...recipe, directions: [...recipe.directions, ''] });
+    setRecipe({
+      ...recipe,
+      directions: [...recipe.directions, { id: nextDirection++, content: "" }]
+    })
   };
 
-  const handleRemoveDirection = () => {
+  const handleRemoveDirection = (e) => {
     if (recipe.directions.length > 1) {
-      const newDirections = recipe.directions
-      newDirections.pop()
-      setRecipe({ ...recipe, directions: [...newDirections] });
+      nextDirection--
+      setRecipe({
+        ...recipe,
+        directions: recipe.directions.filter(dir => dir.id != nextDirection)
+      });
     }
   };
 
   const handlePhotoUpload = (e) => {
-    setRecipe({ ...recipe, photo: e.target.files[0] });
+    setRecipe({ ...recipe, photo: URL.createObjectURL(e.target.files[0]) });
   };
 
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setFormData(values => ({ ...values, [name]: value }))
+    setRecipe(values => ({ ...values, [name]: value }))
   }
+
+  const handleChangeIngredients = (e) => {
+    const nextIngredients = recipe.ingredients.map((ingredient) => {
+      if (ingredient.id == e.target.id) {
+        ingredient.content = e.target.value
+      }
+      return ingredient
+    })
+
+    setRecipe({ ...recipe, ingredients: nextIngredients });
+  };
+
+  const handleChangeDirection = (e) => {
+    const nextDirections = recipe.directions.map((direction) => {
+      if (direction.id == e.target.id) {
+        direction.content = e.target.value
+      }
+      return direction
+    })
+
+    setRecipe({ ...recipe, directions: nextDirections });
+  };
+
   const handleSubmit = (e) => {
     console.log(recipe)
     e.preventDefault()
@@ -97,7 +116,9 @@ export default function RecipeInput() {
     else {
       const response = fetchPost(`/api/recipe`, recipe)
       console.log(response)
-      navigate('/my-recipes?message=Recipe added')
+      if (response.ok) {
+        navigate('/my-recipes?message=Recipe added')
+      }
     }
   }
 
@@ -107,51 +128,61 @@ export default function RecipeInput() {
       <Form onSubmit={handleSubmit} >
 
         <Typography variant="h5" mb={2}>Add New Recipe</Typography>
-        <TextField fullWidth label="Title" name="title" id="title" defaultValue={recipe.title} variant="outlined" margin="normal" />
-        <TextField fullWidth label="Recipe Description" name="description" defaultValue={recipe.description} variant="outlined" margin="normal" />
+        <TextField onChange={handleChange} fullWidth label="Title" name="title" id="title" value={recipe.title} variant="outlined" margin="normal" />
+        <TextField onChange={handleChange} fullWidth label="Recipe Description" name="description" value={recipe.description} variant="outlined" margin="normal" />
 
         <Box display={'flex'} justifyContent={'space-evenly'}>
           <Box>
             <Typography variant="subtitle1" mt={2}>Upload Dish Photo</Typography>
-            <DragDropContainer>
-              <input
-                type="file"
-                name="photo"
-                accept="image/*"
-                style={{ display: 'none' }}
-                id="photo-upload"
-                onClick={handlePhotoUpload}
+
+            <Card >
+              <CardMedia
+                component="img"
+                height="250"
+                image={recipe.photo}
               />
-              <label htmlFor="photo-upload">
-                {recipe.photo ? <Typography>{recipe.photo.name}</Typography> : <Typography>Click to upload :3</Typography>}
-              </label>
-            </DragDropContainer>
+              <CardContent>
+
+              </CardContent>
+              <CardActions>
+                <Input
+                  type="file"
+                  name="photo"
+                  accept="image/*"
+                  id="photo-upload"
+                  onChange={handlePhotoUpload}
+                />
+              </CardActions>
+            </Card>
           </Box>
 
+          <Box>
+            <Typography variant="subtitle1" mt={2}>Recipe details</Typography>
 
-          <Card>
-            <CardContent>
-              <Box display={'flex'}>
-                <TextField fullWidth select label="difficulty" name="difficulty" defaultValue={recipe.difficulty} variant="outlined" margin="normal">
-                  {['Easy', 'Medium', 'Hard'].map((level) => (
-                    <MenuItem key={level} value={level}>
-                      {level}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <TextField fullWidth label="Servings" name="servings" defaultValue={recipe.servings} type="number" variant="outlined" margin="normal" />
-              </Box>
-              <Box display={'flex'}>
+            <Card>
+              <CardContent>
+                <Box display={'flex'}>
+                  <TextField onChange={handleChange} fullWidth select label="Difficulty" name="difficulty" value={recipe.difficulty} variant="outlined" margin="normal">
+                    {['Easy', 'Medium', 'Hard'].map((level) => (
+                      <MenuItem key={level} value={level}>
+                        {level}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <TextField onChange={handleChange} fullWidth label="Servings" name="servings" value={recipe.servings} type="number" variant="outlined" margin="normal" />
+                </Box>
+                <Box display={'flex'}>
 
-                <TextField fullWidth label="Prep Time (minutes)" name="prepTime" defaultValue={recipe.prepTime} type="number" variant="outlined" margin="normal" />
-                <TextField fullWidth label="Cook Time (minutes)" name="cookTime" defaultValue={recipe.cookTime} type="number" variant="outlined" margin="normal" />
-              </Box>
+                  <TextField onChange={handleChange} fullWidth label="Prep Time (minutes)" name="prepTime" value={recipe.prepTime} type="number" variant="outlined" margin="normal" />
+                  <TextField onChange={handleChange} fullWidth label="Cook Time (minutes)" name="cookTime" value={recipe.cookTime} type="number" variant="outlined" margin="normal" />
+                </Box>
 
-              Make recipe public
-              <Checkbox name="isPublic" label="isPublic" defaultChecked={recipe.isPublic} />
-            </CardContent>
+                Make recipe public
+                <Checkbox name="isPublic" label="isPublic" defaultChecked={recipe.isPublic} />
+              </CardContent>
 
-          </Card>
+            </Card>
+          </Box>
         </Box>
 
         <Box display={'flex'} justifyContent={'center'} >
@@ -166,13 +197,15 @@ export default function RecipeInput() {
               Delete Ingredient
             </Button>
 
-            {recipe.ingredients.map((ingredient, index) => (
+            {recipe.ingredients.map((ingredient) => (
               <TextField
                 fullWidth
-                key={index}
+                onChange={handleChangeIngredients}
+                key={ingredient.id}
+                id={`${ingredient.id}`}
                 name="ingredient"
-                defaultValue={ingredient}
-                label={`Ingredient ${index + 1}`}
+                value={ingredient.content}
+                label={`Ingredient ${ingredient.id}`}
                 variant="outlined"
               />
             ))}
@@ -187,12 +220,15 @@ export default function RecipeInput() {
             <Button startIcon={<Delete />} onClick={handleRemoveDirection}>
               Delete direction
             </Button>
-            {recipe.directions.map((direction, index) => (
-              <Box key={index} margin={'10px'}>
-                <TextField fullWidth name="step" defaultValue={direction.step} label={`Step ${index + 1}`} variant="outlined" />
-                <TextField name="description"
-                  defaultValue={direction.description}
-                  label={'Description'}
+            <Box margin={'10px'}>
+              {recipe.directions.map((direction) => (
+                <TextField
+                  onChange={handleChangeDirection}
+                  name="direction"
+                  key={direction.id}
+                  id={`${direction.id}`}
+                  value={direction.content}
+                  label={`Direction ${direction.id}`}
                   variant="outlined"
                   rows={4}
                   multiline
@@ -201,13 +237,13 @@ export default function RecipeInput() {
                     "& .MuiInputBase-root": { height: 100 }
                   }}
                 />
-              </Box>
-            ))}
+              ))}
+            </Box>
 
           </Box>
         </Box>
 
-        <TextField fullWidth label="Tags" defaultValue={recipe.tags} helperText="Separate tags with commas" variant="outlined" margin="normal"
+        <TextField onChange={handleChange} fullWidth label="Tags" name="tags" value={recipe.tags} helperText="Separate tags with commas" variant="outlined" margin="normal"
         />
 
         <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
