@@ -7,6 +7,8 @@ import 'dotenv/config';
 
 import recipeRoute from './routes/recipeRoute.js';
 import authRoute from './routes/authRoute.js';
+import userRoute from './routes/userRoute.js';
+import uploadRoute from './routes/uploadRoute.js';
 import errorHandler from './middlewares/errorHandler.js';
 import prisma from './utils/prisma.js';
 
@@ -53,6 +55,8 @@ app.use(session(sess));
 
 app.use('/api/recipe', recipeRoute);
 app.use('/api/auth', authRoute);
+app.use('/api/user', userRoute);
+app.use('/api/upload', uploadRoute);
 
 app.use(errorHandler);
 

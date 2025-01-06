@@ -7,33 +7,33 @@ async function register(req, res, next) {
   const { email, password, name } = req.body;
   const hashedPassword = await argon2.hash(password);
   try {
-      const user = await prisma.user.create({
-          data: {
-              email,
-              password: hashedPassword,
-              name
-          },
-          select: {
-              id: true,
-              email: true,
-              name: true
-          }
-      });
+    const user = await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        name
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true
+      }
+    });
 
     await req.session.regenerate((err) => {
       if (err) {
         return next(createError(500, err));
       }
 
-      req.session.user =  {id: user.id, email: user.email, name: user.name, isAdmin: user.isAdmin};
+      req.session.user = { id: user.id, email: user.email, name: user.name, isAdmin: user.isAdmin };
       return res.status(201).json(req.session.user);
     });
-    
+
   } catch (error) {
-      return next(createError(500, error));
+    return next(createError(500, error));
   }
 
-  
+
 };
 
 async function login(req, res, next) {
@@ -43,6 +43,13 @@ async function login(req, res, next) {
     const user = await prisma.user.findUnique({
       where: {
         email
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        password: true,
+        isAdmin: true
       }
     });
 
@@ -61,7 +68,7 @@ async function login(req, res, next) {
         return next(createError(500, err));
       }
 
-      req.session.user = { id: user.id, email: user.email, name: user.name };
+      req.session.user = { id: user.id, email: user.email, name: user.name, isAdmin: user.isAdmin };
       return res.status(200).json(req.session.user);
     });
 
@@ -85,6 +92,9 @@ async function passwordResetRequest(req, res, next) {
     const user = await prisma.user.findUnique({
       where: {
         email
+      },
+      select: {
+        id: true
       }
     });
 
@@ -117,7 +127,13 @@ async function passwordReset(req, res, next) {
         token
       },
       include: {
-        user: true
+        user: {
+          select: {
+            id: true,
+            email: true,
+            password: true
+          }
+        }
       }
     });
 

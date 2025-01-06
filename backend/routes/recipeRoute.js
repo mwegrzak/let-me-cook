@@ -17,20 +17,32 @@ router.get('/:id', validator.params(recipeGetSchema), get);
 const recipeCreateSchema = Joi.object({
     name: Joi.string().required(),
     description: Joi.string().required(),
-    ingredients: Joi.string().required(),
-    steps: Joi.string().required(),
     difficulty: Joi.number().required(),
     time: Joi.number().required(),
+    uploadId: Joi.string().optional(),
+    ingredients: Joi.array().items(Joi.object({
+        name: Joi.string().required(),
+        quantity: Joi.string().required(),
+    })).optional(),
+    steps: Joi.array().items(Joi.object({
+        description: Joi.string().required(),
+    })).optional(),
 });
 router.post('/', validator.body(recipeCreateSchema), authenticated, create);
 
 const recipeUpdateSchemaBody = Joi.object({
     name: Joi.string().required(),
     description: Joi.string().required(),
-    ingredients: Joi.string().required(),
-    steps: Joi.string().required(),
     difficulty: Joi.number().required(),
     time: Joi.number(),
+    uploadId: Joi.string().optional(),
+    ingredients: Joi.array().items(Joi.object({
+        name: Joi.string().required(),
+        quantity: Joi.string().required(),
+    })).optional(),
+    steps: Joi.array().items(Joi.object({
+        description: Joi.string().required(),
+    })).optional(),
 });
 const recipeUpdateSchemaParams = Joi.object({
     id: Joi.string().required(),
