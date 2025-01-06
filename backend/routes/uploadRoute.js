@@ -15,7 +15,10 @@ const upload = multer({
   }
 });
 const uploadSchema = Joi.object({
-  file: Joi.object().required(),
+  file: Joi.any()
+    .meta({ swaggerType: 'file' }) // crucial for swagger docs
+    .required()
+    .description('File to be uploaded'),
 });
 router.post('/upload', upload.single('file'), authenticated, create);
 

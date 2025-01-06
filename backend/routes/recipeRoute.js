@@ -31,10 +31,10 @@ const recipeCreateSchema = Joi.object({
 router.post('/', validator.body(recipeCreateSchema), authenticated, create);
 
 const recipeUpdateSchemaBody = Joi.object({
-    name: Joi.string().required(),
-    description: Joi.string().required(),
-    difficulty: Joi.number().required(),
-    time: Joi.number(),
+    name: Joi.string().optional(),
+    description: Joi.string().optional(),
+    difficulty: Joi.number().optional(),
+    time: Joi.number().optional(),
     uploadId: Joi.string().optional(),
     ingredients: Joi.array().items(Joi.object({
         name: Joi.string().required(),
