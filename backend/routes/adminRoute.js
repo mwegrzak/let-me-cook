@@ -11,12 +11,12 @@ const validator = createValidator({passError: true, statusCode: 400});
 router.use(authenticated);
 router.use(isAdmin);
 
-router.get('/', list);
+router.get('/user', list);
 
 const userGetSchema = Joi.object({
     id: Joi.string().required(),
 });
-router.get('/:id', validator.params(userGetSchema), get);
+router.get('/user/:id', validator.params(userGetSchema), get);
 
 const userUpdateSchema = Joi.object({
     id: Joi.string().required(),
@@ -26,11 +26,11 @@ const userUpdateSchemaBody = Joi.object({
     email: Joi.string().optional(),
     isAdmin: Joi.boolean().optional(),
 });
-router.put('/:id', validator.params(userUpdateSchema), validator.body(userUpdateSchemaBody), update);
+router.put('/user/:id', validator.params(userUpdateSchema), validator.body(userUpdateSchemaBody), update);
 
 const userDeleteSchema = Joi.object({
     id: Joi.string().required(),
 });
-router.delete('/:id', validator.params(userDeleteSchema), update, remove);
+router.delete('/user/:id', validator.params(userDeleteSchema), update, remove);
 
 export default router;
