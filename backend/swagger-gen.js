@@ -11,20 +11,6 @@ const config = {
   outputPath: path.join(__dirname, 'api-doc'),
   generateUI: true,
   swaggerUIPath: '/api-doc',
-	requestSchemaNames: [
-    'registerSchema',
-    'loginSchema',
-    'passwordResetRequestSchema',
-    'passwordResetSchema',
-    'recipeCreateSchema',
-    'recipeUpdateSchemaBody',
-		'recipeDeleteSchema',
-		'uploadSchema',
-		'userGetSchema',
-		'userUpdateSchema',
-		'userUpdateSchemaBody',
-		'userDeleteSchema',
-  ],
   openapi: '3.0.0',
   swaggerInitInfo: {
     info: {
@@ -44,10 +30,15 @@ const config = {
   },
 };
 
-async function workflow() {
+function workflow() {
   try {
-    await generateSwagger.default(app, config);
-    console.log('Apidoc was successfully generated');
+    app.on('appStarted', async () => {
+      // sleep for 1 second to make sure that the server is started
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await generateSwagger.default(app, config);
+      console.log('Apidoc was successfully generated');
+    });
+    
   } catch (e) {
     console.log(`Unable to generate apidoc: ${e}`);
   }

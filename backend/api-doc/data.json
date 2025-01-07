@@ -1,289 +1,117 @@
 {
   "openapi": "3.0.0",
+  "info": {
+    "title": "API Documentation",
+    "version": "1.0.0"
+  },
   "servers": [
     {
-      "url": "http://localhost:4000"
+      "url": "http://localhost:4000/api"
     }
   ],
-  "info": {
-    "description": "Let me cook API",
-    "version": "1.0.6-SNAPSHOT",
-    "title": "Let me cook",
-    "termsOfService": "http://swagger.io/terms/",
-    "contact": {
-      "email": "apiteam@swagger.io"
-    },
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-    }
-  },
   "paths": {
-    "/api/recipe/": {
-      "get": {
-        "operationId": "getRecipe",
-        "description": "Retrieve a list of all recipes",
-        "tags": [
-          "Recipe"
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of recipes",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Recipe"
+    "/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8
+                  },
+                  "name": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z\\s]{3,30}$"
                   }
                 }
               }
             }
           }
-        }
-      },
-      "post": {
-        "operationId": "postRecipe",
-        "description": "Create a new recipe",
-        "tags": [
-          "Recipe"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RecipeCreate"
-              }
-            }
-          }
         },
         "responses": {
-          "201": {
-            "description": "Recipe created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Recipe"
-                }
-              }
-            }
+          "200": {
+            "description": "User registered successfully"
           }
         }
       }
     },
-    "/api/recipe/{id}": {
-      "get": {
-        "operationId": "getRecipeId",
-        "description": "Retrieve a specific recipe by ID",
-        "tags": [
-          "Recipe"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Recipe data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Recipe"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recipe not found"
-          }
-        }
-      },
-      "put": {
-        "operationId": "putRecipeId",
-        "description": "Update a recipe by ID",
-        "tags": [
-          "Recipe"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+    "/auth/login": {
+      "post": {
+        "summary": "Login a user",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RecipeUpdate"
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Recipe updated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Recipe"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recipe not found"
-          }
-        }
-      },
-      "delete": {
-        "operationId": "deleteRecipeId",
-        "description": "Delete a recipe by ID",
-        "tags": [
-          "Recipe"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Recipe deleted successfully"
-          },
-          "404": {
-            "description": "Recipe not found"
+            "description": "User logged in successfully"
           }
         }
       }
     },
-    "/api/auth/register": {
+    "/auth/logout": {
       "post": {
-        "operationId": "postApiAuthRegister",
-        "description": "Register a new user",
-        "tags": [
-          "Auth"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AuthRegister"
-              }
-            }
-          }
-        },
+        "summary": "Logout the current user",
         "responses": {
-          "201": {
-            "description": "User registered successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data"
+          "200": {
+            "description": "User logged out successfully"
           }
         }
       }
     },
-    "/api/auth/login": {
+    "/auth/passwordreset": {
       "post": {
-        "operationId": "postApiAuthLogin",
-        "description": "Log in a user",
-        "tags": [
-          "Auth"
-        ],
+        "summary": "Request password reset",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AuthLogin"
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Login successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Invalid credentials"
+            "description": "Password reset request successful"
           }
         }
       }
     },
-    "/api/auth/logout": {
+    "/auth/passwordreset/{token}": {
       "post": {
-        "operationId": "postApiAuthLogout",
-        "description": "Log out the current user",
-        "tags": [
-          "Auth"
-        ],
-        "responses": {
-          "200": {
-            "description": "Logout successful"
-          }
-        }
-      }
-    },
-    "/api/auth/passwordreset": {
-      "post": {
-        "operationId": "postApiAuthPasswordreset",
-        "description": "Request password reset",
-        "tags": [
-          "Auth"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PasswordResetRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Password reset link sent"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      }
-    },
-    "/api/auth/passwordreset/{token}": {
-      "post": {
-        "operationId": "postApiAuthPasswordresetToken",
-        "description": "Reset password using token",
-        "tags": [
-          "Auth"
-        ],
+        "summary": "Reset password using token",
         "parameters": [
           {
             "name": "token",
@@ -295,10 +123,17 @@
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PasswordReset"
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "minLength": 8
+                  }
+                }
               }
             }
           }
@@ -306,212 +141,413 @@
         "responses": {
           "200": {
             "description": "Password reset successful"
-          },
-          "400": {
-            "description": "Invalid token or request data"
           }
         }
       }
     },
-    "/api/auth/check": {
+    "/auth/check": {
       "get": {
-        "operationId": "getApiAuthCheck",
-        "description": "Check user authentication status",
-        "tags": [
-          "Auth"
-        ],
+        "summary": "Check user authentication",
         "responses": {
           "200": {
-            "description": "User is authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthStatus"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "User not authenticated"
+            "description": "Authentication status"
           }
         }
       }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Recipe": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "ingredients": {
-            "type": "string"
-          },
-          "steps": {
-            "type": "string"
-          },
-          "difficulty": {
-            "type": "integer"
-          },
-          "time": {
-            "type": "integer"
+    },
+    "/recipe": {
+      "get": {
+        "summary": "List all recipes",
+        "responses": {
+          "200": {
+            "description": "List of recipes"
           }
         }
       },
-      "RecipeCreate": {
-        "type": "object",
-        "required": [
-          "name",
-          "description",
-          "ingredients",
-          "steps",
-          "difficulty",
-          "time"
+      "post": {
+        "summary": "Create a new recipe",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "difficulty": {
+                    "type": "number"
+                  },
+                  "time": {
+                    "type": "number"
+                  },
+                  "uploadId": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "ingredients": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "quantity": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "steps": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "description": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Recipe created successfully"
+          }
+        }
+      }
+    },
+    "/recipe/{id}": {
+      "get": {
+        "summary": "Get recipe details",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "ingredients": {
-            "type": "string"
-          },
-          "steps": {
-            "type": "string"
-          },
-          "difficulty": {
-            "type": "integer"
-          },
-          "time": {
-            "type": "integer"
+        "responses": {
+          "200": {
+            "description": "Recipe details"
           }
         }
       },
-      "RecipeUpdate": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "ingredients": {
-            "type": "string"
-          },
-          "steps": {
-            "type": "string"
-          },
-          "difficulty": {
-            "type": "integer"
-          },
-          "time": {
-            "type": "integer"
+      "put": {
+        "summary": "Update recipe details",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "difficulty": {
+                    "type": "number"
+                  },
+                  "time": {
+                    "type": "number"
+                  },
+                  "uploadId": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "ingredients": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "quantity": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "steps": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "description": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Recipe updated successfully"
           }
         }
       },
-      "AuthRegister": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "password": {
-            "type": "string",
-            "format": "password"
+      "delete": {
+        "summary": "Delete a recipe",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recipe deleted successfully"
+          }
+        }
+      }
+    },
+    "/upload": {
+      "post": {
+        "summary": "Upload a file",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
           }
         },
-        "required": [
-          "username",
-          "email",
-          "password"
-        ]
-      },
-      "AuthLogin": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "password": {
-            "type": "string",
-            "format": "password"
+        "responses": {
+          "201": {
+            "description": "File uploaded successfully"
           }
-        },
-        "required": [
-          "email",
-          "password"
-        ]
-      },
-      "PasswordResetRequest": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email"
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "summary": "List all users",
+        "responses": {
+          "200": {
+            "description": "List of users"
           }
-        },
-        "required": [
-          "email"
-        ]
-      },
-      "PasswordReset": {
-        "type": "object",
-        "properties": {
-          "password": {
-            "type": "string",
-            "minLength": 8
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "summary": "Get user details",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
-        },
-        "required": [
-          "password"
-        ]
-      },
-      "AuthResponse": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
+        ],
+        "responses": {
+          "200": {
+            "description": "User details"
           }
         }
       },
-      "AuthStatus": {
-        "type": "object",
-        "properties": {
-          "authenticated": {
-            "type": "boolean"
-          },
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
+      "put": {
+        "summary": "Update user details",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully"
+          }
+        }
+      }
+    },
+    "/user/{id}/recipe": {
+      "get": {
+        "summary": "List user-specific recipes",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of user-specific recipes"
+          }
+        }
+      }
+    },
+    "/admin/user": {
+      "get": {
+        "summary": "List all users (Admin)",
+        "responses": {
+          "200": {
+            "description": "List of users accessible by admin"
+          }
+        }
+      }
+    },
+    "/admin/user/{id}": {
+      "get": {
+        "summary": "Get user details (Admin)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User details accessible by admin"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user details (Admin)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "isAdmin": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully by admin"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user (Admin)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully by admin"
           }
         }
       }
