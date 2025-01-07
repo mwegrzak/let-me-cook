@@ -68,6 +68,7 @@ async function get(req, res, next) {
 async function create(req, res, next) {
   let ingredients = [];
   let steps = [];
+  let uploadId = null;
 
   if (req.body.uploadId) {
     const image = await prisma.upload.findUnique({
@@ -83,6 +84,9 @@ async function create(req, res, next) {
     if (image.userId !== req.session.user.id) {
       return next(createError(403));
     }
+
+    uploadId = image.id;
+    delete req.body.uploadId;
   }
 
   if (req.body.ingredients) {
@@ -126,6 +130,13 @@ async function create(req, res, next) {
             id: req.session.user.id
           },
         },
+        upload: uploadId
+          ? {
+              connect: {
+                id: uploadId,
+              },
+            }
+          : undefined,
         recipeIngredients: {
           create: ingredients
         },

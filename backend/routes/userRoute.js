@@ -7,6 +7,8 @@ import authenticated from "../middlewares/authenticated.js";
 const router = express.Router();
 const validator = createValidator({passError: true, statusCode: 400});
 
+router.use(express.json());
+
 router.get('/', list);
 
 const userGetSchema = Joi.object({

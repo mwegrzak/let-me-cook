@@ -20,6 +20,6 @@ const uploadSchema = Joi.object({
     .required()
     .description('File to be uploaded'),
 });
-router.post('/upload', upload.single('file'), authenticated, create);
+router.post('/', upload.single('file'), authenticated, create);
 
 export default router;

@@ -1,3 +1,4 @@
+import express from "express";
 import { Router } from "express";
 import Joi from "joi";
 import { createValidator } from "express-joi-validation";
@@ -8,6 +9,8 @@ import notAuthenticated from "../middlewares/notAuthenticated.js";
 
 const validator = createValidator({passError: true, statusCode: 400});
 const router = Router();
+
+router.use(express.json());
 
 const registerSchema = Joi.object({
     email: Joi.string().email().required(),

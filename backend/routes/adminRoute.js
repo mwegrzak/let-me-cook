@@ -8,6 +8,7 @@ import isAdmin from '../middlewares/isAdmin.js';
 const router = express.Router();
 const validator = createValidator({passError: true, statusCode: 400});
 
+router.use(express.json());
 router.use(authenticated);
 router.use(isAdmin);
 
