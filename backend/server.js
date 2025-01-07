@@ -9,6 +9,7 @@ import recipeRoute from './routes/recipeRoute.js';
 import authRoute from './routes/authRoute.js';
 import userRoute from './routes/userRoute.js';
 import uploadRoute from './routes/uploadRoute.js';
+import adminRoute from './routes/adminRoute.js';
 import errorHandler from './middlewares/errorHandler.js';
 import prisma from './utils/prisma.js';
 
@@ -57,11 +58,13 @@ app.use('/api/recipe', recipeRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
 app.use('/api/upload', uploadRoute);
+app.use('/api/admin', adminRoute);
 
 app.use(errorHandler);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
+  app.emit('appStarted');
 });
 
 export default app;

@@ -31,10 +31,6 @@ async function get(req, res, next) {
 async function remove(req, res, next) {
   const { id } = req.params;
 
-  if (req.session.user.id !== id) {
-    return next(createError(403));
-  }
-
   try {
     await prisma.user.delete({
       where: {
@@ -50,10 +46,6 @@ async function remove(req, res, next) {
 
 async function update(req, res, next) {
   const { id } = req.params;
-
-  if (req.session.user.id !== id) {
-    return next(createError(403));
-  }
 
   try {
     const user = await prisma.user.update({
@@ -71,20 +63,4 @@ async function update(req, res, next) {
   }
 }
 
-async function listRecipes(req, res, next) {
-  const { id } = req.params;
-
-  try {
-    const recipes = await prisma.recipe.findMany({
-      where: {
-        userId: id
-      }
-    });
-
-    return res.json(recipes);
-  } catch (error) {
-    return next(createError(500));
-  }
-}
-
-export { list, get, remove, update, listRecipes };
+export { list, get, remove, update };
