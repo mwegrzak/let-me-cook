@@ -50,7 +50,9 @@ model Recipe {
   name             String
   description      String
   difficulty       Int
-  time             Int
+  servings         Int
+  prepTime         Int
+  cookTime         Int
   user             User               @relation(fields: [userId], references: [id])
   userId           String
   RecipeLikes      RecipeLike[]

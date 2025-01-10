@@ -1,11 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Card, Typography, Button, Avatar, Box } from '@mui/material';
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { Card, Typography, Button, Avatar, Box, Checkbox } from '@mui/material';
+import { Edit as EditIcon, Delete as DeleteIcon, AdminPanelSettings } from '@mui/icons-material';
 
 const UserTile = ({ user, onDelete }) => {
-    // user props
-    const { name, surname, email, avatarUrl, creationDate, userId } = user;
+    const { name, email, id, isAdmin } = user;
 
     return (
         <Card sx={{
@@ -18,17 +17,16 @@ const UserTile = ({ user, onDelete }) => {
             boxShadow: 3,
         }}>
             <Box display='flex' alignItems='center'>
-                <Avatar src={avatarUrl} alt={`${name} ${surname}`} sx={{ width: 56, height: 56, mr: 3 }} />
-                <Typography variant="h6">{name} {surname}</Typography>
+                <Avatar alt={`${name}`} sx={{ width: 56, height: 56, mr: 3 }} />
+                <Typography variant="h6">{name}</Typography>
             </Box>
 
             <Typography variant="body2" color="text.secondary">{email}</Typography>
-            <Typography variant="body2" color="text.secondary">Created: {creationDate}</Typography>
             <Box>
-                <Button component={NavLink} to={`${userId}`} variant="outlined" startIcon={<EditIcon />} >
+                <Button component={NavLink} to={`${id}`} variant="outlined" startIcon={<EditIcon />}>
                     Edit
                 </Button>
-                <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => onDelete(userId)}>
+                <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => onDelete(id)}>
                     Delete
                 </Button>
             </Box>

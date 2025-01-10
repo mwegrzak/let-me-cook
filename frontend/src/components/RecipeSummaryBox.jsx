@@ -23,36 +23,24 @@ export default function RecipeSummaryBox(props) {
     const servings = props.servings
     const prepTime = props.prepTime
     const cookTime = props.cookTime
-    let scoreVotes = props.scoreVotes
+    const scoreVotes = props.scoreVotes
 
-    const [score, setScore] = useState(1);
+    const [score, setScore] = useState(calcAvgScore(scoreVotes));
 
     return (
         <Card sx={{ minWidth: 275 }}>
             <CardContent>
-                <Box sx={{ '& > legend': { mt: 2 } }}>
-                    <Typography component="legend">Rate {calcAvgScore(scoreVotes)}</Typography>
-                    <Rating
-                        name="simple-controlled"
-                        score={score}
-                        onChange={(event, newValue) => {
-                            setScore(newValue);
-                        }}
-                    />
-                </Box>
-
+                <Box sx={{ '& > legend': { mt: 2 } }}></Box>
                 <Box sx={{ justifyContent: 'space-between', display: 'flex', flexDirection: 'row', m: 3 }} >
                     <Box>
                         <Typography gutterBottom sx={{ fontSize: 18 }}>Difficulty</Typography>
                         <Typography gutterBottom sx={{ fontSize: 14 }}>{difficulty}</Typography>
                     </Box>
-
                     <Box>
                         <Typography gutterBottom sx={{ fontSize: 18 }}>Servings</Typography>
                         <Typography gutterBottom sx={{ fontSize: 14 }}>{servings}</Typography>
                     </Box>
                 </Box>
-
                 <Box sx={{ justifyContent: 'space-between', display: 'flex', flexDirection: 'row', m: 3 }} >
                     <Box>
                         <Typography gutterBottom sx={{ fontSize: 18 }}>Prep time</Typography>
@@ -63,9 +51,7 @@ export default function RecipeSummaryBox(props) {
                         <Typography gutterBottom sx={{ fontSize: 14 }}>{cookTime}</Typography>
                     </Box>
                 </Box>
-
-
             </CardContent>
-        </Card >
+        </Card>
     );
 }

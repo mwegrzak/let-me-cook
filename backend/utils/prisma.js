@@ -6,6 +6,21 @@ const prisma = new PrismaClient({
       password: true
     }
   }
+}).$extends({
+  result: {
+    recipe: {
+      img: {
+        needs: { uploadId: true },
+        compute(recipe) {
+          if (recipe.uploadId) {
+            return `/uploads/${recipe.uploadId}.jpeg`;
+          } else {
+            return null;
+          }
+        }
+      }
+    }
+  }
 });
 
 export default prisma;

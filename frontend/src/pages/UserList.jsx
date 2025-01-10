@@ -11,7 +11,7 @@ export default function UserList(props) {
   useEffect(() => {
     async function getUsers() {
       setLoading(true)
-      const response = await fetchGet('/api/user/')
+      const response = await fetchGet('/api/admin/user')
       console.log(response)
       setUsers(response)
       setLoading(false)
@@ -24,7 +24,7 @@ export default function UserList(props) {
     console.log(userId)
 
     try {
-      const response = await fetchDelete(`/api/user/${userId}`)
+      const response = await fetchDelete(`/api/admin/user/${userId}`)
       console.log(response)
       return response
     }
@@ -35,15 +35,10 @@ export default function UserList(props) {
 
   }
 
-  const testUsers = [
-    { name: 'John', surname: 'Doe', email: 'johndoe@example.local', avatarUrl: '', creationDate: '15.12.2024', userId: 1 },
-    { name: 'John', surname: 'Doe', email: 'johndoe@example.local', avatarUrl: '', creationDate: '15.12.2024', userId: 2 },
-    { name: 'John', surname: 'Doe', email: 'johndoe@example.local', avatarUrl: '', creationDate: '15.12.2024', userId: 3 }
-  ]
   return (
     <>
-      {testUsers.map((user) => (
-        <UserTile key={user.userId} user={user} onDelete={() => handleDelete(user.userId)} />
+      {users.map((user) => (
+        <UserTile key={user.id} user={user} onDelete={() => handleDelete(user.userId)} />
       ))}
     </>
   );

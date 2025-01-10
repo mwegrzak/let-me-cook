@@ -6,28 +6,28 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 
-export default function IngredientsList(...ingredients) {
-    const [checked, setChecked] = useState([0]);
+export default function IngredientsList({ ingredients }) {
+    const [checked, setChecked] = useState([]);
 
-    const handleToggle = (ingredient) => () => {
-        const currentIndex = checked.indexOf(ingredient);
+    const handleToggle = (id) => () => {
+        const currentIndex = checked.indexOf(id);
         const newChecked = [...checked];
-
+    
         if (currentIndex === -1) {
-            newChecked.push(ingredient);
+            newChecked.push(id);
         } else {
             newChecked.splice(currentIndex, 1);
         }
-
+    
         setChecked(newChecked);
     };
 
     return (
         <List sx={{ width: '100%', minWidth: 360, bgcolor: 'background.paper' }}>
             {ingredients.map((ingredient) => {
-                const labelId = `checkbox-list-label-${ingredient}`;
+                const labelId = `checkbox-list-label`;
                 return (
-                    <ListItem key={ingredient} disablePadding>
+                    <ListItem key={ingredient.name} disablePadding>
                         <ListItemButton onClick={handleToggle(ingredient.id)} dense>
                             <ListItemIcon>
                                 <Checkbox
@@ -38,7 +38,7 @@ export default function IngredientsList(...ingredients) {
                                     inputProps={{ 'aria-labelledby': labelId }}
                                 />
                             </ListItemIcon>
-                            <ListItemText id={labelId} primary={ingredient.content} />
+                            <ListItemText id={labelId} primary={ingredient.name} />
                         </ListItemButton>
                     </ListItem>
                 );

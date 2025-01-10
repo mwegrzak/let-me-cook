@@ -38,11 +38,10 @@ export default function Home(props) {
           description={item.description}
           author={item.userId}
           // TODO
-          //img={item.imgUrl}
+          img={item.img ? item.img : "https://cdn.aniagotuje.com/pictures/articles/2024/11/70950775-v-1080x1080.jpg"}
           //score={item.score}
           //tags={item.tags}
           score={{ 1: 1, 2: 2, 3: 6, 4: 20, 5: 100 }}
-          img={"https://cdn.aniagotuje.com/pictures/articles/2024/11/70950775-v-1080x1080.jpg"}
           tags={['dinner']}
         />
       </NavLink>

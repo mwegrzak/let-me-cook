@@ -1,5 +1,9 @@
 const API_URL = 'http://localhost:4000';
 
+//export variable
+
+export { API_URL }
+
 export async function fetchPost(endpoint, data) {
   const body = JSON.stringify(data) || {};
 

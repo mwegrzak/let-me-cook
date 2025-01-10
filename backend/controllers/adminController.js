@@ -2,7 +2,7 @@ import createError from "http-errors";
 import prisma from "../utils/prisma.js";
 
 async function list(req, res) {
-  const users = await prisma.user.findMany({omit: {password: true, email: true}});
+  const users = await prisma.user.findMany({omit: {password: true}});
 
   return res.json(users);
 }
@@ -15,7 +15,7 @@ async function get(req, res, next) {
       where: {
         id
       },
-      omit: {password: true, email: true}
+      omit: {password: true}
     });
 
     if (!user) {

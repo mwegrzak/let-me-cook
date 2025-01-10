@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, Form, useNavigate } from 'react-router-dom';
 import { TextField, Button, MenuItem, Typography, Box, Checkbox, Card, CardContent, Input, CardMedia, CardActions } from '@mui/material';
 import { Add, CardTravel, Delete } from '@mui/icons-material';
-import { fetchGet, fetchPost, fetchPut } from '../utils/api';
+import { fetchGet, fetchPost, fetchPut, API_URL } from '../utils/api';
 import { useUser } from '../UserContext';
 import placeholderDish from '../images/food-plate.png'
 
 let nextIngredient = 2
-let nextDirection = 2
+let nextStep = 2
 export default function RecipeInput() {
 
   const params = useParams()
@@ -18,8 +18,9 @@ export default function RecipeInput() {
     title: '',
     description: '',
     photo: placeholderDish,
-    ingredients: [{ id: 1, content: '' }],
-    directions: [{ id: 1, content: '' }],
+    uploadId: null,
+    ingredients: [{ id: 1, name: '' }],
+    steps: [{ id: 1, description: '' }],
     difficulty: '',
     prepTime: '',
     cookTime: '',
@@ -43,7 +44,7 @@ export default function RecipeInput() {
   const handleAddIngredient = () => {
     setRecipe({
       ...recipe,
-      ingredients: [...recipe.ingredients, { id: nextIngredient++, content: "" }]
+      ingredients: [...recipe.ingredients, { id: nextIngredient++, name: '' }]
     });
   };
 
@@ -57,25 +58,37 @@ export default function RecipeInput() {
     }
   };
 
-  const handleAddDirection = () => {
+  const handleAddStep = () => {
     setRecipe({
       ...recipe,
-      directions: [...recipe.directions, { id: nextDirection++, content: "" }]
+      steps: [...recipe.steps, { id: nextStep++, description: '' }]
     })
   };
 
   const handleRemoveDirection = (e) => {
-    if (recipe.directions.length > 1) {
-      nextDirection--
+    if (recipe.steps.length > 1) {
+      nextStep--
       setRecipe({
         ...recipe,
-        directions: recipe.directions.filter(dir => dir.id != nextDirection)
+        steps: recipe.steps.filter(dir => dir.id != nextStep)
       });
     }
   };
 
-  const handlePhotoUpload = (e) => {
-    setRecipe({ ...recipe, photo: URL.createObjectURL(e.target.files[0]) });
+  const handlePhotoUpload = async (e) => {
+    if (!e.target.files?.[0]) return
+    const file = e.target.files[0]
+    setRecipe({ ...recipe, photo: URL.createObjectURL(file) })
+
+    const formData = new FormData()
+    formData.append('file', file)
+    const response = await fetch(`${API_URL}/api/upload`, {
+      method: 'POST',
+      body: formData,
+      credentials: 'include'
+    })
+    const data = await response.json()
+    setRecipe({ ...recipe, uploadId: data.id, photo: URL.createObjectURL(file) })
   };
 
   const handleChange = (event) => {
@@ -85,40 +98,34 @@ export default function RecipeInput() {
   }
 
   const handleChangeIngredients = (e) => {
-    const nextIngredients = recipe.ingredients.map((ingredient) => {
-      if (ingredient.id == e.target.id) {
-        ingredient.content = e.target.value
+    const nextIngredients = recipe.ingredients.map((ing) => {
+      if (ing.id == e.target.id) {
+        ing.name = e.target.value
       }
-      return ingredient
+      return ing
     })
 
     setRecipe({ ...recipe, ingredients: nextIngredients });
   };
 
-  const handleChangeDirection = (e) => {
-    const nextDirections = recipe.directions.map((direction) => {
-      if (direction.id == e.target.id) {
-        direction.content = e.target.value
+  const handleChangeStep = (e) => {
+    const nextSteps = recipe.steps.map((step) => {
+      if (step.id == e.target.id) {
+        step.description = e.target.value
       }
-      return direction
+      return step
     })
 
-    setRecipe({ ...recipe, directions: nextDirections });
+    setRecipe({ ...recipe, steps: nextSteps });
   };
 
-  const handleSubmit = (e) => {
-    console.log(recipe)
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (location.pathname.includes('my-recipes/edit')) {
-      const response = fetchPut(`/api/recipe/${params.id}`, recipe)
-      console.log(response)
-    }
-    else {
-      const response = fetchPost(`/api/recipe`, recipe)
-      console.log(response)
-      if (response.ok) {
-        navigate('/my-recipes?message=Recipe added')
-      }
+    const response = location.pathname.includes('edit')
+      ? await fetchPut(`/api/recipe/${params.id}`, recipe)
+      : await fetchPost(`/api/recipe`, recipe)
+    if (response.ok) {
+      navigate('/my-recipes?message=Recipe added')
     }
   }
 
@@ -176,9 +183,6 @@ export default function RecipeInput() {
                   <TextField onChange={handleChange} fullWidth label="Prep Time (minutes)" name="prepTime" value={recipe.prepTime} type="number" variant="outlined" margin="normal" />
                   <TextField onChange={handleChange} fullWidth label="Cook Time (minutes)" name="cookTime" value={recipe.cookTime} type="number" variant="outlined" margin="normal" />
                 </Box>
-
-                Make recipe public
-                <Checkbox name="isPublic" label="isPublic" defaultChecked={recipe.isPublic} />
               </CardContent>
 
             </Card>
@@ -204,7 +208,7 @@ export default function RecipeInput() {
                 key={ingredient.id}
                 id={`${ingredient.id}`}
                 name="ingredient"
-                value={ingredient.content}
+                value={ingredient.name}
                 label={`Ingredient ${ingredient.id}`}
                 variant="outlined"
               />
@@ -213,22 +217,22 @@ export default function RecipeInput() {
           </Box>
 
           <Box display="block" alignItems="center" maxWidth={'40em'} mt={1}>
-            <Typography variant="subtitle1" mt={2}>Directions</Typography>
-            <Button startIcon={<Add />} onClick={handleAddDirection} sx={{ mt: 1 }}>
-              Add direction
+            <Typography variant="subtitle1" mt={2}>Steps</Typography>
+            <Button startIcon={<Add />} onClick={handleAddStep} sx={{ mt: 1 }}>
+              Add Step
             </Button>
             <Button startIcon={<Delete />} onClick={handleRemoveDirection}>
-              Delete direction
+              Delete Step
             </Button>
             <Box margin={'10px'}>
-              {recipe.directions.map((direction) => (
+              {recipe.steps.map((step) => (
                 <TextField
-                  onChange={handleChangeDirection}
-                  name="direction"
-                  key={direction.id}
-                  id={`${direction.id}`}
-                  value={direction.content}
-                  label={`Direction ${direction.id}`}
+                  onChange={handleChangeStep}
+                  name="step"
+                  key={step.id}
+                  id={`${step.id}`}
+                  value={step.description}
+                  label={`Step ${step.id}`}
                   variant="outlined"
                   rows={4}
                   multiline
