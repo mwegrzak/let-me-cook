@@ -39,6 +39,7 @@ const recipeUpdateSchemaBody = Joi.object({
     difficulty: Joi.number().optional().min(0).max(2),
     prepTime: Joi.number().optional(),
     cookTime: Joi.number().optional(),
+    servings: Joi.number().required(),
     uploadId: Joi.string().optional(),
     ingredients: Joi.array().items(Joi.object({
         name: Joi.string().required(),

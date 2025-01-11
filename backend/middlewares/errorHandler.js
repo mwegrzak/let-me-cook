@@ -5,8 +5,10 @@ const errorHandler = (err, req, res, next) => {
 
   if (err.type) {
     statusCode = 400;
-    for (const error of err.error.details) {
-      message.push(error.message);
+    if (err.error?.details) {
+      for (const error of err.error.details) {
+        message.push(error.message);
+      }
     }
   } else {
     // P2002 is a Prisma error code for unique constraint violation

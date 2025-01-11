@@ -168,18 +168,24 @@ async function remove(req, res, next) {
       return next(createError(403));
     }
 
-    await prisma.recipe.delete({
-      where: {
-        id
-      },
-      recipeIngredients: {
-        deleteMany: {}
-      },
-      recipeSteps: {
-        deleteMany: {}
-      },
-    });
-
+    await prisma.$transaction([
+      prisma.recipeIngredient.deleteMany({
+        where: {
+          recipeId: id
+        }
+      }),
+      prisma.recipeStep.deleteMany({
+        where: {
+          recipeId: id
+        }
+      }),
+      prisma.recipe.delete({
+        where: {
+          id
+        }
+      })
+    ])
+    
     res.status(204).end();
   } catch (error) {
     return next(createError(500, error));
@@ -230,7 +236,6 @@ async function update(req, res, next) {
 
         ingredients.push({
           name: ingredient.name,
-          quantity: ingredient.quantity
         });
       }
     }
@@ -259,15 +264,15 @@ async function update(req, res, next) {
         id
       },
       data: {
-        ...req.body
-      },
-      recipeIngredients: {
-        deleteMany: {},
-        create: ingredients
-      },
-      recipeSteps: {
-        deleteMany: {},
-        create: steps
+        ...req.body,
+        recipeIngredients: {
+          deleteMany: {},
+          create: ingredients
+        },
+        recipeSteps: {
+          deleteMany: {},
+          create: steps
+        }
       }
     });
 

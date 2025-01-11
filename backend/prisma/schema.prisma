@@ -54,7 +54,6 @@ model Recipe {
   cookTime         Int
   user             User               @relation(fields: [userId], references: [id])
   userId           String
-  RecipeLikes      RecipeLike[]
   uploadId         String?
   upload           Upload?            @relation(fields: [uploadId], references: [id])
   recipeIngredients RecipeIngredient[]
