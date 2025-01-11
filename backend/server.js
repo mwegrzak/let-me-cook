@@ -14,12 +14,6 @@ import errorHandler from './middlewares/errorHandler.js';
 import prisma from './utils/prisma.js';
 
 const app = express();
-app.use(cors({
-  origin: 'http://localhost:5173',
-  methods: ['GET', 'POST', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
-  credentials: true
-}));
 
 const sess = {
   secret: process.env.SESSION_SECRET,
@@ -41,10 +35,19 @@ const sess = {
 }
 
 if (process.env.NODE_ENV === 'development') {
+  app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
+    credentials: true
+  }));
+
   app.use(hemlet({
-    contentSecurityPolicy: false
+    contentSecurityPolicy: false,
+    crossOriginResourcePolicy: false
   }));
   app.use('/api-doc', express.static('api-doc'));
+  app.use('/uploads', express.static('uploads'));
 } else {
   app.set('trust proxy', 1) // trust first proxy
   sess.cookie.secure = true

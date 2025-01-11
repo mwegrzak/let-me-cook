@@ -13,7 +13,7 @@ const prisma = new PrismaClient({
         needs: { uploadId: true },
         compute(recipe) {
           if (recipe.uploadId) {
-            return `/uploads/${recipe.uploadId}.jpeg`;
+            return `${process.env.STATIC_CONTENT_URL}${recipe.uploadId}.jpeg`;
           } else {
             return null;
           }
