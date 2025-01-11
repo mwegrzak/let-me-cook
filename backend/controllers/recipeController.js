@@ -86,6 +86,8 @@ async function create(req, res, next) {
 
     uploadId = image.id;
     delete req.body.uploadId;
+  } else if (req.body.uploadId === null) {
+    delete req.body.uploadId;
   }
 
   if (req.body.ingredients) {
@@ -226,6 +228,8 @@ async function update(req, res, next) {
       if (image.userId !== req.session.user.id) {
         return next(createError(403));
       }
+    } else if (req.body.uploadId === null) {
+      delete req.body.uploadId;
     }
 
     if (req.body.ingredients) {
