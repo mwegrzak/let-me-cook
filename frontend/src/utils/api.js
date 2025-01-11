@@ -46,17 +46,17 @@ export async function fetchGet(endpoint) {
 }
 
 export async function fetchDelete(endpoint, data) {
-  const body = JSON.stringify(data) || {};
+  const body = JSON.stringify(data);
 
   try {
     const response = await fetch(`${API_URL}${endpoint}`, {
       method: 'DELETE',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-      },
-      body
+      }
     })
-    return response.json();
+    return response;
 
   }
   catch (err) {
@@ -70,6 +70,7 @@ export async function fetchPut(endpoint, data) {
   try {
     const response = await fetch(`${API_URL}${endpoint}`, {
       method: 'PUT',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },

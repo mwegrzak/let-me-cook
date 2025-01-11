@@ -1,25 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Grid2 as Grid, Box, Button } from '@mui/material';
 import HomePageRecipe from '../components/HomePageRecipe';
 import { fetchGet, fetchDelete } from '../utils/api';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import { useUser, useUpdateUser } from '../UserContext.jsx'
+
 
 export default function UserRecipes(props) {
 
   const [recipes, setRecipes] = useState([])
+  const location = useLocation()
+  const { isLoggedIn, user } = useUser()
 
-  useEffect(() => {
-    // useUser + body
-    // todo - if admin page fetch all recipes
-    // useLocation.pathname
-    async function getRecipes() {
-      const response = await fetchGet('/api/recipe/')
+  async function getRecipes() {
+    const response = await fetchGet('/api/recipe/')
+    if (location.pathname.includes('admin')) {
       setRecipes(response)
     }
+    else {
+      const userRecipes = response.filter(recipe => recipe.userId == user.id)
+      setRecipes(userRecipes)
+    }
+  }
+
+  useEffect(() => {
+
     getRecipes()
   }, [])
+
+  const handleDelete = async (recipeId) => {
+
+    const deleteResponse = await fetchDelete(`/api/recipe/${recipeId}`)
+    if (deleteResponse.ok) {
+      const updatedRecipes = recipes.filter(recipe => recipe.id != recipeId)
+      setRecipes(updatedRecipes)
+    }
+  }
 
   const recipeElements = recipes.map(recipe => {
     return (
@@ -30,7 +48,7 @@ export default function UserRecipes(props) {
             <HomePageRecipe
               key={recipe.id}
               id={recipe.id}
-              img={recipe.photo}
+              img={recipe.img}
               tags={recipe.tags}
               title={recipe.title}
               description={recipe.description}
@@ -41,7 +59,7 @@ export default function UserRecipes(props) {
           <NavLink to={`edit/${recipe.id}`} className="navlink">
             <Button startIcon={<EditRoundedIcon />} />
           </NavLink>
-          <Button startIcon={<DeleteRoundedIcon />} onClick={() => fetchDelete(`/api/recipe/${recipe.id}`)} />
+          <Button startIcon={<DeleteRoundedIcon />} onClick={() => handleDelete(recipe.id)} />
         </Box>
       </>
     )

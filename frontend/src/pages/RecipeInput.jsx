@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, Form, useNavigate } from 'react-router-dom';
-import { TextField, Button, MenuItem, Typography, Box, Checkbox, Card, CardContent, Input, CardMedia, CardActions } from '@mui/material';
+import { TextField, Button, MenuItem, Typography, Box, Alert, Card, CardContent, Input, CardMedia, CardActions } from '@mui/material';
 import { Add, CardTravel, Delete } from '@mui/icons-material';
 import { fetchGet, fetchPost, fetchPut, API_URL } from '../utils/api';
 import { useUser } from '../UserContext';
@@ -14,6 +14,7 @@ export default function RecipeInput() {
   const location = useLocation()
   const navigate = useNavigate()
   const { isLoggedIn, user } = useUser()
+  const [error, setError] = useState(false);
   const [recipe, setRecipe] = useState({
     name: '',
     description: '',
@@ -70,10 +71,10 @@ export default function RecipeInput() {
     });
   };
 
-  const handlePhotoUpload = async (e) => {
+  const handleImgUpload = async (e) => {
     if (!e.target.files?.[0]) return
     const file = e.target.files[0]
-    setRecipe({ ...recipe, photo: URL.createObjectURL(file) })
+    setRecipe({ ...recipe, img: URL.createObjectURL(file) })
 
     const formData = new FormData()
     formData.append('file', file)
@@ -83,7 +84,7 @@ export default function RecipeInput() {
       credentials: 'include'
     })
     const data = await response.json()
-    setRecipe({ ...recipe, uploadId: data.id, photo: URL.createObjectURL(file) })
+    setRecipe({ ...recipe, uploadId: data.id, img: URL.createObjectURL(file) })
   };
 
   const handleChange = (event) => {
@@ -114,17 +115,34 @@ export default function RecipeInput() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { photo, ingredients, steps, ...rest } = recipe;
+    const { ingredients, steps } = recipe;
+
     const payload = {
-      ...rest,
+      name: recipe.name,
+      description: recipe.description,
+      difficulty: recipe.difficulty,
+      servings: recipe.servings,
+      prepTime: recipe.prepTime,
+      cookTime: recipe.cookTime,
       ingredients: ingredients.map(({ name, quantity }) => ({ name, quantity })),
       steps: steps.map(({ description }) => ({ description }))
     };
+
+    const newRecipePayload = {
+      ingredients: ingredients.map(({ name, quantity }) => ({ name, quantity })),
+      steps: steps.map(({ description }) => ({ description })),
+
+    };
+
+
     const response = location.pathname.includes('edit')
       ? await fetchPut(`/api/recipe/${params.id}`, payload)
       : await fetchPost(`/api/recipe`, payload);
-    if (response.ok) {
+    if (response.id) {
       navigate('/my-recipes?message=Recipe added');
+    }
+    if (response.error) {
+      setError(response.error)
     }
   };
 
@@ -134,19 +152,29 @@ export default function RecipeInput() {
       <Form onSubmit={handleSubmit} >
 
         <Typography variant="h5" mb={2}>Add New Recipe</Typography>
+        {error &&
+          <Alert severity="error" variant="outlined"
+            sx={{
+              width: '100%', display: 'flex',
+              flexDirection: 'column',
+              alignSelf: 'center',
+            }} >
+            {error}
+          </Alert>
+        }
         <TextField onChange={handleChange} fullWidth label="Title" name="name" id="title" value={recipe.name} variant="outlined" margin="normal" />
         <TextField onChange={handleChange} fullWidth label="Recipe Description" name="description" value={recipe.description} variant="outlined" margin="normal" />
 
         <Box display={'flex'} justifyContent={'space-evenly'}>
-          <Box>    servings: {recipe.servings}
+          <Box>
 
-            <Typography variant="subtitle1" mt={2}>Upload Dish Photo</Typography>
+            <Typography variant="subtitle1" mt={2}>Upload Dish Img</Typography>
 
             <Card >
               <CardMedia
                 component="img"
                 height="250"
-                image={recipe.photo}
+                image={recipe.img}
               />
               <CardContent>
 
@@ -154,10 +182,10 @@ export default function RecipeInput() {
               <CardActions>
                 <Input
                   type="file"
-                  name="photo"
+                  name="img"
                   accept="image/*"
-                  id="photo-upload"
-                  onChange={handlePhotoUpload}
+                  id="img-upload"
+                  onChange={handleImgUpload}
                 />
               </CardActions>
             </Card>
