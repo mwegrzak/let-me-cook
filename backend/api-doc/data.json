@@ -182,7 +182,10 @@
                   "difficulty": {
                     "type": "number"
                   },
-                  "time": {
+                  "prepTime": {
+                    "type": "number"
+                  },
+                  "cookTime": {
                     "type": "number"
                   },
                   "uploadId": {
@@ -195,9 +198,6 @@
                       "type": "object",
                       "properties": {
                         "name": {
-                          "type": "string"
-                        },
-                        "quantity": {
                           "type": "string"
                         }
                       }
@@ -273,7 +273,10 @@
                   "difficulty": {
                     "type": "number"
                   },
-                  "time": {
+                  "prepTime": {
+                    "type": "number"
+                  },
+                  "cookTime": {
                     "type": "number"
                   },
                   "uploadId": {
@@ -286,9 +289,6 @@
                       "type": "object",
                       "properties": {
                         "name": {
-                          "type": "string"
-                        },
-                        "quantity": {
                           "type": "string"
                         }
                       }
