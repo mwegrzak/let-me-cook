@@ -1,9 +1,11 @@
-import React from 'react';
-import { NavLink, Form, useActionData } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink, Form, useNavigate, replace } from 'react-router-dom';
 import { SitemarkIcon } from '../components/CustomIcons';
 import { Box, Button, FormLabel, TextField, Typography, styled, Alert } from '@mui/material'
 import MuiCard from '@mui/material/Card';
 import { fetchPost } from '../utils/api';
+import { useUser, useUpdateUser } from '../UserContext.jsx'
+
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -25,36 +27,47 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 
-export async function action({ request }) {
-  const formData = await request.formData()
-  const email = formData.get("email")
-  const password = formData.get("password")
-  const repeatPassword = formData.get("repeatPassword")
-  const name = formData.get("name")
-
-  if (password != repeatPassword) {
-    return { error: 'Passwords do not match' }
-  }
-
-  try {
-    const response = await fetchPost('/api/auth/register', { name: name, email: email, password: password })
-    return response
-  }
-  catch (err) {
-    return err
-  }
-}
-
 export default function Register(props) {
+  const [formData, setFormData] = useState({ email: "", name: "", password: "", repeatPassword: "" });
+  const [error, setError] = useState(false)
+  const { isLoggedIn, user } = useUser()
+  const toggleLogin = useUpdateUser();
+  const navigate = useNavigate()
 
-  const actionData = useActionData()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    if (formData.password != formData.repeatPassword) {
+      setError('Passwords do not match')
+      return
+    }
+
+    const response = await fetchPost('/api/auth/register', { email: formData.email, name: formData.name, password: formData.password })
+    console.log(response)
+
+    if (response.id) {
+      toggleLogin(response);
+      navigate("/", replace);
+    }
+    else {
+      setError(response.error)
+    }
+
+  }
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setFormData(values => ({ ...values, [name]: value }))
+  }
 
   return (
     <>
       <Box direction="column" justifyContent='space-between'>
 
         <Card variant="outlined">
-          {actionData &&
+          {error &&
             <Alert severity="error" variant="outlined"
               sx={{
                 width: '100%', display: 'flex',
@@ -62,7 +75,7 @@ export default function Register(props) {
                 alignSelf: 'center',
 
               }} >
-              {actionData.error}
+              {error}
             </Alert>
           }
           <SitemarkIcon />
@@ -77,10 +90,11 @@ export default function Register(props) {
 
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
 
-            <Form method="post" action='/register' replace>
+            <Form onSubmit={handleSubmit} replace>
 
               <FormLabel htmlFor="email">Email</FormLabel>
               <TextField
+                onChange={handleChange}
                 required
                 fullWidth
                 id="email"
@@ -93,6 +107,8 @@ export default function Register(props) {
 
               <FormLabel htmlFor="name">Name</FormLabel>
               <TextField
+                onChange={handleChange}
+
                 autoComplete="name"
                 name="name"
                 required
@@ -104,6 +120,7 @@ export default function Register(props) {
 
               <FormLabel htmlFor="password">Password</FormLabel>
               <TextField
+                onChange={handleChange}
                 required
                 fullWidth
                 name="password"
@@ -116,6 +133,7 @@ export default function Register(props) {
               <FormLabel htmlFor="repeatPassword">Repeat Password</FormLabel>
 
               <TextField
+                onChange={handleChange}
                 required
                 fullWidth
                 name="repeatPassword"

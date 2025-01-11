@@ -9,7 +9,7 @@ import NotFound from './pages/NotFound.jsx';
 import Error from './pages/Error.jsx'
 import HomeLayout from './pages/HomeLayout.jsx'
 import Home from './pages/Home.jsx'
-import Register, { action as registerAction } from './pages/Register.jsx'
+import Register from './pages/Register.jsx'
 import Login from './pages/Login.jsx'
 import ForgotPassword, { action as ForgotPasswordAction } from './pages/ForgotPassword.jsx'
 import RecipeDetail from './pages/RecipeDetail.jsx'
@@ -35,7 +35,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="*" element={<NotFound />} />
             <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} action={registerAction} />
+            <Route path="register" element={<Register />} />
             <Route path="forgot-password" element={<ForgotPassword />} action={ForgotPasswordAction} />
             <Route path="recipe/:id" element={<RecipeDetail />} />
 

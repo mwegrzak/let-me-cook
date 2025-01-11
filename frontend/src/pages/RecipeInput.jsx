@@ -32,7 +32,9 @@ export default function RecipeInput() {
   useEffect(() => {
     async function getRecipe() {
       if (location.pathname.includes('my-recipes/edit')) {
-        const response = fetchGet(`/api/recipe/${params.id}`)
+        const response = await fetchGet(`/api/recipe/${params.id}`)
+        response.ingredients = response.recipeIngredients
+        response.steps = response.recipeSteps
         setRecipe(response)
       }
     }
@@ -137,7 +139,7 @@ export default function RecipeInput() {
 
         <Box display={'flex'} justifyContent={'space-evenly'}>
           <Box>    servings: {recipe.servings}
-          
+
             <Typography variant="subtitle1" mt={2}>Upload Dish Photo</Typography>
 
             <Card >
@@ -168,7 +170,7 @@ export default function RecipeInput() {
               <CardContent>
                 <Box display={'flex'}>
                   <TextField onChange={handleChange} fullWidth select label="Difficulty" name="difficulty" value={recipe.difficulty} variant="outlined" margin="normal">
-                    {[0,1,2].map((level) => (
+                    {[0, 1, 2].map((level) => (
                       <MenuItem key={level} value={level}>
                         {difficulty_labels[level]}
                       </MenuItem>

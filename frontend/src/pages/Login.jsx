@@ -5,7 +5,6 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { SitemarkIcon } from '../components/CustomIcons';
 import { fetchPost } from '../utils/api';
-
 import { useUser, useUpdateUser } from '../UserContext';
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -48,7 +47,6 @@ export default function Login(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(formData)
 
     const response = await fetchPost('/api/auth/login', { email: formData.email, password: formData.password })
     if (response.id) {

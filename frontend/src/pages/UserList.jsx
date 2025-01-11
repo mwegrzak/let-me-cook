@@ -12,8 +12,9 @@ export default function UserList(props) {
     async function getUsers() {
       setLoading(true)
       const response = await fetchGet('/api/admin/user')
-      console.log(response)
-      setUsers(response)
+      if (response.ok) {
+        setUsers(response)
+      }
       setLoading(false)
     }
     getUsers()

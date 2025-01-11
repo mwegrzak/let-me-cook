@@ -86,7 +86,7 @@ export default function UserProfile(props) {
           </CardContent>
           <Divider />
           <CardActions>
-            <Button fullWidth variant="text">
+            <Button fullWidth variant="text" disabled>
               Upload picture
             </Button>
           </CardActions>
