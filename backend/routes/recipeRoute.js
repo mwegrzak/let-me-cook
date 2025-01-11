@@ -23,7 +23,7 @@ const recipeCreateSchema = Joi.object({
     prepTime: Joi.number().required(),
     cookTime: Joi.number().required(),
     servings: Joi.number().required(),
-    uploadId: Joi.string().optional(),
+    uploadId: Joi.string().optional().allow(null),
     ingredients: Joi.array().items(Joi.object({
         name: Joi.string().required(),
     })).optional(),
@@ -40,7 +40,7 @@ const recipeUpdateSchemaBody = Joi.object({
     prepTime: Joi.number().optional(),
     cookTime: Joi.number().optional(),
     servings: Joi.number().required(),
-    uploadId: Joi.string().optional(),
+    uploadId: Joi.string().optional().allow(null),
     ingredients: Joi.array().items(Joi.object({
         name: Joi.string().required(),
     })).optional(),
