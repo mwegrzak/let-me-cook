@@ -26,7 +26,6 @@ model User {
   password       String
   isAdmin        Boolean         @default(false)
   recipes        Recipe[]
-  RecipeLikes    RecipeLike[]
   PasswordResets PasswordReset[]
   Uploads        Upload[]
 }
@@ -74,14 +73,6 @@ model RecipeStep {
   recipeId    String
   description String
   recipe      Recipe @relation(fields: [recipeId], references: [id])
-}
-
-model RecipeLike {
-  id       String @id @default(cuid())
-  recipeId String
-  userId   String
-  user     User   @relation(fields: [userId], references: [id])
-  recipe   Recipe @relation(fields: [recipeId], references: [id])
 }
 
 model Upload {

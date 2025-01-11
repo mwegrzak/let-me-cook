@@ -171,7 +171,13 @@ async function remove(req, res, next) {
     await prisma.recipe.delete({
       where: {
         id
-      }
+      },
+      recipeIngredients: {
+        deleteMany: {}
+      },
+      recipeSteps: {
+        deleteMany: {}
+      },
     });
 
     res.status(204).end();
