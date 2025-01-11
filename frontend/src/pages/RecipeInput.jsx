@@ -15,9 +15,8 @@ export default function RecipeInput() {
   const navigate = useNavigate()
   const { isLoggedIn, user } = useUser()
   const [recipe, setRecipe] = useState({
-    title: '',
+    name: '',
     description: '',
-    photo: placeholderDish,
     uploadId: null,
     ingredients: [{ id: 1, name: '' }],
     steps: [{ id: 1, description: '' }],
@@ -25,9 +24,9 @@ export default function RecipeInput() {
     prepTime: '',
     cookTime: '',
     servings: '',
-    isPublic: false,
-    tags: ''
-  })
+  });
+
+  const difficulty_labels = ['Easy', 'Medium', 'Hard'];
 
 
   useEffect(() => {
@@ -48,31 +47,25 @@ export default function RecipeInput() {
     });
   };
 
-  const handleRemoveIngredient = (e) => {
-    if (recipe.ingredients.length > 1) {
-      nextIngredient--
-      setRecipe({
-        ...recipe,
-        ingredients: recipe.ingredients.filter(ingr => ingr.id != nextIngredient)
-      });
-    }
+  const handleRemoveIngredient = (id) => {
+    setRecipe({
+      ...recipe,
+      ingredients: recipe.ingredients.filter(ingr => ingr.id !== id)
+    });
   };
 
   const handleAddStep = () => {
     setRecipe({
       ...recipe,
       steps: [...recipe.steps, { id: nextStep++, description: '' }]
-    })
+    });
   };
 
-  const handleRemoveDirection = (e) => {
-    if (recipe.steps.length > 1) {
-      nextStep--
-      setRecipe({
-        ...recipe,
-        steps: recipe.steps.filter(dir => dir.id != nextStep)
-      });
-    }
+  const handleRemoveStep = (id) => {
+    setRecipe({
+      ...recipe,
+      steps: recipe.steps.filter(step => step.id !== id)
+    });
   };
 
   const handlePhotoUpload = async (e) => {
@@ -97,37 +90,41 @@ export default function RecipeInput() {
     setRecipe(values => ({ ...values, [name]: value }))
   }
 
-  const handleChangeIngredients = (e) => {
+  const handleChangeIngredients = (e, id) => {
     const nextIngredients = recipe.ingredients.map((ing) => {
-      if (ing.id == e.target.id) {
-        ing.name = e.target.value
+      if (ing.id === id) {
+        ing.name = e.target.value;
       }
-      return ing
-    })
-
+      return ing;
+    });
     setRecipe({ ...recipe, ingredients: nextIngredients });
   };
 
-  const handleChangeStep = (e) => {
+  const handleChangeStep = (e, id) => {
     const nextSteps = recipe.steps.map((step) => {
-      if (step.id == e.target.id) {
-        step.description = e.target.value
+      if (step.id === id) {
+        step.description = e.target.value;
       }
-      return step
-    })
-
+      return step;
+    });
     setRecipe({ ...recipe, steps: nextSteps });
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    const { photo, ingredients, steps, ...rest } = recipe;
+    const payload = {
+      ...rest,
+      ingredients: ingredients.map(({ name, quantity }) => ({ name, quantity })),
+      steps: steps.map(({ description }) => ({ description }))
+    };
     const response = location.pathname.includes('edit')
-      ? await fetchPut(`/api/recipe/${params.id}`, recipe)
-      : await fetchPost(`/api/recipe`, recipe)
+      ? await fetchPut(`/api/recipe/${params.id}`, payload)
+      : await fetchPost(`/api/recipe`, payload);
     if (response.ok) {
-      navigate('/my-recipes?message=Recipe added')
+      navigate('/my-recipes?message=Recipe added');
     }
-  }
+  };
 
   return (
     <Box sx={{ maxWidth: 1000, margin: 'auto', padding: 4 }}>
@@ -135,11 +132,12 @@ export default function RecipeInput() {
       <Form onSubmit={handleSubmit} >
 
         <Typography variant="h5" mb={2}>Add New Recipe</Typography>
-        <TextField onChange={handleChange} fullWidth label="Title" name="title" id="title" value={recipe.title} variant="outlined" margin="normal" />
+        <TextField onChange={handleChange} fullWidth label="Title" name="name" id="title" value={recipe.name} variant="outlined" margin="normal" />
         <TextField onChange={handleChange} fullWidth label="Recipe Description" name="description" value={recipe.description} variant="outlined" margin="normal" />
 
         <Box display={'flex'} justifyContent={'space-evenly'}>
-          <Box>
+          <Box>    servings: {recipe.servings}
+          
             <Typography variant="subtitle1" mt={2}>Upload Dish Photo</Typography>
 
             <Card >
@@ -170,9 +168,9 @@ export default function RecipeInput() {
               <CardContent>
                 <Box display={'flex'}>
                   <TextField onChange={handleChange} fullWidth select label="Difficulty" name="difficulty" value={recipe.difficulty} variant="outlined" margin="normal">
-                    {['Easy', 'Medium', 'Hard'].map((level) => (
+                    {[0,1,2].map((level) => (
                       <MenuItem key={level} value={level}>
-                        {level}
+                        {difficulty_labels[level]}
                       </MenuItem>
                     ))}
                   </TextField>
@@ -197,21 +195,22 @@ export default function RecipeInput() {
             <Button startIcon={<Add />} onClick={handleAddIngredient} sx={{ mt: 1 }}>
               Add Ingredient
             </Button>
-            <Button startIcon={<Delete />} onClick={handleRemoveIngredient} >
-              Delete Ingredient
-            </Button>
 
             {recipe.ingredients.map((ingredient) => (
-              <TextField
-                fullWidth
-                onChange={handleChangeIngredients}
-                key={ingredient.id}
-                id={`${ingredient.id}`}
-                name="ingredient"
-                value={ingredient.name}
-                label={`Ingredient ${ingredient.id}`}
-                variant="outlined"
-              />
+              <Box key={ingredient.id} display="flex" alignItems="center">
+                <TextField
+                  fullWidth
+                  onChange={(e) => handleChangeIngredients(e, ingredient.id)}
+                  id={`${ingredient.id}`}
+                  name="ingredient"
+                  value={ingredient.name}
+                  label={`Ingredient ${ingredient.id}`}
+                  variant="outlined"
+                />
+                <Button startIcon={<Delete />} onClick={() => handleRemoveIngredient(ingredient.id)}>
+                  Delete
+                </Button>
+              </Box>
             ))}
 
           </Box>
@@ -221,34 +220,32 @@ export default function RecipeInput() {
             <Button startIcon={<Add />} onClick={handleAddStep} sx={{ mt: 1 }}>
               Add Step
             </Button>
-            <Button startIcon={<Delete />} onClick={handleRemoveDirection}>
-              Delete Step
-            </Button>
             <Box margin={'10px'}>
               {recipe.steps.map((step) => (
-                <TextField
-                  onChange={handleChangeStep}
-                  name="step"
-                  key={step.id}
-                  id={`${step.id}`}
-                  value={step.description}
-                  label={`Step ${step.id}`}
-                  variant="outlined"
-                  rows={4}
-                  multiline
-                  sx={{
-                    width: { sm: 600, md: 600 },
-                    "& .MuiInputBase-root": { height: 100 }
-                  }}
-                />
+                <Box key={step.id} display="flex" alignItems="center">
+                  <TextField
+                    onChange={(e) => handleChangeStep(e, step.id)}
+                    name="step"
+                    id={`${step.id}`}
+                    value={step.description}
+                    label={`Step ${step.id}`}
+                    variant="outlined"
+                    rows={4}
+                    multiline
+                    sx={{
+                      width: { sm: 600, md: 600 },
+                      "& .MuiInputBase-root": { height: 100 }
+                    }}
+                  />
+                  <Button startIcon={<Delete />} onClick={() => handleRemoveStep(step.id)}>
+                    Delete
+                  </Button>
+                </Box>
               ))}
             </Box>
 
           </Box>
         </Box>
-
-        <TextField onChange={handleChange} fullWidth label="Tags" name="tags" value={recipe.tags} helperText="Separate tags with commas" variant="outlined" margin="normal"
-        />
 
         <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
           Submit Recipe

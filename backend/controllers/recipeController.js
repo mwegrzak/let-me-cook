@@ -44,7 +44,6 @@ async function get(req, res, next) {
         recipeIngredients: {
           select: {
             name: true,
-            quantity: true
           }
         },
         recipeSteps: {
@@ -91,13 +90,12 @@ async function create(req, res, next) {
 
   if (req.body.ingredients) {
     for (const ingredient of req.body.ingredients) {
-      if (!ingredient.name || !ingredient.quantity) {
+      if (!ingredient.name) {
         return next(createError(400, 'Invalid ingredient'));
       }
 
       ingredients.push({
         name: ingredient.name,
-        quantity: ingredient.quantity
       });
     }
   }
@@ -220,7 +218,7 @@ async function update(req, res, next) {
 
     if (req.body.ingredients) {
       for (const ingredient of req.body.ingredients) {
-        if (!ingredient.name || !ingredient.quantity) {
+        if (!ingredient.name) {
           return next(createError(400, 'Invalid ingredient'));
         }
 
