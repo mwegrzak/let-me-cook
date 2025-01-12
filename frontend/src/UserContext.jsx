@@ -1,4 +1,5 @@
 import React, { useContext, useState, createContext, useEffect } from 'react';
+import { API_URL } from './utils/api';
 
 const UserContext = createContext({ isLoggedIn: false, user: {}, toggleLogin: () => { } });
 const UserUpdateContext = createContext()
@@ -29,7 +30,7 @@ export function UserProvider({ children }) {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await fetch(`/api/auth/check`, {
+                const response = await fetch(`${API_URL}/api/auth/check`, {
                     credentials: 'include',
                 });
                 if (!response.ok) {

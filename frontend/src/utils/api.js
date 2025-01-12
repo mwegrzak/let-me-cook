@@ -1,6 +1,4 @@
-const API_URL = '/';
-
-//export variable
+const API_URL = 'http://localhost';
 
 export { API_URL }
 
