@@ -1,5 +1,5 @@
 # ============ Stage 1: Build React App ============
-FROM node:16-alpine AS react_builder
+FROM node:22-alpine AS react_builder
 
 WORKDIR /app
 
