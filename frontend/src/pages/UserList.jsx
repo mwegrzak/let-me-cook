@@ -12,7 +12,7 @@ export default function UserList(props) {
     async function getUsers() {
       setLoading(true)
       const response = await fetchGet('/api/admin/user')
-      if (response) {
+      if (!response.error) {
         setUsers(response)
       }
       setLoading(false)
@@ -25,8 +25,7 @@ export default function UserList(props) {
   const handleDelete = async (userId) => {
     const response = await fetchDelete(`/api/admin/user/${userId}`)
     if (response.ok) {
-      const updatedUsers = response.filter(user => user.id != userId)
-      console.log(updatedUsers)
+      const updatedUsers = users.filter(user => user.id != userId)
       setUsers(updatedUsers)
     }
     else {

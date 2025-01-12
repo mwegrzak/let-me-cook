@@ -71,7 +71,7 @@ export default function NavBar() {
               <>
                 <Box sx={{ color: 'text.primary' }}>Welcome, {user.name}</Box>
                 <Button component={NavLink} to="/user" variant="outlined" color="info" size="small">Profile</Button>
-                <Button component={NavLink} to="/admin" variant="outlined" color="info" size="small">Admin panel</Button>
+                {user.isAdmin && <Button component={NavLink} to="/admin" variant="outlined" color="info" size="small">Admin panel</Button>}
                 <Button color="info" variant="contained" size="small" onClick={() => logout(toggleLogin)}>Logout</Button>
                 <ColorModeIconDropdown />
               </>

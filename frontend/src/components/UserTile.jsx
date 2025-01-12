@@ -18,7 +18,10 @@ const UserTile = ({ user, onDelete }) => {
         }}>
             <Box display='flex' alignItems='center'>
                 <Avatar alt={`${name}`} sx={{ width: 56, height: 56, mr: 3 }} />
-                <Typography variant="h6">{name}</Typography>
+                <Box>
+                    <Typography variant="h6">{name}</Typography>
+                    {isAdmin && <Typography variant="subtitle2">Admin</Typography>}
+                </Box>
             </Box>
 
             <Typography variant="body2" color="text.secondary">{email}</Typography>

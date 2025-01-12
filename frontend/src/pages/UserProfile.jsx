@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, Form } from 'react-router-dom';
-import { Avatar, Button, Card, CardActions, CardContent, Divider, Stack, Typography, Box, CardHeader, Grid2 as Grid, FormControl, InputLabel, OutlinedInput, TextField } from '@mui/material';
+import { Avatar, Button, Card, CardActions, CardContent, Divider, Stack, Typography, Box, CardHeader, Grid2 as Grid, FormControl, FormControlLabel, InputLabel, OutlinedInput, Checkbox } from '@mui/material';
 import { fetchPut, fetchGet } from '../utils/api';
 import { useUser, useUpdateUser } from '../UserContext.jsx'
 
@@ -21,7 +21,7 @@ export default function UserProfile(props) {
   useEffect(() => {
     async function getUser() {
       if (location.pathname.includes('admin')) {
-        const response = fetchGet(`/api/admin/user/${params.id}`)
+        const response = await fetchGet(`/api/admin/user/${params.id}`)
         console.log(response)
         setFormData(response)
       }
@@ -37,6 +37,11 @@ export default function UserProfile(props) {
     setFormData(values => ({ ...values, [name]: value }))
   }
 
+  const handleChangeCheckbox = (event) => {
+    const name = event.target.name;
+    const checked = event.target.checked;
+    setFormData(values => ({ ...values, [name]: checked }))
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -65,7 +70,6 @@ export default function UserProfile(props) {
         setError(response.error)
       }
     }
-
   }
 
   return (
@@ -118,8 +122,17 @@ export default function UserProfile(props) {
                       <OutlinedInput onChange={handleChange} value={formData.email} label="Email address" name="email" />
                     </FormControl>
                   </Grid>
-
                 </Grid>
+
+                <Grid container my={1}>
+                  <Grid item md={6} xs={12} mr={4}>
+                    <FormControlLabel
+                      control={<Checkbox checked={formData.isAdmin} onChange={handleChangeCheckbox} name="isAdmin" />}
+                      label="Admin"
+                    />
+                  </Grid>
+                </Grid>
+
               </Grid>
 
             </CardContent>
