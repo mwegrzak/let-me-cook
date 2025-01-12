@@ -28,7 +28,7 @@ export default function RecipeSummaryBox(props) {
     const [score, setScore] = useState(calcAvgScore(scoreVotes));
 
     return (
-        <Card sx={{ minWidth: 275 }}>
+        <Card sx={{ minWidth: 275, boxShadow: 3, borderRadius: 2 }}>
             <CardContent>
                 <Box sx={{ '& > legend': { mt: 2 } }}></Box>
                 <Box sx={{ justifyContent: 'space-between', display: 'flex', flexDirection: 'row', m: 3 }} >
@@ -50,6 +50,10 @@ export default function RecipeSummaryBox(props) {
                         <Typography gutterBottom sx={{ fontSize: 18 }}>Cook time</Typography>
                         <Typography gutterBottom sx={{ fontSize: 14 }}>{cookTime}</Typography>
                     </Box>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                    <Rating name="read-only" value={Number(score)} readOnly precision={0.5} />
+                    <Typography variant="body2" sx={{ ml: 1 }}>{score}</Typography>
                 </Box>
             </CardContent>
         </Card>

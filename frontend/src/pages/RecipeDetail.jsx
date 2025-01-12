@@ -53,24 +53,24 @@ export default function RecipeDetail(props) {
   }, [])
 
   return (
-    <Container>
+    <Container sx={{ mt: 4 }}>
       {
         <>
-          <Typography gutterBottom variant="h1" component="div">
+          <Typography gutterBottom variant="h2" component="div" sx={{ fontWeight: 'bold' }}>
             {recipe.name}
           </Typography>
-          <Typography gutterBottom variant="body" component="div">
+          <Typography gutterBottom variant="body1" component="div" sx={{ mb: 4 }}>
             {recipe.description}
           </Typography>
-          <Box sx={{ display: 'inline-flex', flexDirection: 'row', gap: 3, overflow: 'auto' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 3, overflow: 'auto', mb: 4 }}>
             <CardMedia
               component="img"
               alt={recipe.name}
-              image={recipe.img}
+              image={recipe.upload.url}
               sx={{
                 aspectRatio: '16 / 9',
-                borderBottom: '1px solid',
-                borderColor: 'divider',
+                borderRadius: 2,
+                boxShadow: 3,
               }}
             />
             <RecipeSummaryBox
@@ -78,9 +78,10 @@ export default function RecipeDetail(props) {
               prepTime={recipe.prepTime}
               cookTime={recipe.cookTime}
               servings={recipe.servings}
+              scoreVotes={recipe.RecipeLikes}
             />
           </Box>
-          <Box sx={{ display: 'inline-flex', flexDirection: 'row', gap: 3, overflow: 'auto' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 3, overflow: 'auto' }}>
             <IngredientsList ingredients={recipe.recipeIngredients} />
             <RecipeStepsList directions={recipe.recipeSteps} />
           </Box>

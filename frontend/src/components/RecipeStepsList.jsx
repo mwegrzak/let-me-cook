@@ -1,8 +1,7 @@
 import React from 'react';
-import { List, ListItem, ListItemText, Grid2 as Grid, Typography } from '@mui/material'
+import { List, ListItem, ListItemText, Grid, Typography } from '@mui/material'
 
 export default function RecipeStepsList({ directions }) {
-    console.log('BBBBBBB'+JSON.stringify(directions))
 
     const listItems = directions.map((item) => {
         return (
@@ -16,8 +15,8 @@ export default function RecipeStepsList({ directions }) {
     })
 
     return (
-        <Grid xs={12} md={6}>
-            <Typography variant="h4" component="div">
+        <Grid item xs={12} md={6}>
+            <Typography variant="h4" component="div" gutterBottom>
                 Directions
             </Typography>
             <List>

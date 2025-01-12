@@ -23,7 +23,7 @@ export default function IngredientsList({ ingredients }) {
     };
 
     return (
-        <List sx={{ width: '100%', minWidth: 360, bgcolor: 'background.paper' }}>
+        <List sx={{ width: '100%', minWidth: 360, bgcolor: 'background.paper', boxShadow: 3, borderRadius: 2 }}>
             {ingredients.map((ingredient) => {
                 const labelId = `checkbox-list-label`;
                 return (
