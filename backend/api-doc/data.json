@@ -182,6 +182,9 @@
                   "difficulty": {
                     "type": "number"
                   },
+                  "servings": {
+                    "type": "number"
+                  },
                   "prepTime": {
                     "type": "number"
                   },
@@ -271,6 +274,9 @@
                     "type": "string"
                   },
                   "difficulty": {
+                    "type": "number"
+                  },
+                  "servings": {
                     "type": "number"
                   },
                   "prepTime": {
