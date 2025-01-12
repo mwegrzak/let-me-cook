@@ -12,35 +12,34 @@ export default function UserList(props) {
     async function getUsers() {
       setLoading(true)
       const response = await fetchGet('/api/admin/user')
-      if (response.ok) {
+      if (response) {
         setUsers(response)
       }
       setLoading(false)
+
     }
     getUsers()
   }, [])
 
 
   const handleDelete = async (userId) => {
-    console.log(userId)
-
-    try {
-      const response = await fetchDelete(`/api/admin/user/${userId}`)
-      console.log(response)
-      return response
+    const response = await fetchDelete(`/api/admin/user/${userId}`)
+    if (response.ok) {
+      const updatedUsers = response.filter(user => user.id != userId)
+      console.log(updatedUsers)
+      setUsers(updatedUsers)
     }
-    catch (err) {
-      console.log(err)
-      return err
+    else {
+      console.log(response.error)
     }
 
   }
 
   return (
     <>
-      {users.map((user) => (
-        <UserTile key={user.id} user={user} onDelete={() => handleDelete(user.userId)} />
-      ))}
+      {loading
+        ? <h1>Loading...</h1>
+        : users.map((user) => (<UserTile key={user.id} user={user} onDelete={() => handleDelete(user.id)} />))}
     </>
   );
 }
