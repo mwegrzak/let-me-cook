@@ -166,4 +166,28 @@ async function check(req, res, next) {
   return res.status(200).json(req.session.user);
 }
 
-export { register, login, logout, passwordResetRequest, passwordReset, check };
+async function changePassword(req, res, next) {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const user = await prisma.user.findUnique({
+      where: { id: req.session.user.id },
+    });
+    if (!user) {
+      return next(createError(404, "User not found"));
+    }
+    const oldPassMatch = await argon2.verify(user.password, oldPassword);
+    if (!oldPassMatch) {
+      return next(createError(401, "Incorrect old password"));
+    }
+    const hashed = await argon2.hash(newPassword);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashed },
+    });
+    return res.status(200).json({ message: "Password changed" });
+  } catch (error) {
+    return next(createError(500, error));
+  }
+}
+
+export { register, login, logout, passwordResetRequest, passwordReset, check, changePassword };

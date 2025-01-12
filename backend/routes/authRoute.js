@@ -3,7 +3,7 @@ import { Router } from "express";
 import Joi from "joi";
 import { createValidator } from "express-joi-validation";
 
-import { register, login, logout, passwordResetRequest, passwordReset, check } from "../controllers/authController.js";
+import { register, login, logout, passwordResetRequest, passwordReset, check, changePassword } from "../controllers/authController.js";
 import authenticated from "../middlewares/authenticated.js";
 import notAuthenticated from "../middlewares/notAuthenticated.js";
 
@@ -37,6 +37,11 @@ const passwordResetSchema = Joi.object({
 });
 router.post('/passwordreset/:token', notAuthenticated ,validator.body(passwordResetSchema), passwordReset);
 
+const changePasswordSchema = Joi.object({
+  oldPassword: Joi.string().required(),
+  newPassword: Joi.string().min(8).required(),
+});
+router.post('/changepassword', authenticated, validator.body(changePasswordSchema), changePassword);
 
 router.get('/check', authenticated, check)
 
