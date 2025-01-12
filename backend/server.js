@@ -50,8 +50,9 @@ if (process.env.NODE_ENV === 'development') {
   app.use('/uploads', express.static('uploads'));
 } else {
   app.set('trust proxy', 1) // trust first proxy
-  sess.cookie.secure = true
   app.use(hemlet());
+  app.use('/uploads', express.static('uploads'));
+
 }
 
 app.use(session(sess));
