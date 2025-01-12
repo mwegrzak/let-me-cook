@@ -29,7 +29,7 @@ export function UserProvider({ children }) {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/api/auth/check`, {
+                const response = await fetch(`/api/auth/check`, {
                     credentials: 'include',
                 });
                 if (!response.ok) {

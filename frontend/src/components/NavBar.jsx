@@ -31,7 +31,7 @@ export default function NavBar() {
 
 
   const logout = async (toggleLogin) => {
-    fetch('http://localhost:4000/api/auth/logout', {
+    fetch('/api/auth/logout', {
       method: 'POST',
       credentials: 'include',
     })
