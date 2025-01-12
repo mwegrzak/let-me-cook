@@ -18,7 +18,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx/default.conf /etc/nginx/conf.d/
 
 # Copy the React build output from the previous stage
-COPY --from=react_builder /app/build /usr/share/nginx/html
+COPY --from=react_builder /app/dist /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
