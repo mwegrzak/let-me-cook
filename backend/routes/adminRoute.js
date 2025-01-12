@@ -32,6 +32,6 @@ router.put('/user/:id', validator.params(userUpdateSchema), validator.body(userU
 const userDeleteSchema = Joi.object({
     id: Joi.string().required(),
 });
-router.delete('/user/:id', validator.params(userDeleteSchema), update, remove);
+router.delete('/user/:id', validator.params(userDeleteSchema), remove);
 
 export default router;
