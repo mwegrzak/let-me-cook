@@ -124,6 +124,7 @@ export default function RecipeInput() {
       servings: recipe.servings,
       prepTime: recipe.prepTime,
       cookTime: recipe.cookTime,
+      uploadId: recipe.uploadId || null,
       ingredients: ingredients.map(({ name, quantity }) => ({ name, quantity })),
       steps: steps.map(({ description }) => ({ description }))
     };
