@@ -41,7 +41,7 @@ model PasswordReset {
   token     String   @id
   userId    String
   validTill DateTime
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Recipe {
@@ -52,10 +52,10 @@ model Recipe {
   servings         Int
   prepTime         Int
   cookTime         Int
-  user             User               @relation(fields: [userId], references: [id])
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId           String
   uploadId         String?
-  upload           Upload?            @relation(fields: [uploadId], references: [id])
+  upload           Upload?            @relation(fields: [uploadId], references: [id], onDelete: SetNull)
   recipeIngredients RecipeIngredient[]
   recipeSteps       RecipeStep[]
 }
@@ -64,20 +64,20 @@ model RecipeIngredient {
   id       String @id @default(cuid())
   recipeId String
   name     String
-  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 }
 
 model RecipeStep {
   id          String @id @default(cuid())
   recipeId    String
   description String
-  recipe      Recipe @relation(fields: [recipeId], references: [id])
+  recipe      Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 }
 
 model Upload {
   id      String   @id @default(uuid())
   type    Int      @default(0)
   userId  String
-  user    User     @relation(fields: [userId], references: [id])
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   Recipes Recipe[]
 }
