@@ -44,7 +44,6 @@ export default function Register(props) {
     }
 
     const response = await fetchPost('/api/auth/register', { email: formData.email, name: formData.name, password: formData.password })
-    console.log(response)
 
     if (response.id) {
       toggleLogin(response);

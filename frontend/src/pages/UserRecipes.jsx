@@ -10,6 +10,7 @@ import { useUser, useUpdateUser } from '../UserContext.jsx'
 
 export default function UserRecipes(props) {
 
+  const score = { 1: 2, 2: 2, 3: 3, 4: 50, 5: 100 }
   const [recipes, setRecipes] = useState([])
   const location = useLocation()
   const { isLoggedIn, user } = useUser()
@@ -50,10 +51,10 @@ export default function UserRecipes(props) {
               id={recipe.id}
               img={recipe.img}
               tags={recipe.tags}
-              title={recipe.title}
+              title={recipe.name}
               description={recipe.description}
               author={recipe.userId}
-              score={recipe.score}
+              score={score}
             />
           </NavLink>
           <NavLink to={`edit/${recipe.id}`} className="navlink">

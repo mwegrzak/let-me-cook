@@ -40,7 +40,6 @@ export default function Login(props) {
   const handleForgotPasswordSubmit = async (e) => {
     e.preventDefault()
     const response = await fetch('/api/auth/passwordreset', { email: formData.forgotPasswordEmail })
-    console.log(response)
     setOpenSnackbar(true)
 
   }

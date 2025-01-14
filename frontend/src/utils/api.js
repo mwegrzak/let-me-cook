@@ -4,17 +4,28 @@ export { API_URL }
 
 export async function fetchPost(endpoint, data) {
   const body = JSON.stringify(data) || {};
-
   try {
-    const response = await fetch(`${API_URL}${endpoint}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body
-    })
-    return response.json();
+    if (data) {
+      let response = await fetch(`${API_URL}${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body
+      })
+      return response.json();
+    }
+    else {
+      let response = await fetch(`${API_URL}${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      })
+      return response;
+    }
 
   }
   catch (err) {

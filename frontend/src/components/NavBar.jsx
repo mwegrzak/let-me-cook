@@ -29,16 +29,12 @@ export default function NavBar() {
   const toggleLogin = useUpdateUser()
   let navigate = useNavigate()
 
-
   const logout = async (toggleLogin) => {
-    fetch('/api/auth/logout', {
-      method: 'POST',
-      credentials: 'include',
-    })
-      .then(() => {
-        toggleLogin();
-        navigate("/", { replace: true })
-      })
+    const response = await fetchPost('/api/auth/logout')
+    if (!response.error) {
+      toggleLogin();
+      navigate("/", { replace: true })
+    }
   }
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation, Form } from 'react-router-dom';
+import { useParams, useLocation, Form, useNavigate } from 'react-router-dom';
 import { Avatar, Button, Card, CardActions, CardContent, Divider, Stack, Typography, Box, CardHeader, Grid2 as Grid, FormControl, FormControlLabel, InputLabel, OutlinedInput, Checkbox } from '@mui/material';
 import { fetchPut, fetchGet } from '../utils/api';
 import { useUser, useUpdateUser } from '../UserContext.jsx'
@@ -7,6 +7,7 @@ import { useUser, useUpdateUser } from '../UserContext.jsx'
 
 export default function UserProfile(props) {
   const { isLoggedIn, user } = useUser()
+  const navigate = useNavigate()
   const params = useParams()
   const toggleLogin = useUpdateUser();
   const location = useLocation()
@@ -22,7 +23,6 @@ export default function UserProfile(props) {
     async function getUser() {
       if (location.pathname.includes('admin')) {
         const response = await fetchGet(`/api/admin/user/${params.id}`)
-        console.log(response)
         setFormData(response)
       }
     }
@@ -60,11 +60,10 @@ export default function UserProfile(props) {
           email: formData.email,
           name: formData.name,
         })
-      console.log(response)
 
       if (response.id) {
         toggleLogin(response);
-        navigate("/", replace);
+        navigate("/");
       }
       else {
         setError(response.error)
@@ -124,14 +123,17 @@ export default function UserProfile(props) {
                   </Grid>
                 </Grid>
 
-                <Grid container my={1}>
-                  <Grid item md={6} xs={12} mr={4}>
-                    <FormControlLabel
-                      control={<Checkbox checked={formData.isAdmin} onChange={handleChangeCheckbox} name="isAdmin" />}
-                      label="Admin"
-                    />
+                {user.isAdmin &&
+                  <Grid container my={1}>
+                    <Grid item md={6} xs={12} mr={4}>
+                      <FormControlLabel
+                        control={<Checkbox checked={formData.isAdmin} onChange={handleChangeCheckbox} name="isAdmin" />}
+                        label="Admin"
+                      />
+                    </Grid>
                   </Grid>
-                </Grid>
+
+                }
 
               </Grid>
 
