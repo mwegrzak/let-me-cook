@@ -7,28 +7,24 @@ participant "Backend Server" as Backend
 database "Database" as DB
 
 User -> Frontend: Open Registration Page
-Frontend -> User: Display Registration Form
+Frontend -> User: Send Registration Form
 
-User -> Frontend: Fill Form and Submit
-Frontend -> Backend: POST /register with Form Data
-Backend -> DB: Insert New User Record
-
-alt New User
-    DB --> Backend: Insert Success
-    Backend -> Frontend: Return Success Response
-    Frontend -> User: Display Success Message
-    Backend -> User: Send email with confirmation
-
-else User Already Exists
-    DB --> Backend: User Exists
-    Backend --> Frontend : Return Error Message
-    Frontend -> User: Display Error Message
+User -> Backend: POST /api/register with Form Data
+Backend --> Backend: Validate data
+alt Validation Error
+    Backend -> User: Return Error message
+else Valid Data
+    Backend -> DB: Insert New User
+    alt New User
+        DB --> Backend: Insert Success
+        Backend -> User: Return Success Response with session
+        Backend -> User: Send email with confirmation
+        User -> Frontend: GET / with Homepage
+        Frontend -> User: Send Homepage
+    else User Insertion Error
+        DB --> Backend: Error
+        Backend --> User: Return Error Message
+    end
 end
-
-User -> Frontend: Confirm registration
-Frontend -> Backend: POST /confirmed
-Backend -> DB: Insert user confirmed
-Backend -> Frontend: Return success
-Frontend -> User: Display confirmation success
 
 @enduml
